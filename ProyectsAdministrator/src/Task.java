@@ -4,21 +4,41 @@ import java.util.Date;
 
 public class Task {
 	
-	String name;
+	String Name;
 	String Description;
 	String Context; 	//Lo puse como string dado que me parecio practico por el momento
 	State state;
 	Date Deadline;
 	int WorkingDays;
-	int relevance;
+	int Relevance;
 	double Urgency;  	//lo puse double dado que puede ser el resultado de algun procesamiento
-	int progress;
+	int Progress;
 	ArrayList<Task> RequireTasks;
+	
+	////Metodos
+	public Task(String name, Date deadline) //pide lo menos posible para crear una tarea
+	{
+		Name=name;
+		Deadline = deadline;
+		state= State.Active;
+	}
+	public void AddRequireTask(Task t)
+	{
+		RequireTasks.add(t);
+	}
+	public boolean RemoveRequireTask(Task t) 	//Si esta y lo remueve=true, si no esta =false
+	{
+		if(RequireTasks.contains(t))
+			RequireTasks.remove(t);
+		return RequireTasks.contains(t); 
+	}
+	
+	////Getters y Setters
 	public String getName() {
-		return name;
+		return Name;
 	}
 	public void setName(String name) {
-		this.name = name;
+		this.Name = name;
 	}
 	public String getDescription() {
 		return Description;
@@ -51,10 +71,10 @@ public class Task {
 		WorkingDays = workingDays;
 	}
 	public int getRelevance() {
-		return relevance;
+		return Relevance;
 	}
 	public void setRelevance(int relevance) {
-		this.relevance = relevance;
+		this.Relevance = relevance;
 	}
 	public double getUrgency() {
 		return Urgency;
@@ -63,21 +83,12 @@ public class Task {
 		Urgency = urgency;
 	}
 	public int getProgress() {
-		return progress;
+		return Progress;
 	}
 	public void setProgress(int progress) {
-		this.progress = progress;
+		this.Progress = progress;
 	}
-	public void AddRequireTask(Task t)
-	{
-		RequireTasks.add(t);
-	}
-	public boolean RemoveRequireTask(Task t) 	//Si esta y lo remueve=true, si no esta =false
-	{
-		if(RequireTasks.contains(t))
-			RequireTasks.remove(t);
-		return RequireTasks.contains(t); 
-	}
+
 	
 	
 	
