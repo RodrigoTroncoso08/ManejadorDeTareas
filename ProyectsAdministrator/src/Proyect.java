@@ -6,6 +6,7 @@ import org.joda.time.DateTimeComparator;
 
 
 public class Proyect {
+	
 	String Name;
 	int Id;
 	String Description;
@@ -83,6 +84,7 @@ public class Proyect {
 		return TodayTasks;
 	}
 	public ArrayList<Task> WeekTasks()
+
 	{
 		
 		ArrayList<Task> TodayTasks = new ArrayList<Task>();
@@ -99,6 +101,44 @@ public class Proyect {
 			
 		}
 		return TodayTasks;
+	}
+
+	////Getters y Setters
+	public String getName() {
+		return Name;
+	}
+	public void setName(String name) {
+		Name = name;
+	}
+	public int getId() {
+		return Id;
+	}
+	public void setId(int id) {
+		Id = id;
+	}
+	public String getDescription() {
+		return Description;
+	}
+	public void setDescription(String description) {
+		Description = description;
+	}
+	public State getState() {
+		return state;
+	}
+	public void setState(State state) {
+		this.state = state;
+	}
+	public Date getDeadline() {
+		return Deadline;
+	}
+	public void setDeadline(Date deadline) {
+		Deadline = deadline;
+	}
+	public int getProgress() {
+		return Progress;
+	}
+	public void setProgress(int progress) {
+		Progress = progress;
 	}
 }
 

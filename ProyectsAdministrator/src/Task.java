@@ -14,6 +14,7 @@ public class Task {
 	double Urgency;  	//lo puse double dado que puede ser el resultado de algun procesamiento
 	int Progress;
 	ArrayList<Task> RequireTasks;
+	int ProyectId; // necesario para poder saber de manera facil el color de la tarea (proyeto al que pertenece)
 	
 	////Metodos
 	public Task(String name, Date deadline) //pide lo menos posible para crear una tarea
