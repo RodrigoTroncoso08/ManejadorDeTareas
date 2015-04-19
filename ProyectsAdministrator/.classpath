@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry excluding="joda/" kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="C:/Users/rodrigo/Desktop/Roro/PUC/7-septimo/Ingenieria de Software/Proyecto/joda-time-2.7"/>
@@ -9,5 +8,6 @@
 			<attribute name="javadoc_location" value="jar:file:/C:/Users/rodrigo/Desktop/Roro/PUC/7-septimo/Ingenieria%20de%20Software/Proyecto/joda-time-2.7/joda-time-2.7-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry excluding="joda/" kind="src" path="src"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
