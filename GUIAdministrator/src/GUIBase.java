@@ -21,19 +21,20 @@ import javax.swing.JList;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JPanel;
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.RowSpec;
+//import com.jgoodies.forms.layout.FormLayout;
+//import com.jgoodies.forms.layout.ColumnSpec;
+//import com.jgoodies.forms.layout.RowSpec;
 import javax.swing.JSeparator;
 import javax.swing.JScrollBar;
 import javax.swing.AbstractListModel;
 import javax.swing.ScrollPaneConstants;
-
+import backend.*;
 
 public class GUIBase {
 
 	private JFrame frame;
 	private JTextField txtSearch;
+	private Administrator admin;
 
 	/**
 	 * Launch the application.
@@ -81,6 +82,7 @@ public class GUIBase {
 		AddTask.setText("+ Task  ");
 		AddTask.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
 			}
 		});
 		AddTask.setVerticalAlignment(SwingConstants.BOTTOM);
@@ -98,13 +100,15 @@ public class GUIBase {
 		lblNewLabel.setBounds(61, 11, 99, 34);
 		panel.add(lblNewLabel);
 		
-		RoundedButton rndbtnProyect = new RoundedButton("+ Task");
+		RoundedButton rndbtnProyect = new RoundedButton("+ Project");
 		rndbtnProyect.setVerticalAlignment(SwingConstants.BOTTOM);
 		rndbtnProyect.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e) 
+			{
+				
 			}
 		});
-		rndbtnProyect.setText("+ Proyect  ");
+		//rndbtnProyect.setText("+ Proyect  ");
 		rndbtnProyect.setForeground(new Color(153, 204, 255));
 		rndbtnProyect.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 16));
 		rndbtnProyect.setBackground(Color.WHITE);

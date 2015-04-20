@@ -1,7 +1,10 @@
+package backend;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+
 import org.joda.time.DateTimeComparator;
 
 
@@ -14,6 +17,7 @@ public class Proyect {
 	Date Deadline;
 	ArrayList<Task> Tasks;
 	int Progress;
+	ArrayList<String> Members; //la idea es tener los email de quienes participen del proyecto
 	
 	//Metodos
 	
@@ -101,6 +105,16 @@ public class Proyect {
 			
 		}
 		return TodayTasks;
+	}
+	public void AddMember(String s)
+	{
+		Members.add(s);
+	}
+	public boolean RemoveMember(String s) 	
+	{
+		if(Members.contains(s))
+			Members.remove(s);
+		return Members.contains(s); 
 	}
 
 	////Getters y Setters
