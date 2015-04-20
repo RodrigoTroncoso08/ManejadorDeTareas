@@ -23,20 +23,7 @@ public class Task {
 		Name=name;
 		state= State.Active;
 	}
-	public Task(String name, Date deadline)//contructor un poco más elaborado
-	{
-		Name=name;
-		Deadline=deadline;
-		state = State.Active;
-	}
-	public Task(String name, Date deadline, int r, String cont)
-	{
-		Name=name;
-		Deadline=deadline;
-		Relevance=r;
-		Context=cont;
-		state=State.Active;
-	}
+	
 	public void AddRequireTask(Task t)
 	{
 		RequireTasks.add(t);

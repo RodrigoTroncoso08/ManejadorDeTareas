@@ -1,2 +1,2 @@
 
-public enum State {Pause, Active, Cancelled, Finished}
+public enum State {Pause, Active, Cancelled, Finished,Delayed}

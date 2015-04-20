@@ -5,6 +5,7 @@ import java.util.Date;
 public class Administrator {
 
 	ArrayList<Proyect> Proyects;
+	ArrayList<String> PosibleContext; //restringe que los usuarios no pongan cualquier cosa en contexto
 	
 	/*estos metodos se basan en que al agrupar las tareas sin importar de que proyecto
 	 * viene cada una, es como tener un solo gran proyecto al que se le agregan las 
@@ -12,6 +13,10 @@ public class Administrator {
 	 * identificacion de la tarea, le agregue un identificador a la tarea con el numero
 	 * de identificacion de su proyeto.
 	*/
+	public void AddContext(String cont)
+	{
+		PosibleContext.add(cont);
+	}
 	public ArrayList<Task> TodayTasks()
 	{
 		
@@ -23,7 +28,7 @@ public class Administrator {
 				aux.AddTask(t);
 			}
 		}
-		return aux.TodayTasks();
+		return aux.getTasks();
 	}
 	public ArrayList<Task> ThreeDayTasks()
 	{
@@ -36,7 +41,7 @@ public class Administrator {
 				aux.AddTask(t);
 			}
 		}
-		return aux.ThreeDayTasks();
+		return aux.getTasks();
 	}
 	public ArrayList<Task> WeekTasks()
 	{
@@ -49,7 +54,7 @@ public class Administrator {
 				aux.AddTask(t);
 			}
 		}
-		return aux.WeekTasks();
+		return aux.getTasks();
 	}
 
 }

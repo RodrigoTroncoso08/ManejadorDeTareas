@@ -104,6 +104,10 @@ public class Proyect {
 	}
 
 	////Getters y Setters
+	public ArrayList<Task> getTasks()
+	{
+		return Tasks;
+	}
 	public String getName() {
 		return Name;
 	}
