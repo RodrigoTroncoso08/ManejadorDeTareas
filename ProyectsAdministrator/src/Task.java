@@ -17,11 +17,25 @@ public class Task {
 	int ProyectId; // necesario para poder saber de manera facil el color de la tarea (proyeto al que pertenece)
 	
 	////Metodos
-	public Task(String name, Date deadline) //pide lo menos posible para crear una tarea
+	//voy a hacer que hayan varios constructores
+	public Task(String name) //pide lo menos posible para crear una tarea
+	{                        //dasen: le saque lo de la fecha, que en realidad lo puede pedir despues
+		Name=name;
+		state= State.Active;
+	}
+	public Task(String name, Date deadline)//contructor un poco más elaborado
 	{
 		Name=name;
-		Deadline = deadline;
-		state= State.Active;
+		Deadline=deadline;
+		state = State.Active;
+	}
+	public Task(String name, Date deadline, int r, String cont)
+	{
+		Name=name;
+		Deadline=deadline;
+		Relevance=r;
+		Context=cont;
+		state=State.Active;
 	}
 	public void AddRequireTask(Task t)
 	{
@@ -33,6 +47,7 @@ public class Task {
 			RequireTasks.remove(t);
 		return RequireTasks.contains(t); 
 	}
+	
 	
 	////Getters y Setters
 	public String getName() {
