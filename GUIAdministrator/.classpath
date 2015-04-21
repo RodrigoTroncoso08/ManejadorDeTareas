@@ -5,5 +5,6 @@
 	<classpathentry kind="lib" path="jgoodies-forms-1.10.jar"/>
 	<classpathentry kind="lib" path="Lib/weblaf-complete-1.28.jar"/>
 	<classpathentry kind="lib" path="newSWT.jar"/>
+	<classpathentry kind="lib" path="joda-time-2.7.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
