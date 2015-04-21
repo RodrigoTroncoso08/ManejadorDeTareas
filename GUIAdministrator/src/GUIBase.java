@@ -49,6 +49,12 @@ import java.awt.BasicStroke;
 import java.awt.Component;
 import java.awt.Dimension;
 import javax.swing.JSlider;
+import java.awt.Rectangle;
+import java.awt.GridLayout;
+import net.miginfocom.swing.MigLayout;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
 
 public class GUIBase {
 
@@ -100,6 +106,52 @@ public class GUIBase {
 		frame.setBounds(100, 50, 1043, 697);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
+		
+		JPanel panel_3 = new RoundedPanel();
+		panel_3.setBackground(new Color(212, 227, 252));
+		panel_3.setBounds(261, 182, 655, 85);
+		frame.getContentPane().add(panel_3);
+		panel_3.setLayout(null);
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(106, 3, 531, 75);
+		scrollPane_1.setBackground(new Color(212, 227, 252));
+		panel_3.add(scrollPane_1);
+		scrollPane_1.setBorder(BorderFactory.createEmptyBorder());
+		scrollPane_1.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+		
+		JPanel panel_1 = new JPanel();
+		panel_1.setBackground(Color.BLACK);
+		scrollPane_1.setViewportView(panel_1);
+		panel_1.setLayout(new BoxLayout(panel_1, BoxLayout.X_AXIS));
+		
+		JScrollPane scrollPane_3 = new JScrollPane();
+		panel_1.add(scrollPane_3);
+		scrollPane_3.setBorder(BorderFactory.createEmptyBorder());
+		
+		JPanel panel_2 = new JPanel();
+		scrollPane_3.setViewportView(panel_2);
+		panel_2.setBackground(new Color(212, 227, 252));
+		GridBagLayout gbl_panel_2 = new GridBagLayout();
+		gbl_panel_2.columnWidths = new int[] {76, 80, 79, 79, 79, 79, 79, 79, 79, 70, 70};
+		gbl_panel_2.rowHeights = new int[]{51, 0};
+		gbl_panel_2.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_panel_2.rowWeights = new double[]{1.0, Double.MIN_VALUE};
+		panel_2.setLayout(gbl_panel_2);
+		
+		NodeButton nodeButton_5 = new NodeButton("New button");
+		nodeButton_5.setBackground(new Color(255, 102, 51));
+		GridBagConstraints gbc_nodeButton_5 = new GridBagConstraints();
+		gbc_nodeButton_5.insets = new Insets(0, 0, 0, 5);
+		gbc_nodeButton_5.gridx = 4;
+		gbc_nodeButton_5.gridy = 0;
+		panel_2.add(nodeButton_5, gbc_nodeButton_5);
+		nodeButton_5.setPreferredSize(new Dimension(50, 50));
+		nodeButton_5.setAlignmentX(0.5f);
+		
+		JLabel lblProyecto = new JLabel("Tarea");
+		lblProyecto.setBounds(38, 23, 39, 31);
+		panel_3.add(lblProyecto);
 		
 		
 		RoundedPanel panel = new RoundedPanel();
@@ -244,135 +296,13 @@ public class GUIBase {
 		JLabel label_1 = new JLabel("  ");
 		GlosaryPane.add(label_1);
 		
-		JPanel panel_2 = new JPanel();
-		panel_2.setBounds(0, 69, 1026, 584);
-		panel_2.setBackground(new Color(0, 110, 142));
-		frame.getContentPane().add(panel_2);
-		panel_2.setLayout(null);
+		JPanel TimeLinePane = new TimeLinePanel();
+		TimeLinePane.setBounds(0, 69, 1026, 584);
+		TimeLinePane.setBackground(new Color(0, 110, 142));
+		frame.getContentPane().add(TimeLinePane);
+		TimeLinePane.setLayout(null);
 		
-		RoundedPanel panel_1 = new RoundedPanel();
-		panel_1.setBounds(6, 6, 1005, 576);
-		panel_2.add(panel_1);
-		panel_1.setForeground(Color.DARK_GRAY);
-		panel_1.setBackground(new Color(255, 255, 255));
-		panel_1.setLayout(null);
-		panel_1.setVisible(true);
 		
-		JSeparator separator_1 = new JSeparator();
-		separator_1.setForeground(Color.BLUE);
-		separator_1.setBounds(385, 86, 550, 2);
-		
-		panel_1.add(separator_1);
-		
-		JSeparator separator_6 = new JSeparator();
-		separator_6.setForeground(Color.BLUE);
-		separator_6.setOrientation(SwingConstants.VERTICAL);
-		separator_6.setBounds(432, 86, 2, 411);
-		panel_1.add(separator_6);
-		
-		JSeparator separator_7 = new JSeparator();
-		separator_7.setForeground(Color.BLUE);
-		separator_7.setOrientation(SwingConstants.VERTICAL);
-		separator_7.setBounds(586, 86, 2, 411);
-		panel_1.add(separator_7);
-		
-		JSeparator separator_8 = new JSeparator();
-		separator_8.setForeground(Color.BLUE);
-		separator_8.setOrientation(SwingConstants.VERTICAL);
-		separator_8.setBounds(740, 86, 2, 411);
-		panel_1.add(separator_8);
-		
-		JSeparator separator_9 = new JSeparator();
-		separator_9.setForeground(Color.BLUE);
-		separator_9.setOrientation(SwingConstants.VERTICAL);
-		separator_9.setBounds(355, 23, 2, 474);
-		
-		panel_1.add(separator_9);
-		
-		JSeparator separator_10 = new JSeparator();
-		separator_10.setForeground(Color.BLUE);
-		separator_10.setOrientation(SwingConstants.VERTICAL);
-		separator_10.setBounds(509, 86, 2, 411);
-		panel_1.add(separator_10);
-		
-		JSeparator separator_11 = new JSeparator();
-		separator_11.setForeground(Color.BLUE);
-		separator_11.setOrientation(SwingConstants.VERTICAL);
-		separator_11.setBounds(663, 86, 2, 411);
-		panel_1.add(separator_11);
-		
-		JSeparator separator_12 = new JSeparator();
-		separator_12.setForeground(Color.BLUE);
-		separator_12.setOrientation(SwingConstants.VERTICAL);
-		separator_12.setBounds(817, 86, 2, 411);
-		panel_1.add(separator_12);
-		
-		JSeparator separator_13 = new JSeparator();
-		separator_13.setForeground(Color.BLUE);
-		separator_13.setOrientation(SwingConstants.VERTICAL);
-		separator_13.setBounds(894, 86, 2, 411);
-		panel_1.add(separator_13);
-		
-		JSlider slider = new JSlider();
-		slider.setForeground(new Color(102, 204, 204));
-		slider.setBackground(new Color(153, 204, 255));
-		slider.setMaximum(30);
-		slider.setMajorTickSpacing(4);
-		slider.setBounds(396, 23, 513, 21);
-		panel_1.add(slider);
-		
-		JLabel lblDate = new JLabel("17/4");
-		lblDate.setFont(new Font("Arial", Font.PLAIN, 12));
-		lblDate.setHorizontalAlignment(SwingConstants.CENTER);
-		lblDate.setForeground(new Color(51, 204, 204));
-		lblDate.setBounds(446, 58, 55, 30);
-		panel_1.add(lblDate);
-		
-		JLabel lblDate_1 = new JLabel("17/4");
-		lblDate_1.setFont(new Font("Arial", Font.PLAIN, 12));
-		lblDate_1.setHorizontalAlignment(SwingConstants.CENTER);
-		lblDate_1.setForeground(new Color(51, 204, 204));
-		lblDate_1.setBounds(519, 58, 55, 30);
-		panel_1.add(lblDate_1);
-		
-		JLabel lblDate_2 = new JLabel("17/4");
-		lblDate_2.setFont(new Font("Arial", Font.PLAIN, 12));
-		lblDate_2.setHorizontalAlignment(SwingConstants.CENTER);
-		lblDate_2.setForeground(new Color(51, 204, 204));
-		lblDate_2.setBounds(600, 58, 55, 30);
-		panel_1.add(lblDate_2);
-		
-		JLabel lblDate_5 = new JLabel("17/4");
-		lblDate_5.setFont(new Font("Arial", Font.PLAIN, 12));
-		lblDate_5.setHorizontalAlignment(SwingConstants.CENTER);
-		lblDate_5.setForeground(new Color(51, 204, 204));
-		lblDate_5.setBounds(831, 58, 55, 30);
-		panel_1.add(lblDate_5);
-		
-		JLabel lblDate_3 = new JLabel("17/4");
-		lblDate_3.setFont(new Font("Arial", Font.PLAIN, 12));
-		lblDate_3.setHorizontalAlignment(SwingConstants.CENTER);
-		lblDate_3.setForeground(new Color(51, 204, 204));
-		lblDate_3.setBounds(673, 58, 55, 30);
-		panel_1.add(lblDate_3);
-		
-		JLabel lblDate_4 = new JLabel("17/4");
-		lblDate_4.setFont(new Font("Arial", Font.PLAIN, 12));
-		lblDate_4.setHorizontalAlignment(SwingConstants.CENTER);
-		lblDate_4.setForeground(new Color(51, 204, 204));
-		lblDate_4.setBounds(750, 58, 55, 30);
-		panel_1.add(lblDate_4);
-		
-		JSeparator separator_2 = new JSeparator();
-		separator_2.setForeground(Color.BLUE);
-		separator_2.setBounds(385, 58, 550, 2);
-		panel_1.add(separator_2);
-		
-		JLabel lblTareas = new JLabel("Tareas");
-		lblTareas.setForeground(new Color(0, 153, 204));
-		lblTareas.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 26));
-		lblTareas.setBounds(256, 23, 117, 53);
-		panel_1.add(lblTareas);
 		
 		
 		
