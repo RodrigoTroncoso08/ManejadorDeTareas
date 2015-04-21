@@ -194,6 +194,7 @@ public class GUIBase {
 				Tnombre.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 14));
 				Tnombre.setForeground(new Color(0,0,0));
 				Tnombre.setBounds(37, 127, 147, 34);
+				Paneldialog.add(Tnombre);
 				
 				JLabel ProyectoTarea = new JLabel("Proyecto de la tarea");
 				ProyectoTarea.setHorizontalAlignment(SwingConstants.CENTER);
@@ -218,6 +219,14 @@ public class GUIBase {
 				Proyectos.setSelectedIndex(0);
 				Proyectos.setBackground(new Color(255, 255, 255));
 				Proyectos.setBounds(37, 172, 147, 28);
+				Proyectos.addActionListener(new ActionListener()
+				{
+					public void actionPerformed(ActionEvent e)
+					{
+						//aca tiene que aparecer la ventana para crear un proyecto
+					}
+				});
+				Paneldialog.add(Proyectos);
 				
 				JLabel ContextoTarea = new JLabel("Contexto de la tarea");
 				ContextoTarea.setHorizontalAlignment(SwingConstants.CENTER);
@@ -226,6 +235,32 @@ public class GUIBase {
 				//ContextoTarea.setBounds(x, y, width, height);
 				Paneldialog.add(ContextoTarea);
 				
+				JComboBox Contextos = new JComboBox();
+				Contextos.setBorder(null);
+				Contextos.setEditable(true);
+				Contextos.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 12));
+				Contextos.setForeground(new Color(0,0,0));
+				ArrayList<String> Listac=admin.getPosibleContext();
+				String[] opcionesc = new String[Listac.size()+1];
+				for(int i=0; i<Listac.size();i++)
+				{
+					opcionesc[i]=Lista.get(i);
+				}
+				opcionesc[Lista.size()]="Nuevo Contexto";
+				Contextos.setModel(new DefaultComboBoxModel(opcionesc));
+				Contextos.setSelectedIndex(0);
+				Contextos.setBackground(new Color(255, 255, 255));
+				Contextos.setBounds(37, 172, 147, 28);
+			//	/Contextos.addActionListener(new ActionListener()
+		//		{
+				//	public void actionPerformed(ActionEvent e)
+			//		{
+						// aca se pide que ingrese el nombre y se agrega
+				
+				//	}
+			//	});
+				Paneldialog.add(Contextos);
+				
 				JLabel FechaTarea = new JLabel("Fecha de termino");
 				FechaTarea.setHorizontalAlignment(SwingConstants.CENTER);
 				FechaTarea.setForeground(new Color(0,0,0));
@@ -233,8 +268,27 @@ public class GUIBase {
 				//FechaTarea.setBounds(x, y, width, height);
 				Paneldialog.add(FechaTarea);
 				
+				RoundedButton okbotom = new RoundedButton("OK");
+				okbotom.setVerticalAlignment(SwingConstants.BOTTOM);
+				okbotom.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) 
+					{
+						for (int i=0; i < admin.getProyects().size();i++)
+						{
+						if(admin.getProyects().get(i).getName()== Proyectos.getSelectedItem().toString())	
+							admin.getProyects().get(i).AddTask(new Task(Tnombre.getText()));						
+						}
+					}
+				});
+				okbotom.setForeground(new Color(153, 204, 255));
+				okbotom.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 16));
+				okbotom.setBackground(Color.WHITE);
+				okbotom.setBounds(37, 88, 147, 28);
+				Paneldialog.add(okbotom);
+				
 				Ask.add(Paneldialog);
 				Ask.setVisible(true);
+				
 
 			}
 		});
