@@ -23,9 +23,6 @@ import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JPanel;
 import javax.swing.JDialog;
-//import com.jgoodies.forms.layout.FormLayout;
-//import com.jgoodies.forms.layout.ColumnSpec;
-//import com.jgoodies.forms.layout.RowSpec;
 import javax.swing.JSeparator;
 import javax.swing.JScrollBar;
 import javax.swing.AbstractListModel;
@@ -36,13 +33,13 @@ import javax.swing.UIManager.LookAndFeelInfo;
 
 import backend.*;
 
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.RowSpec;
+//import com.jgoodies.forms.layout.FormLayout;
+//import com.jgoodies.forms.layout.ColumnSpec;
+//import com.jgoodies.forms.layout.RowSpec;
 
 import javax.swing.BoxLayout;
 
-import org.eclipse.wb.swing.FocusTraversalOnArray;
+//import org.eclipse.wb.swing.FocusTraversalOnArray;
 
 import sun.java2d.loops.DrawLine;
 
@@ -52,7 +49,7 @@ import java.awt.Dimension;
 import javax.swing.JSlider;
 import java.awt.Rectangle;
 import java.awt.GridLayout;
-import net.miginfocom.swing.MigLayout;
+//import net.miginfocom.swing.MigLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -172,7 +169,13 @@ public class GUIBase {
 				JDialog Ask = new JDialog (frame,"Nueva Tarea");
 				Ask.setSize(200, 150);
 				Ask.setLocation(400, 300);
+				JPanel Paneldialog = new JPanel ();
+				Paneldialog.setLayout(null);
+				Paneldialog.setBounds(0, 0, 0, 0);
+				
+				Ask.add(Paneldialog);
 				Ask.setVisible(true);
+
 			}
 		});
 		AddTask.setVerticalAlignment(SwingConstants.BOTTOM);
