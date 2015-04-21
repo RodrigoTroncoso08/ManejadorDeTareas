@@ -13,6 +13,7 @@ import javax.swing.JButton;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
 import javax.swing.BorderFactory;
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
@@ -27,10 +28,10 @@ import javax.swing.UIManager.LookAndFeelInfo;
 
 import backend.*;
 
-
 import javax.swing.BoxLayout;
 
 //import org.eclipse.wb.swing.FocusTraversalOnArray;
+
 
 
 
@@ -39,6 +40,7 @@ import sun.java2d.loops.DrawLine;
 import java.awt.BasicStroke;
 import java.awt.Component;
 import java.awt.Dimension;
+
 
 
 import javax.swing.JSlider;
@@ -286,7 +288,7 @@ public class GUIBase {
 				okbotom.setBounds(37, 88, 147, 28);
 				Paneldialog.add(okbotom);
 				
-				Ask.add(Paneldialog);
+				Ask.getContentPane().add(Paneldialog);
 				Ask.setVisible(true);
 				
 
@@ -423,7 +425,13 @@ public class GUIBase {
 		TimeLinePane.setVisible(false);
 		TimeLinePane.setLayout(null);
 		
-		
+		RoundedPanel WhiteBase = new RoundedPanel();
+		WhiteBase.setBounds(6, 69, 1005, 576);
+		frame.getContentPane().add(WhiteBase);
+		WhiteBase.setForeground(Color.DARK_GRAY);
+		WhiteBase.setBackground(new Color(255, 255, 255));
+		WhiteBase.setLayout(null);
+		WhiteBase.setVisible(true);
 		
 		
 		
