@@ -19,10 +19,9 @@ public class Proyect {
 	
 	//Metodos
 	
-	public Proyect(String name, Date deadline)
+	public Proyect(String name)
 	{
 		Name=name;
-		Deadline=deadline;
 	}
 	public void AddTask(Task t) //mantiene ordenada la lista
 	{
