@@ -19,9 +19,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JPanel;
-//import com.jgoodies.forms.layout.FormLayout;
-//import com.jgoodies.forms.layout.ColumnSpec;
-//import com.jgoodies.forms.layout.RowSpec;
+import javax.swing.JDialog;
 import javax.swing.JSeparator;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.UIManager;
@@ -32,11 +30,26 @@ import backend.*;
 
 import javax.swing.BoxLayout;
 
+//import org.eclipse.wb.swing.FocusTraversalOnArray;
+
+
+
+import sun.java2d.loops.DrawLine;
+
+import java.awt.BasicStroke;
 import java.awt.Component;
 import java.awt.Dimension;
+
+
+import javax.swing.JSlider;
+
+import java.awt.Rectangle;
+import java.awt.GridLayout;
+//import net.miginfocom.swing.MigLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.util.ArrayList;
 
 public class GUIBase {
 
@@ -66,6 +79,14 @@ public class GUIBase {
 	public GUIBase() {
 		initialize();
 	}
+	private void CreateAdmin()
+	{
+		//crea el administrador (parte fundamental del backend) y crea un proyecto miscelaneo 
+		//automaticamente para poder ingresar tareas desde un comienzo
+		
+		admin= new Administrator();
+		admin.AddProyect(new Proyect("Miscelaneo"));
+	}
 
 	/**
 	 * Initialize the contents of the frame.
@@ -82,6 +103,8 @@ public class GUIBase {
 		} catch (Exception e) {
 		    // If Nimbus is not available, you can set the GUI to another look and feel.
 		}
+		
+		CreateAdmin();
 		
 		frame = new JFrame();
 		frame.getContentPane().setBackground(new Color(0, 110, 142));
@@ -150,7 +173,69 @@ public class GUIBase {
 		AddTask.setText("+ Task  ");
 		AddTask.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				JDialog Ask = new JDialog (frame,"Nueva Tarea");
+				Ask.setSize(400,400);
+				Ask.setLocation(400, 200);
+				JPanel Paneldialog = new JPanel ();
+				Paneldialog.setLayout(null);
+				Paneldialog.setBounds(0, 0, 0, 0);
 				
+				JLabel NombreTarea = new JLabel("Nombre de la tarea");
+				NombreTarea.setHorizontalAlignment(SwingConstants.CENTER);
+				NombreTarea.setForeground(new Color(0,0,0));
+				NombreTarea.setFont(new Font("Arial Rounded MT Bold",Font.BOLD,15));
+				//NombreTarea.setBounds(x, y, width, height);
+				Paneldialog.add(NombreTarea);
+				
+				JTextField Tnombre = new JTextField();
+				Tnombre.setBorder(null);
+				Tnombre.setBackground(new Color(255, 255, 255));
+				Tnombre.setHorizontalAlignment(SwingConstants.LEFT);
+				Tnombre.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 14));
+				Tnombre.setForeground(new Color(0,0,0));
+				Tnombre.setBounds(37, 127, 147, 34);
+				
+				JLabel ProyectoTarea = new JLabel("Proyecto de la tarea");
+				ProyectoTarea.setHorizontalAlignment(SwingConstants.CENTER);
+				ProyectoTarea.setForeground(new Color(0,0,0));
+				ProyectoTarea.setFont(new Font("Arial Rounded MT Bold",Font.BOLD,15));
+				//ProyectoTarea.setBounds(x, y, width, height);
+				Paneldialog.add(ProyectoTarea);
+				
+				JComboBox Proyectos = new JComboBox();
+				Proyectos.setBorder(null);
+				Proyectos.setEditable(true);
+				Proyectos.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 12));
+				Proyectos.setForeground(new Color(0,0,0));
+				ArrayList<String> Lista=admin.ProjectNames();
+				String[] opcionesp = new String[Lista.size()+1];
+				for(int i=0; i<Lista.size();i++)
+				{
+					opcionesp[i]=Lista.get(i);
+				}
+				opcionesp[Lista.size()]="Nuevo Proyecto";
+				Proyectos.setModel(new DefaultComboBoxModel(opcionesp));
+				Proyectos.setSelectedIndex(0);
+				Proyectos.setBackground(new Color(255, 255, 255));
+				Proyectos.setBounds(37, 172, 147, 28);
+				
+				JLabel ContextoTarea = new JLabel("Contexto de la tarea");
+				ContextoTarea.setHorizontalAlignment(SwingConstants.CENTER);
+				ContextoTarea.setForeground(new Color(0,0,0));
+				ContextoTarea.setFont(new Font("Arial Rounded MT Bold",Font.BOLD,15));
+				//ContextoTarea.setBounds(x, y, width, height);
+				Paneldialog.add(ContextoTarea);
+				
+				JLabel FechaTarea = new JLabel("Fecha de termino");
+				FechaTarea.setHorizontalAlignment(SwingConstants.CENTER);
+				FechaTarea.setForeground(new Color(0,0,0));
+				FechaTarea.setFont(new Font("Arial Rounded MT Bold",Font.BOLD,15));
+				//FechaTarea.setBounds(x, y, width, height);
+				Paneldialog.add(FechaTarea);
+				
+				Ask.add(Paneldialog);
+				Ask.setVisible(true);
+
 			}
 		});
 		AddTask.setVerticalAlignment(SwingConstants.BOTTOM);
@@ -176,7 +261,6 @@ public class GUIBase {
 				
 			}
 		});
-		//rndbtnProyect.setText("+ Proyect  ");
 		rndbtnProyect.setForeground(new Color(153, 204, 255));
 		rndbtnProyect.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 16));
 		rndbtnProyect.setBackground(Color.WHITE);
@@ -219,12 +303,12 @@ public class GUIBase {
 		comboBox.setEditable(true);
 		comboBox.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 12));
 		comboBox.setForeground(new Color(0, 204, 255));
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"       Miselaneo", "\tMiselaneo"}));
+		comboBox.setModel(new DefaultComboBoxModel(new String[] {"       Miselaneo"}));
 		comboBox.setSelectedIndex(0);
 		comboBox.setBackground(new Color(255, 255, 255));
 		comboBox.setBounds(37, 172, 147, 28);
 		comboBox.addItem("Miselaneo");
-		
+		comboBox.addItem("patatas");
 		panel.add(comboBox);
 		
 		JSeparator separator = new JSeparator();

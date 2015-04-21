@@ -7,7 +7,47 @@ import java.util.Date;
 public class Administrator {
 
 	ArrayList<Proyect> Proyects;
-	ArrayList<String> PosibleContext; //restringe que los usuarios no pongan cualquier cosa en contexto
+	ArrayList<String> PosibleContext; //restringe que los usuarios pongan cualquier cosa en contexto	
+	
+	public Administrator ()
+	{
+		Proyects = new ArrayList<Proyect>();
+		PosibleContext = new ArrayList<String>();
+	}
+	
+	public boolean AddProyect (Proyect p)
+	{
+		boolean b = false;                      //si el nombre del proyecto que se quiere 
+		ArrayList<String> ar = ProjectNames();  //ingrresar no existe ya, se ingresa y se 
+		for (String s : ar)                     //retorna true, sino no se ingresa y se 
+		{                                       //retorna false
+			if(s.equals(p.getName()))
+				b = true;
+		}
+		if(!b)
+		{
+			Proyects.add(p);
+			return true;
+		}
+		else
+			return false;
+		
+	}
+	
+	public ArrayList<String> ProjectNames ()
+	{
+		ArrayList<String> r = new ArrayList<String>();
+		for(Proyect p : Proyects)
+		{
+			r.add(p.getName());
+		}
+		return r;
+	}
+	
+	public void AddContext(String cont)
+	{
+		PosibleContext.add(cont);
+	}
 	
 	/*estos metodos se basan en que al agrupar las tareas sin importar de que proyecto
 	 * viene cada una, es como tener un solo gran proyecto al que se le agregan las 
@@ -15,14 +55,10 @@ public class Administrator {
 	 * identificacion de la tarea, le agregue un identificador a la tarea con el numero
 	 * de identificacion de su proyeto.
 	*/
-	public void AddContext(String cont)
-	{
-		PosibleContext.add(cont);
-	}
 	public ArrayList<Task> TodayTasks()
 	{
 		
-		Proyect aux = new Proyect("Aux", new Date()); //funcion add de proyect ya ordena por fecha
+		Proyect aux = new Proyect("Aux"); //funcion add de proyect ya ordena por fecha
 		for(Proyect p : Proyects)
 		{
 			for(Task t : p.TodayTasks())
@@ -35,7 +71,7 @@ public class Administrator {
 	public ArrayList<Task> ThreeDayTasks()
 	{
 		
-		Proyect aux = new Proyect("Aux", new Date()); //funcion add de proyect ya ordena por fecha
+		Proyect aux = new Proyect("Aux"); //funcion add de proyect ya ordena por fecha
 		for(Proyect p : Proyects)
 		{
 			for(Task t : p.ThreeDayTasks())
@@ -48,7 +84,7 @@ public class Administrator {
 	public ArrayList<Task> WeekTasks()
 	{
 		
-		Proyect aux = new Proyect("Aux", new Date()); //funcion add de proyect ya ordena por fecha
+		Proyect aux = new Proyect("Aux"); //funcion add de proyect ya ordena por fecha
 		for(Proyect p : Proyects)
 		{
 			for(Task t : p.WeekTasks())
