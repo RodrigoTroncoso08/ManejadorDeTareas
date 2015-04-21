@@ -15,6 +15,8 @@ public class Administrator {
 		PosibleContext = new ArrayList<String>();
 	}
 	
+	
+	
 	public boolean AddProyect (Proyect p)
 	{
 		boolean b = false;                      //si el nombre del proyecto que se quiere 
@@ -94,5 +96,15 @@ public class Administrator {
 		}
 		return aux.getTasks();
 	}
-
+	
+	public ArrayList<String> getPosibleContext()
+	{
+		return PosibleContext;	
+	}
+	
+	public ArrayList<Proyect> getProyects()
+	{
+		return Proyects;
+	}
+	
 }
