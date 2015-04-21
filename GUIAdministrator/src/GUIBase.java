@@ -172,7 +172,6 @@ public class GUIBase {
 		
 		
 		JButton AddTask = new RoundedButton("+ Task");
-		AddTask.setText("+ Task  ");
 		AddTask.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JDialog Ask = new JDialog (frame,"Nueva Tarea");
@@ -280,6 +279,8 @@ public class GUIBase {
 						if(admin.getProyects().get(i).getName()== Proyectos.getSelectedItem().toString())	
 							admin.getProyects().get(i).AddTask(new Task(Tnombre.getText()));						
 						}
+						Ask.setVisible(false);
+						Ask.dispose(); //pa cerrar el dialogo una vez que se acepta
 					}
 				});
 				okbotom.setForeground(new Color(153, 204, 255));
@@ -290,7 +291,7 @@ public class GUIBase {
 				
 				Ask.getContentPane().add(Paneldialog);
 				Ask.setVisible(true);
-				
+					
 
 			}
 		});
@@ -314,7 +315,39 @@ public class GUIBase {
 		rndbtnProyect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{
+				JDialog AddProject = new JDialog(frame,"Nuevo Proyecto");
+				AddProject.setSize(320, 100);
+				AddProject.setLocation(300,300);
+				JPanel panelsin = new JPanel();
+				panelsin.setBounds(0, 0, 0, 0);
+				panelsin.setLayout(null);
 				
+				JTextField Pnombre = new JTextField();
+				Pnombre.setText("Nombre Proyecto");
+				Pnombre.setBounds(20, 20, 200, 50);
+				
+				RoundedButton okbotom = new RoundedButton("OK");
+				okbotom.setVerticalAlignment(SwingConstants.BOTTOM);
+				okbotom.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) 
+					{
+						for (int i=0; i < admin.getProyects().size();i++)
+						{
+												
+						}
+						AddProject.setVisible(false);
+						AddProject.dispose(); //pa cerrar el dialogo una vez que se acepta
+					}
+				});
+				okbotom.setForeground(new Color(153, 204, 255));
+				okbotom.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 16));
+				okbotom.setBackground(Color.WHITE);
+				okbotom.setBounds(240, 20, 50, 50);
+				
+				panelsin.add(Pnombre);
+				panelsin.add(okbotom);
+				AddProject.add(panelsin);
+				AddProject.setVisible(true);
 			}
 		});
 		rndbtnProyect.setForeground(new Color(153, 204, 255));
