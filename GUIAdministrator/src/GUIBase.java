@@ -13,12 +13,9 @@ import javax.swing.JButton;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.geom.Ellipse2D;
-
 import javax.swing.BorderFactory;
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
-import javax.swing.JList;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JPanel;
@@ -26,32 +23,17 @@ import javax.swing.JPanel;
 //import com.jgoodies.forms.layout.ColumnSpec;
 //import com.jgoodies.forms.layout.RowSpec;
 import javax.swing.JSeparator;
-import javax.swing.JScrollBar;
-import javax.swing.AbstractListModel;
-import javax.swing.LookAndFeel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
 import backend.*;
 
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.RowSpec;
 
 import javax.swing.BoxLayout;
 
-import org.eclipse.wb.swing.FocusTraversalOnArray;
-
-import sun.java2d.loops.DrawLine;
-
-import java.awt.BasicStroke;
 import java.awt.Component;
 import java.awt.Dimension;
-import javax.swing.JSlider;
-import java.awt.Rectangle;
-import java.awt.GridLayout;
-import net.miginfocom.swing.MigLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -150,7 +132,7 @@ public class GUIBase {
 		nodeButton_5.setAlignmentX(0.5f);
 		
 		JLabel lblProyecto = new JLabel("Tarea");
-		lblProyecto.setBounds(38, 23, 39, 31);
+		lblProyecto.setBounds(40, 25, 39, 31);
 		panel_3.add(lblProyecto);
 		
 		
@@ -300,6 +282,7 @@ public class GUIBase {
 		TimeLinePane.setBounds(0, 69, 1026, 584);
 		TimeLinePane.setBackground(new Color(0, 110, 142));
 		frame.getContentPane().add(TimeLinePane);
+		TimeLinePane.setVisible(false);
 		TimeLinePane.setLayout(null);
 		
 		
