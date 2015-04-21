@@ -15,6 +15,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.geom.Ellipse2D;
 
+import javax.swing.BorderFactory;
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
 import javax.swing.JList;
@@ -28,8 +29,33 @@ import javax.swing.JDialog;
 import javax.swing.JSeparator;
 import javax.swing.JScrollBar;
 import javax.swing.AbstractListModel;
+import javax.swing.LookAndFeel;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
+
 import backend.*;
+
+import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.ColumnSpec;
+import com.jgoodies.forms.layout.RowSpec;
+
+import javax.swing.BoxLayout;
+
+import org.eclipse.wb.swing.FocusTraversalOnArray;
+
+import sun.java2d.loops.DrawLine;
+
+import java.awt.BasicStroke;
+import java.awt.Component;
+import java.awt.Dimension;
+import javax.swing.JSlider;
+import java.awt.Rectangle;
+import java.awt.GridLayout;
+import net.miginfocom.swing.MigLayout;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
 
 public class GUIBase {
 
@@ -64,11 +90,70 @@ public class GUIBase {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		
+		try {
+		    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+		        if ("Nimbus".equals(info.getName())) {
+		            UIManager.setLookAndFeel(info.getClassName());
+		            break;
+		        }
+		    }
+		} catch (Exception e) {
+		    // If Nimbus is not available, you can set the GUI to another look and feel.
+		}
+		
 		frame = new JFrame();
 		frame.getContentPane().setBackground(new Color(0, 110, 142));
 		frame.setBounds(100, 50, 1043, 697);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
+		
+		JPanel panel_3 = new RoundedPanel();
+		panel_3.setBackground(new Color(212, 227, 252));
+		panel_3.setBounds(261, 182, 655, 85);
+		frame.getContentPane().add(panel_3);
+		panel_3.setLayout(null);
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(106, 3, 531, 75);
+		scrollPane_1.setBackground(new Color(212, 227, 252));
+		panel_3.add(scrollPane_1);
+		scrollPane_1.setBorder(BorderFactory.createEmptyBorder());
+		scrollPane_1.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+		
+		JPanel panel_1 = new JPanel();
+		panel_1.setBackground(Color.BLACK);
+		scrollPane_1.setViewportView(panel_1);
+		panel_1.setLayout(new BoxLayout(panel_1, BoxLayout.X_AXIS));
+		
+		JScrollPane scrollPane_3 = new JScrollPane();
+		panel_1.add(scrollPane_3);
+		scrollPane_3.setBorder(BorderFactory.createEmptyBorder());
+		
+		JPanel panel_2 = new JPanel();
+		scrollPane_3.setViewportView(panel_2);
+		panel_2.setBackground(new Color(212, 227, 252));
+		GridBagLayout gbl_panel_2 = new GridBagLayout();
+		gbl_panel_2.columnWidths = new int[] {76, 80, 79, 79, 79, 79, 79, 79, 79, 70, 70};
+		gbl_panel_2.rowHeights = new int[]{51, 0};
+		gbl_panel_2.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_panel_2.rowWeights = new double[]{1.0, Double.MIN_VALUE};
+		panel_2.setLayout(gbl_panel_2);
+		
+		NodeButton nodeButton_5 = new NodeButton("New button");
+		nodeButton_5.setBackground(new Color(255, 102, 51));
+		GridBagConstraints gbc_nodeButton_5 = new GridBagConstraints();
+		gbc_nodeButton_5.insets = new Insets(0, 0, 0, 5);
+		gbc_nodeButton_5.gridx = 4;
+		gbc_nodeButton_5.gridy = 0;
+		panel_2.add(nodeButton_5, gbc_nodeButton_5);
+		nodeButton_5.setPreferredSize(new Dimension(50, 50));
+		nodeButton_5.setAlignmentX(0.5f);
+		
+		JLabel lblProyecto = new JLabel("Tarea");
+		lblProyecto.setBounds(38, 23, 39, 31);
+		panel_3.add(lblProyecto);
+		
 		
 		RoundedPanel panel = new RoundedPanel();
 		panel.setBackground(new Color(212, 227, 252));
@@ -76,6 +161,7 @@ public class GUIBase {
 		panel.setBounds(10, 91, 239, 545);
 		frame.getContentPane().add(panel);
 		panel.setLayout(null);
+		
 		
 		
 		
@@ -120,6 +206,7 @@ public class GUIBase {
 		panel.add(rndbtnProyect);
 		
 		txtSearch = new JTextField();
+		txtSearch.setBorder(null);
 		txtSearch.setBackground(new Color(255, 255, 255));
 		txtSearch.setHorizontalAlignment(SwingConstants.LEFT);
 		txtSearch.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 14));
@@ -129,12 +216,12 @@ public class GUIBase {
 		panel.add(txtSearch);
 		txtSearch.setColumns(10);
 		
-		JLabel lblGlosary = new JLabel("Glosary");
-		lblGlosary.setHorizontalAlignment(SwingConstants.CENTER);
-		lblGlosary.setForeground(new Color(255, 255, 255));
-		lblGlosary.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 30));
-		lblGlosary.setBounds(46, 235, 128, 34);
-		panel.add(lblGlosary);
+		JLabel GlosayLabel = new JLabel("Glosary");
+		GlosayLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		GlosayLabel.setForeground(new Color(255, 255, 255));
+		GlosayLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 30));
+		GlosayLabel.setBounds(56, 231, 128, 34);
+		panel.add(GlosayLabel);
 		
 		JButton MiselaneoItem = new RoundedButton("Miselaneo");
 		MiselaneoItem.setVerticalAlignment(SwingConstants.BOTTOM);
@@ -150,6 +237,7 @@ public class GUIBase {
 		
 		
 		JComboBox comboBox = new JComboBox();
+		comboBox.setBorder(null);
 		comboBox.setEditable(true);
 		comboBox.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 12));
 		comboBox.setForeground(new Color(0, 204, 255));
@@ -158,6 +246,7 @@ public class GUIBase {
 		comboBox.setBackground(new Color(255, 255, 255));
 		comboBox.setBounds(37, 172, 147, 28);
 		comboBox.addItem("Miselaneo");
+		
 		panel.add(comboBox);
 		
 		JSeparator separator = new JSeparator();
@@ -166,34 +255,60 @@ public class GUIBase {
 		separator.setBounds(10, 217, 198, 2);
 		panel.add(separator);
 		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(10, 298, 207, 162);
+		panel.add(scrollPane);
+		scrollPane.setBorder(BorderFactory.createEmptyBorder());
+		
+		JPanel GlosaryPane = new JPanel();
+		GlosaryPane.setForeground(Color.WHITE);
+		scrollPane.setViewportView(GlosaryPane);
+		GlosaryPane.setLayout(new BoxLayout(GlosaryPane, BoxLayout.Y_AXIS));
+		GlosaryPane.setBackground(new Color(212, 227, 252));
+		
+		
+		RoundedButton rndbtnClases = new RoundedButton("+ Task");
+		rndbtnClases.setAlignmentX(Component.CENTER_ALIGNMENT);
+		GlosaryPane.add(rndbtnClases);
+		rndbtnClases.setText("Clases");
+		rndbtnClases.setForeground(Color.WHITE);
+		rndbtnClases.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
+		rndbtnClases.setBackground(new Color(0, 0, 102));
+		
+		JLabel lblNewLabel_1 = new JLabel("  ");
+		GlosaryPane.add(lblNewLabel_1);
+		
+		RoundedButton rndbtnMicelaneo = new RoundedButton("+ Task");
+		rndbtnMicelaneo.setAlignmentX(Component.CENTER_ALIGNMENT);
+		GlosaryPane.add(rndbtnMicelaneo);
+		rndbtnMicelaneo.setText("Micelaneo");
+		rndbtnMicelaneo.setForeground(Color.WHITE);
+		rndbtnMicelaneo.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
+		rndbtnMicelaneo.setBackground(new Color(102, 204, 153));
+		
+		JLabel label = new JLabel("  ");
+		GlosaryPane.add(label);
+		
 		RoundedButton roundedButton = new RoundedButton("+ Task");
+		roundedButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		GlosaryPane.add(roundedButton);
 		roundedButton.setText("Trabajo");
 		roundedButton.setForeground(Color.WHITE);
-		roundedButton.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 16));
+		roundedButton.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
 		roundedButton.setBackground(new Color(255, 204, 51));
-		roundedButton.setBounds(37, 453, 147, 34);
-		panel.add(roundedButton);
 		
-		RoundedButton roundedButton_1 = new RoundedButton("+ Task");
-		roundedButton_1.setText("Micelaneo");
-		roundedButton_1.setForeground(Color.WHITE);
-		roundedButton_1.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 16));
-		roundedButton_1.setBackground(new Color(102, 204, 153));
-		roundedButton_1.setBounds(37, 387, 147, 43);
-		panel.add(roundedButton_1);
+		JLabel label_1 = new JLabel("  ");
+		GlosaryPane.add(label_1);
 		
-		RoundedButton roundedButton_2 = new RoundedButton("+ Task");
-		roundedButton_2.setText("Clases");
-		roundedButton_2.setForeground(Color.WHITE);
-		roundedButton_2.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 16));
-		roundedButton_2.setBackground(new Color(0, 0, 102));
-		roundedButton_2.setBounds(37, 318, 147, 43);
-		panel.add(roundedButton_2);
+		JPanel TimeLinePane = new TimeLinePanel();
+		TimeLinePane.setBounds(0, 69, 1026, 584);
+		TimeLinePane.setBackground(new Color(0, 110, 142));
+		frame.getContentPane().add(TimeLinePane);
+		TimeLinePane.setLayout(null);
 		
-		RoundedPanel panel_1 = new RoundedPanel();
-		panel_1.setBackground(new Color(255, 255, 255));
-		panel_1.setBounds(0, 77, 1005, 576);
-		frame.getContentPane().add(panel_1);
-		panel_1.setLayout(null);
+		
+		
+		
+		
 	}
 }
