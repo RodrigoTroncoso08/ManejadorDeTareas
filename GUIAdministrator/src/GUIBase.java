@@ -21,6 +21,7 @@ import javax.swing.JList;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JPanel;
+import javax.swing.JDialog;
 //import com.jgoodies.forms.layout.FormLayout;
 //import com.jgoodies.forms.layout.ColumnSpec;
 //import com.jgoodies.forms.layout.RowSpec;
@@ -82,7 +83,10 @@ public class GUIBase {
 		AddTask.setText("+ Task  ");
 		AddTask.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				JDialog Ask = new JDialog (frame,"Nueva Tarea");
+				Ask.setSize(200, 150);
+				Ask.setLocation(400, 300);
+				Ask.setVisible(true);
 			}
 		});
 		AddTask.setVerticalAlignment(SwingConstants.BOTTOM);
