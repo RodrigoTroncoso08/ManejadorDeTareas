@@ -50,7 +50,7 @@ public class ProyectPanel extends JPanel{
 		// TODO Auto-generated constructor stub
 		super();
 		setOpaque(false);
-		this.setBounds(220, 20+130*ProyectCount, 758, 121);
+		this.setBounds(230, 20+130*ProyectCount, 748, 119);
 		this.setBackground(new Color(212, 227, 252));
 		this.setLayout(null);
 		ProyectCount++;
@@ -64,7 +64,7 @@ public class ProyectPanel extends JPanel{
 		this.add(ProyectLabel);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(105, 6, 632, 109);
+		scrollPane_1.setBounds(140, 6, 602, 100);
 		scrollPane_1.setBackground(new Color(212, 227, 252));
 		this.add(scrollPane_1);
 		scrollPane_1.setBorder(BorderFactory.createEmptyBorder());
@@ -111,7 +111,7 @@ public void AddTask(Task t)
 		
 		NodeButton nodeButton_5 = new NodeButton(t.getName().substring(0, 1));
 		nodeButton_5.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 30));
-		nodeButton_5.setForeground(new Color(0, 128, 128));
+		nodeButton_5.setForeground(t.getContext());
 		GridBagConstraints gbc_nodeButton_5 = new GridBagConstraints();
 		gbc_nodeButton_5.insets = new Insets(0, 0, 5, 5);
 		gbc_nodeButton_5.gridx = countTask;

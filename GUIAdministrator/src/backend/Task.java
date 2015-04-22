@@ -9,7 +9,7 @@ public class Task {
 	
 	String Name;
 	String Description;
-	String Context; 	//Lo puse como string dado que me parecio practico por el momento
+	Color Context; 	//Lo puse como string dado que me parecio practico por el momento
 	State state;
 	Date Deadline;
 	int WorkingDays;
@@ -54,10 +54,10 @@ public class Task {
 	public void setDescription(String description) {
 		Description = description;
 	}
-	public String getContext() {
+	public Color getContext() {
 		return Context;
 	}
-	public void setContext(String context) {
+	public void setContext(Color context) {
 		Context = context;
 	}
 	public State getState() {

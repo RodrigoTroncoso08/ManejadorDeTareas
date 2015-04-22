@@ -93,9 +93,6 @@ public class GUIBase {
 		admin= new Administrator();
 		admin.AddProyect(new Proyect("Miscelaneo"));
 		admin.AddContext("Miscelaneo");
-		ProyectPanel PP = new ProyectPanel("Miscelaneo");
-		ProyectUI.add(PP);
-		WhiteBase.add(PP);
 	}
 
 	/**
@@ -262,13 +259,14 @@ public class GUIBase {
 				RoundedButton okbotom = new RoundedButton("OK");
 				okbotom.setVerticalAlignment(SwingConstants.BOTTOM);
 				okbotom.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) 
+					public void actionPerformed(ActionEvent e) 				//////////////////+ Tarea
 					{
 						for (int i=0; i < admin.getProyects().size();i++)
 						{
 						if(admin.getProyects().get(i).getName()== Proyectos.getSelectedItem().toString())
 						{
 							Task t = new Task(Tnombre.getText());
+							t.setContext(admin.AddContext((String)Contextos.getSelectedItem()));
 							admin.getProyects().get(i).AddTask(t);
 							ProyectUI.get(i).AddTask(t); //es importante que los proyectos se agreguen logica y visualmente en el mismo orden
 							
@@ -324,15 +322,19 @@ public class GUIBase {
 				RoundedButton okbotom = new RoundedButton("OK");
 				okbotom.setVerticalAlignment(SwingConstants.BOTTOM);
 				okbotom.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) 
+					public void actionPerformed(ActionEvent e) 			////////////////////+ Proyecto
 					{
 						Proyect p = new Proyect(Pnombre.getText());
 						admin.AddProyect(p);
 						ProyectPanel PP = new ProyectPanel(Pnombre.getText());
 						ProyectUI.add(PP);
 						WhiteBase.add(PP);
+						WhiteBase.setPreferredSize(new Dimension(WhiteBase.getPreferredSize().width, WhiteBase.getPreferredSize().height+140));
+						WhiteBase.revalidate();
+						WhiteBase.repaint();
 						AddProject.setVisible(false);
 						AddProject.dispose(); //pa cerrar el dialogo una vez que se acepta
+						frame.revalidate();
 						frame.repaint();
 						
 					}
@@ -408,11 +410,12 @@ public class GUIBase {
 		JPanel GlosaryPanel = new JPanel();
 		GlosaryPanel.setForeground(Color.WHITE);
 		scrollPane.setViewportView(GlosaryPanel);
-		GlosaryPanel.setLayout(new BoxLayout(GlosaryPanel, BoxLayout.Y_AXIS));
 		GlosaryPanel.setBackground(new Color(212, 227, 252));
+		GlosaryPanel.setLayout(null);
 		
 		
 		RoundedButton rndbtnClases = new RoundedButton("+ Task");
+		rndbtnClases.setBounds(6, 0, 164, 36);
 		rndbtnClases.setAlignmentX(Component.CENTER_ALIGNMENT);
 		GlosaryPanel.add(rndbtnClases);
 		rndbtnClases.setText("Clases");
@@ -421,9 +424,11 @@ public class GUIBase {
 		rndbtnClases.setBackground(new Color(0, 0, 102));
 		
 		JLabel lblNewLabel_1 = new JLabel("  ");
+		lblNewLabel_1.setBounds(80, 36, 6, 16);
 		GlosaryPanel.add(lblNewLabel_1);
 		
 		RoundedButton rndbtnMicelaneo = new RoundedButton("+ Task");
+		rndbtnMicelaneo.setBounds(6, 52, 164, 36);
 		rndbtnMicelaneo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
@@ -437,9 +442,12 @@ public class GUIBase {
 		rndbtnMicelaneo.setBackground(new Color(102, 204, 153));
 		
 		JLabel label = new JLabel("  ");
+		label.setBounds(80, 88, 6, 16);
 		GlosaryPanel.add(label);
 		
 		RoundedButton roundedButton = new RoundedButton("+ Task");
+		roundedButton.shady=false;
+		roundedButton.setBounds(6, 104, 164, 36);
 		roundedButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		GlosaryPanel.add(roundedButton);
 		roundedButton.setText("Trabajo");
@@ -448,19 +456,24 @@ public class GUIBase {
 		roundedButton.setBackground(new Color(255, 204, 51));
 		
 		JLabel label_1 = new JLabel("  ");
+		label_1.setBounds(80, 140, 6, 16);
 		GlosaryPanel.add(label_1);
 		
-		
-		WhiteBase.setBounds(6, 69, 1005, 576);
-		frame.getContentPane().add(WhiteBase);
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setSize(new Dimension(100, 100));
+		scrollPane_1.setPreferredSize(new Dimension(1000, 1000));
+		scrollPane_1.setBounds(6, 69, 1005, 576);
+		frame.getContentPane().add(scrollPane_1);
+		ProyectPanel PP = new ProyectPanel("Miscelaneo");
+		ProyectUI.add(PP);
+		WhiteBase.setSize(new Dimension(100, 1000));
+		WhiteBase.setPreferredSize(new Dimension(500, 140));
+		scrollPane_1.setViewportView(WhiteBase);
+		WhiteBase.add(PP);
 		WhiteBase.setForeground(Color.DARK_GRAY);
 		WhiteBase.setBackground(new Color(255, 255, 255));
 		WhiteBase.setLayout(null);
-		
-		JScrollBar scrollBar = new JScrollBar();
-		scrollBar.setBounds(984, 37, 15, 514);
-		WhiteBase.add(scrollBar);
-		
+		WhiteBase.setVisible(true);
 		
 		
 		JPanel TimeLinePane = new TimeLinePanel();
@@ -469,7 +482,6 @@ public class GUIBase {
 		frame.getContentPane().add(TimeLinePane);
 		TimeLinePane.setVisible(false);
 		TimeLinePane.setLayout(null);
-		WhiteBase.setVisible(true);
 		
 		
 		
