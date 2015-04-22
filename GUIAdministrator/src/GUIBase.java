@@ -52,10 +52,6 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.util.ArrayList;
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.RowSpec;
-
 public class GUIBase {
 
 	private JFrame frame;
@@ -91,6 +87,7 @@ public class GUIBase {
 		
 		admin= new Administrator();
 		admin.AddProyect(new Proyect("Miscelaneo"));
+		admin.AddContext("Miscelaneo");
 	}
 
 	/**
@@ -132,7 +129,7 @@ public class GUIBase {
 		AddTask.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JDialog Ask = new JDialog (frame,"Nueva Tarea");
-				Ask.setSize(400,400);
+				Ask.setSize(400,320);
 				Ask.setLocation(400, 200);
 				JPanel Paneldialog = new JPanel ();
 				Paneldialog.setLayout(null);
@@ -141,90 +138,118 @@ public class GUIBase {
 				JLabel NombreTarea = new JLabel("Nombre de la tarea");
 				NombreTarea.setHorizontalAlignment(SwingConstants.CENTER);
 				NombreTarea.setForeground(new Color(0,0,0));
-				NombreTarea.setFont(new Font("Arial Rounded MT Bold",Font.BOLD,15));
-				//NombreTarea.setBounds(x, y, width, height);
+				NombreTarea.setFont(new Font("Arial Rounded MT Bold",Font.BOLD,13));
+				NombreTarea.setBounds(10, 10, 200, 50);
 				Paneldialog.add(NombreTarea);
 				
 				JTextField Tnombre = new JTextField();
 				Tnombre.setBorder(null);
 				Tnombre.setBackground(new Color(255, 255, 255));
 				Tnombre.setHorizontalAlignment(SwingConstants.LEFT);
-				Tnombre.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 14));
+				Tnombre.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 13));
 				Tnombre.setForeground(new Color(0,0,0));
-				Tnombre.setBounds(37, 127, 147, 34);
+				Tnombre.setBounds(220, 10, 160, 50);
 				Paneldialog.add(Tnombre);
 				
 				JLabel ProyectoTarea = new JLabel("Proyecto de la tarea");
 				ProyectoTarea.setHorizontalAlignment(SwingConstants.CENTER);
 				ProyectoTarea.setForeground(new Color(0,0,0));
-				ProyectoTarea.setFont(new Font("Arial Rounded MT Bold",Font.BOLD,15));
-				//ProyectoTarea.setBounds(x, y, width, height);
+				ProyectoTarea.setFont(new Font("Arial Rounded MT Bold",Font.BOLD,13));
+				ProyectoTarea.setBounds(10, 70, 200, 50);
 				Paneldialog.add(ProyectoTarea);
 				
 				JComboBox Proyectos = new JComboBox();
 				Proyectos.setBorder(null);
 				Proyectos.setEditable(true);
-				Proyectos.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 12));
+				Proyectos.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 13));
 				Proyectos.setForeground(new Color(0,0,0));
-				ArrayList<String> Lista=admin.ProjectNames();
-				String[] opcionesp = new String[Lista.size()+1];
-				for(int i=0; i<Lista.size();i++)
+				ArrayList<String> Listap=admin.ProjectNames();
+				String[] opcionesp = new String[Listap.size()+1];
+				for(int i=0; i<Listap.size();i++)
 				{
-					opcionesp[i]=Lista.get(i);
+					opcionesp[i]=Listap.get(i);
 				}
-				opcionesp[Lista.size()]="Nuevo Proyecto";
+				opcionesp[Listap.size()]="Nuevo Proyecto";
 				Proyectos.setModel(new DefaultComboBoxModel(opcionesp));
 				Proyectos.setSelectedIndex(0);
 				Proyectos.setBackground(new Color(255, 255, 255));
-				Proyectos.setBounds(37, 172, 147, 28);
-				Proyectos.addActionListener(new ActionListener()
-				{
-					public void actionPerformed(ActionEvent e)
-					{
-						//aca tiene que aparecer la ventana para crear un proyecto
-					}
-				});
+				Proyectos.setBounds(220, 70, 160, 50);
 				Paneldialog.add(Proyectos);
 				
 				JLabel ContextoTarea = new JLabel("Contexto de la tarea");
 				ContextoTarea.setHorizontalAlignment(SwingConstants.CENTER);
 				ContextoTarea.setForeground(new Color(0,0,0));
-				ContextoTarea.setFont(new Font("Arial Rounded MT Bold",Font.BOLD,15));
-				//ContextoTarea.setBounds(x, y, width, height);
+				ContextoTarea.setFont(new Font("Arial Rounded MT Bold",Font.BOLD,13));
+				ContextoTarea.setBounds(10, 130, 200, 50);
 				Paneldialog.add(ContextoTarea);
 				
 				JComboBox Contextos = new JComboBox();
 				Contextos.setBorder(null);
 				Contextos.setEditable(true);
-				Contextos.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 12));
+				Contextos.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 13));
 				Contextos.setForeground(new Color(0,0,0));
 				ArrayList<String> Listac=admin.getPosibleContext();
 				String[] opcionesc = new String[Listac.size()+1];
 				for(int i=0; i<Listac.size();i++)
 				{
-					opcionesc[i]=Lista.get(i);
+					opcionesc[i]=Listac.get(i);
 				}
-				opcionesc[Lista.size()-1]="Nuevo Contexto";
+				opcionesc[Listac.size()]="Nuevo Contexto";
 				Contextos.setModel(new DefaultComboBoxModel(opcionesc));
 				Contextos.setSelectedIndex(0);
 				Contextos.setBackground(new Color(255, 255, 255));
-				Contextos.setBounds(37, 172, 147, 28);
-			//	/Contextos.addActionListener(new ActionListener()
-		//		{
-				//	public void actionPerformed(ActionEvent e)
-			//		{
-						// aca se pide que ingrese el nombre y se agrega
-				
-				//	}
-			//	});
+				Contextos.setBounds(220, 130, 160, 50);
 				Paneldialog.add(Contextos);
 				
 				JLabel FechaTarea = new JLabel("Fecha de termino");
 				FechaTarea.setHorizontalAlignment(SwingConstants.CENTER);
 				FechaTarea.setForeground(new Color(0,0,0));
-				FechaTarea.setFont(new Font("Arial Rounded MT Bold",Font.BOLD,15));
-				//FechaTarea.setBounds(x, y, width, height);
+				FechaTarea.setFont(new Font("Arial Rounded MT Bold",Font.BOLD,13));
+				FechaTarea.setBounds(10, 190, 200, 50);
 				Paneldialog.add(FechaTarea);
+				
+				JLabel DiaTarea = new JLabel("dia");
+				DiaTarea.setHorizontalAlignment(SwingConstants.CENTER);
+				DiaTarea.setForeground(new Color(0,0,0));
+				DiaTarea.setFont(new Font("Arial Rounded MT Bold",Font.BOLD,13));
+				DiaTarea.setBounds(220, 220, 30, 25);
+				Paneldialog.add(DiaTarea);
+				JLabel MesTarea = new JLabel("mes");
+				MesTarea.setHorizontalAlignment(SwingConstants.CENTER);
+				MesTarea.setForeground(new Color(0,0,0));
+				MesTarea.setFont(new Font("Arial Rounded MT Bold",Font.BOLD,13));
+				MesTarea.setBounds(260, 220, 30, 25);
+				Paneldialog.add(MesTarea);
+				JLabel AñoTarea = new JLabel("año");
+				AñoTarea.setHorizontalAlignment(SwingConstants.CENTER);
+				AñoTarea.setForeground(new Color(0,0,0));
+				AñoTarea.setFont(new Font("Arial Rounded MT Bold",Font.BOLD,13));
+				AñoTarea.setBounds(300, 220, 40, 25);
+				Paneldialog.add(AñoTarea);
+				JTextField Tdia = new JTextField();
+				Tdia.setBorder(null);
+				Tdia.setBackground(new Color(255, 255, 255));
+				Tdia.setHorizontalAlignment(SwingConstants.LEFT);
+				Tdia.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 13));
+				Tdia.setForeground(new Color(0,0,0));
+				Tdia.setBounds(220, 195, 30, 25);
+				Paneldialog.add(Tdia);
+				JTextField Tmes = new JTextField();
+				Tmes.setBorder(null);
+				Tmes.setBackground(new Color(255, 255, 255));
+				Tmes.setHorizontalAlignment(SwingConstants.LEFT);
+				Tmes.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 13));
+				Tmes.setForeground(new Color(0,0,0));
+				Tmes.setBounds(260, 195, 30, 25);
+				Paneldialog.add(Tmes);
+				JTextField Taño = new JTextField();
+				Taño.setBorder(null);
+				Taño.setBackground(new Color(255, 255, 255));
+				Taño.setHorizontalAlignment(SwingConstants.LEFT);
+				Taño.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 13));
+				Taño.setForeground(new Color(0,0,0));
+				Taño.setBounds(300, 195, 40, 25);
+				Paneldialog.add(Taño);
 				
 				RoundedButton okbotom = new RoundedButton("OK");
 				okbotom.setVerticalAlignment(SwingConstants.BOTTOM);
@@ -241,9 +266,9 @@ public class GUIBase {
 					}
 				});
 				okbotom.setForeground(new Color(153, 204, 255));
-				okbotom.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 16));
+				okbotom.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 13));
 				okbotom.setBackground(Color.WHITE);
-				okbotom.setBounds(37, 88, 147, 28);
+				okbotom.setBounds(310,245 ,70 ,30 );
 				Paneldialog.add(okbotom);
 				
 				Ask.getContentPane().add(Paneldialog);
@@ -288,16 +313,14 @@ public class GUIBase {
 				okbotom.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) 
 					{
-						for (int i=0; i < admin.getProyects().size();i++)
-						{
-												
-						}
+						admin.AddProyect(new Proyect(Pnombre.getText()));
 						AddProject.setVisible(false);
 						AddProject.dispose(); //pa cerrar el dialogo una vez que se acepta
+						
 					}
 				});
 				okbotom.setForeground(new Color(153, 204, 255));
-				okbotom.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 16));
+				okbotom.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 13));
 				okbotom.setBackground(Color.WHITE);
 				okbotom.setBounds(240, 20, 50, 50);
 				
