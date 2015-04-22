@@ -16,11 +16,13 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 import backend.*;
 
 public class ProyectPanel extends JPanel{
 	
+		
 		public JLabel ProyectLabel = new JLabel("Proyect");
 		public JPanel NodeGrid = new JPanel();
 		
@@ -39,9 +41,12 @@ public class ProyectPanel extends JPanel{
 	    protected int shadowOffset = 5;
 	    /** The transparency value of shadow. ( 0 - 255) */
 	    protected int shadowAlpha = 150;
+	    
+	    
 	public ProyectPanel(String Name) {
 		// TODO Auto-generated constructor stub
 		super();
+		
 		setOpaque(false);
 		this.setBounds(230, 64, 758, 121);
 		this.setBackground(new Color(212, 227, 252));
@@ -70,11 +75,10 @@ public class ProyectPanel extends JPanel{
 		panel_1.add(scrollPane_3);
 		scrollPane_3.setBorder(BorderFactory.createEmptyBorder());
 		
-		JPanel NodeGrid = new JPanel();
 		scrollPane_3.setViewportView(NodeGrid);
 		NodeGrid.setBackground(new Color(212, 227, 252));
 		GridBagLayout gbl_NodeGrid = new GridBagLayout();
-		gbl_NodeGrid.columnWidths = new int[] {79};
+		gbl_NodeGrid.columnWidths = new int[] {79,79,79,79,79,77,79,79,79,79,79,79};
 		gbl_NodeGrid.rowHeights = new int[] {10, 40, 10};
 		gbl_NodeGrid.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		gbl_NodeGrid.rowWeights = new double[]{0.0, 0.0, 0.0};
@@ -102,14 +106,7 @@ public class ProyectPanel extends JPanel{
 		nodeButton_5.setPreferredSize(new Dimension(25, 25));  //maximo 50 para que quepan, minimo 10 para que se vea
 		nodeButton_5.setAlignmentX(0.5f);
 		
-		JLabel TaskLavel = new JLabel("asdsad");
-		TaskLavel.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 12));
-		GridBagConstraints gbc_TaskLavel = new GridBagConstraints();
-		TaskLavel.setForeground(new Color(112, 150, 252));
-		gbc_TaskLavel.insets = new Insets(0, 0, 0, 5);
-		gbc_TaskLavel.gridx = 0;
-		gbc_TaskLavel.gridy = 2;
-		NodeGrid.add(TaskLavel, gbc_TaskLavel);
+		
 	}
 public void AddTask(int index, Task t)
 	{
@@ -124,7 +121,7 @@ public void AddTask(int index, Task t)
 		lblNewLabel_2.setBackground(new Color(255, 250, 250));
 		GridBagConstraints gbc_lblNewLabel_2 = new GridBagConstraints();
 		gbc_lblNewLabel_2.insets = new Insets(0, 0, 5, 5);
-		gbc_lblNewLabel_2.gridx = index;
+		gbc_lblNewLabel_2.gridx = 3;
 		gbc_lblNewLabel_2.gridy = 0;
 		NodeGrid.add(lblNewLabel_2, gbc_lblNewLabel_2);
 		
@@ -133,11 +130,11 @@ public void AddTask(int index, Task t)
 		nodeButton_5.setForeground(new Color(0, 128, 128));
 		GridBagConstraints gbc_nodeButton_5 = new GridBagConstraints();
 		gbc_nodeButton_5.insets = new Insets(0, 0, 5, 5);
-		gbc_nodeButton_5.gridx = index;
+		gbc_nodeButton_5.gridx = 3;
 		gbc_nodeButton_5.gridy = 1;
 		NodeGrid.add(nodeButton_5, gbc_nodeButton_5);
 		nodeButton_5.setBackground(t.getColor());
-		nodeButton_5.setPreferredSize(new Dimension(25, 25));  //maximo 50 para que quepan, minimo 10 para que se vea
+		nodeButton_5.setPreferredSize(new Dimension(50, 50));  //maximo 50 para que quepan, minimo 10 para que se vea
 		nodeButton_5.setAlignmentX(0.5f);
 		
 		JLabel TaskLavel = new JLabel(t.getName());
@@ -145,10 +142,10 @@ public void AddTask(int index, Task t)
 		GridBagConstraints gbc_TaskLavel = new GridBagConstraints();
 		TaskLavel.setForeground(new Color(112, 150, 252));
 		gbc_TaskLavel.insets = new Insets(0, 0, 0, 5);
-		gbc_TaskLavel.gridx = index;
+		gbc_TaskLavel.gridx = 3;
 		gbc_TaskLavel.gridy = 2;
 		NodeGrid.add(TaskLavel, gbc_TaskLavel);
-		NodeGrid.repaint();
+		this.revalidate();
 		this.repaint();
 	}
 public void ChangeName(String newName)
@@ -159,6 +156,7 @@ public void ChangeName(String newName)
 }
 @Override
 protected void paintComponent(Graphics g) {
+
     super.paintComponent(g);
     int width = getWidth();
     int height = getHeight();
@@ -197,6 +195,12 @@ protected void paintComponent(Graphics g) {
 
     //Sets strokes to default, is better.
     graphics.setStroke(new BasicStroke());
+	}
+
+public String GetName()
+{
+	return ProyectLabel.getText();
 }
 }
+
 	

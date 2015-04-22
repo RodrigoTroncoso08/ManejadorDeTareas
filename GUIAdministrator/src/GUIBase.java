@@ -57,6 +57,7 @@ public class GUIBase {
 	private JFrame frame;
 	private JTextField txtSearch;
 	private Administrator admin;
+	private ArrayList<ProyectPanel> ProyectUI = new ArrayList<ProyectPanel>();
 
 	/**
 	 * Launch the application.
@@ -356,10 +357,6 @@ public class GUIBase {
 		
 		JButton MiselaneoItem = new RoundedButton("Miselaneo");
 		MiselaneoItem.setVerticalAlignment(SwingConstants.BOTTOM);
-		MiselaneoItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
 		MiselaneoItem.setText("+ Proyect  ");
 		MiselaneoItem.setForeground(new Color(153, 204, 255));
 		MiselaneoItem.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 16));
@@ -410,6 +407,11 @@ public class GUIBase {
 		GlosaryPanel.add(lblNewLabel_1);
 		
 		RoundedButton rndbtnMicelaneo = new RoundedButton("+ Task");
+		rndbtnMicelaneo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+			}
+		});
 		rndbtnMicelaneo.setAlignmentX(Component.CENTER_ALIGNMENT);
 		GlosaryPanel.add(rndbtnMicelaneo);
 		rndbtnMicelaneo.setText("Micelaneo");
@@ -481,6 +483,15 @@ public class GUIBase {
 		NodeGrid.add(lblNewLabel_2, gbc_lblNewLabel_2);
 		
 		NodeButton nodeButton_5 = new NodeButton("New button");
+		nodeButton_5.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				Task t = new Task("hola");
+				Proyect p = new Proyect("hola");
+				p.AddTask(t);
+				ProyectUI.get(0).AddTask(0, t);
+			}
+		});
 		nodeButton_5.setForeground(new Color(255, 255, 255));
 		GridBagConstraints gbc_nodeButton_5 = new GridBagConstraints();
 		gbc_nodeButton_5.insets = new Insets(0, 0, 5, 5);
@@ -517,13 +528,12 @@ public class GUIBase {
 		
 		ProyectPanel prueba= new ProyectPanel("VamosCTM");
 		prueba.setLocation(230, 222);
-		
-		
-		Task t = new Task("PorfavorCTM");
-		Proyect p = new Proyect("VamosCTM");
-		p.AddTask(t);
-		prueba.AddTask(0, t);
 		WhiteBase.add(prueba);
+		
+		ProyectUI.add(prueba);
+		
+		
+		
 		
 		
 	}
