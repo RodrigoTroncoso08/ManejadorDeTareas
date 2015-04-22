@@ -1,5 +1,6 @@
 package backend;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -17,7 +18,9 @@ public class Task {
 	int Progress;
 	ArrayList<Task> RequireTasks;
 	int ProyectId; // necesario para poder saber de manera facil el color de la tarea (proyeto al que pertenece)
+	Color color;  //lo agregue para gemerarlo al iniciar un proyecto y se,le agrega a cada tarea cuando se agrega a un proyecto
 	
+
 	////Metodos
 	//voy a hacer que hayan varios constructores
 	public Task(String name) //pide lo menos posible para crear una tarea
@@ -93,7 +96,13 @@ public class Task {
 	public void setProgress(int progress) {
 		this.Progress = progress;
 	}
+	public Color getColor() {
+		return color;
+	}
 
+	public void setColor(Color color) {
+		this.color = color;
+	}
 	
 	
 	

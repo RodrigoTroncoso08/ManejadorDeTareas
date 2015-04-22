@@ -20,7 +20,7 @@ public class NodeButton extends JButton {
     /** Sets if it has an High Quality view */
     protected boolean highQuality = true;
     /** Double values for Horizontal and Vertical radius of corner arcs */
-    protected Dimension arcs = new Dimension(getPreferredSize().width, getPreferredSize().width);
+    protected Dimension arcs = new Dimension(getPreferredSize().width*2, getPreferredSize().width*2);
     /** Distance between shadow border and opaque panel border */
     protected int shadowGap = 3;
     /** The offset of shadow.  */
@@ -30,7 +30,7 @@ public class NodeButton extends JButton {
     /** The transparency value of shadow. ( 0 - 255) */
     protected int shadowAlpha = 150;
 	  public NodeButton(String label) {
-	    super(label);
+	    super("");
 
 	    
 	// These statements enlarge the button so that it 
@@ -63,8 +63,8 @@ public class NodeButton extends JButton {
 	 			RenderingHints.VALUE_ANTIALIAS_ON);
 	         }
 
-	         //Draws shadow borders if any.
-	         if (shady) {
+	         //Draws shadow borders if any. no por ahora
+	         if (false) {
 	             graphics.setColor(shadowColorA);
 	             graphics.fillRoundRect(
 	                     shadowOffset,// X position
@@ -78,12 +78,15 @@ public class NodeButton extends JButton {
 
 	         //Draws the rounded opaque panel with borders.
 	         graphics.setColor(getBackground());
-	         graphics.fillRoundRect(0, 0, width - shadowGap, 
-	        height - shadowGap, arcs.width, arcs.height);
+	         graphics.fillRoundRect(0, 0, width , 
+	        height, arcs.width, arcs.height);
 	         graphics.setColor(getForeground());
-	         graphics.setStroke(new BasicStroke(strokeSize));
-	         graphics.drawRoundRect(0, 0, width - shadowGap, 
-	 		height - shadowGap, arcs.width, arcs.height);
+	         float[] dash3 = {3f, 3f, 3f};
+	         BasicStroke bs3 = new BasicStroke(3, BasicStroke.CAP_BUTT,
+	                 BasicStroke.JOIN_BEVEL, 1f, dash3, 1f);
+	         graphics.setStroke(bs3);
+	         graphics.drawRoundRect(0, 0, width , 
+	 		height, arcs.width, arcs.height);
 
 	         super.paintComponent(g);
 	    }

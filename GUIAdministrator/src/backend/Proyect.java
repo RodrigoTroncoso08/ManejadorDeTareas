@@ -1,8 +1,11 @@
 package backend;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Random;
+
 import org.joda.time.DateTimeComparator;
 
 
@@ -13,15 +16,17 @@ public class Proyect {
 	String Description;
 	State state;
 	Date Deadline;
-	ArrayList<Task> Tasks;
+	ArrayList<Task> Tasks= new ArrayList<Task>();
 	int Progress;
-	ArrayList<String> Members; //la idea es tener los email de quienes participen del proyecto
-	
+	ArrayList<String> Members = new ArrayList<String>(); //la idea es tener los email de quienes participen del proyecto
+	Color color;
 	//Metodos
 	
 	public Proyect(String name)
 	{
 		Name=name;
+		Random r = new Random(42132);
+		color=new Color(r.nextInt(256),r.nextInt(256),r.nextInt(256));
 	}
 	public void AddTask(Task t) //mantiene ordenada la lista
 	{
@@ -53,6 +58,7 @@ public class Proyect {
 			}
 			Tasks.add(t);	//si no se incerta entremedio, queda al ultimo
 		}
+		t.color = color;
 	}
 	public ArrayList<Task> TodayTasks()
 	{

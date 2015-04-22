@@ -52,6 +52,9 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.util.ArrayList;
+import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.ColumnSpec;
+import com.jgoodies.forms.layout.RowSpec;
 
 public class GUIBase {
 
@@ -114,59 +117,13 @@ public class GUIBase {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
-		JPanel panel_3 = new RoundedPanel();
-		panel_3.setBackground(new Color(212, 227, 252));
-		panel_3.setBounds(261, 182, 655, 85);
-		frame.getContentPane().add(panel_3);
-		panel_3.setLayout(null);
 		
-		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(106, 3, 531, 75);
-		scrollPane_1.setBackground(new Color(212, 227, 252));
-		panel_3.add(scrollPane_1);
-		scrollPane_1.setBorder(BorderFactory.createEmptyBorder());
-		scrollPane_1.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
-		
-		JPanel panel_1 = new JPanel();
-		panel_1.setBackground(Color.BLACK);
-		scrollPane_1.setViewportView(panel_1);
-		panel_1.setLayout(new BoxLayout(panel_1, BoxLayout.X_AXIS));
-		
-		JScrollPane scrollPane_3 = new JScrollPane();
-		panel_1.add(scrollPane_3);
-		scrollPane_3.setBorder(BorderFactory.createEmptyBorder());
-		
-		JPanel panel_2 = new JPanel();
-		scrollPane_3.setViewportView(panel_2);
-		panel_2.setBackground(new Color(212, 227, 252));
-		GridBagLayout gbl_panel_2 = new GridBagLayout();
-		gbl_panel_2.columnWidths = new int[] {76, 80, 79, 79, 79, 79, 79, 79, 79, 70, 70};
-		gbl_panel_2.rowHeights = new int[]{51, 0};
-		gbl_panel_2.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-		gbl_panel_2.rowWeights = new double[]{1.0, Double.MIN_VALUE};
-		panel_2.setLayout(gbl_panel_2);
-		
-		NodeButton nodeButton_5 = new NodeButton("New button");
-		nodeButton_5.setBackground(new Color(255, 102, 51));
-		GridBagConstraints gbc_nodeButton_5 = new GridBagConstraints();
-		gbc_nodeButton_5.insets = new Insets(0, 0, 0, 5);
-		gbc_nodeButton_5.gridx = 4;
-		gbc_nodeButton_5.gridy = 0;
-		panel_2.add(nodeButton_5, gbc_nodeButton_5);
-		nodeButton_5.setPreferredSize(new Dimension(50, 50));
-		nodeButton_5.setAlignmentX(0.5f);
-		
-		JLabel lblProyecto = new JLabel("Tarea");
-		lblProyecto.setBounds(40, 25, 39, 31);
-		panel_3.add(lblProyecto);
-		
-		
-		RoundedPanel panel = new RoundedPanel();
-		panel.setBackground(new Color(212, 227, 252));
-		panel.setForeground(new Color(255, 255, 255));
-		panel.setBounds(10, 91, 239, 545);
-		frame.getContentPane().add(panel);
-		panel.setLayout(null);
+		RoundedPanel MenuPanel = new RoundedPanel();
+		MenuPanel.setBackground(new Color(212, 227, 252));
+		MenuPanel.setForeground(new Color(255, 255, 255));
+		MenuPanel.setBounds(10, 91, 214, 545);
+		frame.getContentPane().add(MenuPanel);
+		MenuPanel.setLayout(null);
 		
 		
 		
@@ -247,7 +204,7 @@ public class GUIBase {
 				{
 					opcionesc[i]=Lista.get(i);
 				}
-				opcionesc[Lista.size()]="Nuevo Contexto";
+				opcionesc[Lista.size()-1]="Nuevo Contexto";
 				Contextos.setModel(new DefaultComboBoxModel(opcionesc));
 				Contextos.setSelectedIndex(0);
 				Contextos.setBackground(new Color(255, 255, 255));
@@ -300,15 +257,15 @@ public class GUIBase {
 		AddTask.setBackground(new Color(255, 255, 255));
 		AddTask.setForeground(new Color(153, 204, 255));
 		
-		AddTask.setBounds(37, 51, 147, 28);
-		panel.add(AddTask);
+		AddTask.setBounds(25, 51, 147, 28);
+		MenuPanel.add(AddTask);
 		
 		JLabel lblNewLabel = new JLabel("Menu");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setForeground(new Color(110, 160, 250));
 		lblNewLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 30));
-		lblNewLabel.setBounds(61, 11, 99, 34);
-		panel.add(lblNewLabel);
+		lblNewLabel.setBounds(49, 6, 99, 34);
+		MenuPanel.add(lblNewLabel);
 		
 		RoundedButton rndbtnProyect = new RoundedButton("+ Project");
 		rndbtnProyect.setVerticalAlignment(SwingConstants.BOTTOM);
@@ -346,15 +303,15 @@ public class GUIBase {
 				
 				panelsin.add(Pnombre);
 				panelsin.add(okbotom);
-				AddProject.add(panelsin);
+				AddProject.getContentPane().add(panelsin);
 				AddProject.setVisible(true);
 			}
 		});
 		rndbtnProyect.setForeground(new Color(153, 204, 255));
 		rndbtnProyect.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 16));
 		rndbtnProyect.setBackground(Color.WHITE);
-		rndbtnProyect.setBounds(37, 88, 147, 28);
-		panel.add(rndbtnProyect);
+		rndbtnProyect.setBounds(25, 88, 147, 28);
+		MenuPanel.add(rndbtnProyect);
 		
 		txtSearch = new JTextField();
 		txtSearch.setBorder(null);
@@ -363,16 +320,16 @@ public class GUIBase {
 		txtSearch.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 14));
 		txtSearch.setForeground(new Color(102, 204, 204));
 		txtSearch.setText("   Search...");
-		txtSearch.setBounds(37, 127, 147, 34);
-		panel.add(txtSearch);
+		txtSearch.setBounds(25, 127, 147, 34);
+		MenuPanel.add(txtSearch);
 		txtSearch.setColumns(10);
 		
 		JLabel GlosayLabel = new JLabel("Glosary");
 		GlosayLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		GlosayLabel.setForeground(new Color(255, 255, 255));
 		GlosayLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 30));
-		GlosayLabel.setBounds(56, 231, 128, 34);
-		panel.add(GlosayLabel);
+		GlosayLabel.setBounds(34, 233, 128, 34);
+		MenuPanel.add(GlosayLabel);
 		
 		JButton MiselaneoItem = new RoundedButton("Miselaneo");
 		MiselaneoItem.setVerticalAlignment(SwingConstants.BOTTOM);
@@ -395,68 +352,61 @@ public class GUIBase {
 		comboBox.setModel(new DefaultComboBoxModel(new String[] {"       Miselaneo"}));
 		comboBox.setSelectedIndex(0);
 		comboBox.setBackground(new Color(255, 255, 255));
-		comboBox.setBounds(37, 172, 147, 28);
+		comboBox.setBounds(25, 172, 147, 28);
 		comboBox.addItem("Miselaneo");
 		comboBox.addItem("patatas");
-		panel.add(comboBox);
+		MenuPanel.add(comboBox);
 		
 		JSeparator separator = new JSeparator();
 		separator.setForeground(new Color(153, 204, 255));
 		separator.setBackground(new Color(255, 255, 255));
-		separator.setBounds(10, 217, 198, 2);
-		panel.add(separator);
+		separator.setBounds(10, 217, 187, 2);
+		MenuPanel.add(separator);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 298, 207, 162);
-		panel.add(scrollPane);
+		scrollPane.setBounds(10, 297, 176, 162);
+		MenuPanel.add(scrollPane);
 		scrollPane.setBorder(BorderFactory.createEmptyBorder());
 		
-		JPanel GlosaryPane = new JPanel();
-		GlosaryPane.setForeground(Color.WHITE);
-		scrollPane.setViewportView(GlosaryPane);
-		GlosaryPane.setLayout(new BoxLayout(GlosaryPane, BoxLayout.Y_AXIS));
-		GlosaryPane.setBackground(new Color(212, 227, 252));
+		JPanel GlosaryPanel = new JPanel();
+		GlosaryPanel.setForeground(Color.WHITE);
+		scrollPane.setViewportView(GlosaryPanel);
+		GlosaryPanel.setLayout(new BoxLayout(GlosaryPanel, BoxLayout.Y_AXIS));
+		GlosaryPanel.setBackground(new Color(212, 227, 252));
 		
 		
 		RoundedButton rndbtnClases = new RoundedButton("+ Task");
 		rndbtnClases.setAlignmentX(Component.CENTER_ALIGNMENT);
-		GlosaryPane.add(rndbtnClases);
+		GlosaryPanel.add(rndbtnClases);
 		rndbtnClases.setText("Clases");
 		rndbtnClases.setForeground(Color.WHITE);
 		rndbtnClases.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
 		rndbtnClases.setBackground(new Color(0, 0, 102));
 		
 		JLabel lblNewLabel_1 = new JLabel("  ");
-		GlosaryPane.add(lblNewLabel_1);
+		GlosaryPanel.add(lblNewLabel_1);
 		
 		RoundedButton rndbtnMicelaneo = new RoundedButton("+ Task");
 		rndbtnMicelaneo.setAlignmentX(Component.CENTER_ALIGNMENT);
-		GlosaryPane.add(rndbtnMicelaneo);
+		GlosaryPanel.add(rndbtnMicelaneo);
 		rndbtnMicelaneo.setText("Micelaneo");
 		rndbtnMicelaneo.setForeground(Color.WHITE);
 		rndbtnMicelaneo.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
 		rndbtnMicelaneo.setBackground(new Color(102, 204, 153));
 		
 		JLabel label = new JLabel("  ");
-		GlosaryPane.add(label);
+		GlosaryPanel.add(label);
 		
 		RoundedButton roundedButton = new RoundedButton("+ Task");
 		roundedButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-		GlosaryPane.add(roundedButton);
+		GlosaryPanel.add(roundedButton);
 		roundedButton.setText("Trabajo");
 		roundedButton.setForeground(Color.WHITE);
 		roundedButton.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
 		roundedButton.setBackground(new Color(255, 204, 51));
 		
 		JLabel label_1 = new JLabel("  ");
-		GlosaryPane.add(label_1);
-		
-		JPanel TimeLinePane = new TimeLinePanel();
-		TimeLinePane.setBounds(0, 69, 1026, 584);
-		TimeLinePane.setBackground(new Color(0, 110, 142));
-		frame.getContentPane().add(TimeLinePane);
-		TimeLinePane.setVisible(false);
-		TimeLinePane.setLayout(null);
+		GlosaryPanel.add(label_1);
 		
 		RoundedPanel WhiteBase = new RoundedPanel();
 		WhiteBase.setBounds(6, 69, 1005, 576);
@@ -464,8 +414,93 @@ public class GUIBase {
 		WhiteBase.setForeground(Color.DARK_GRAY);
 		WhiteBase.setBackground(new Color(255, 255, 255));
 		WhiteBase.setLayout(null);
+		
+		JPanel ProyectPanel = new RoundedPanel();
+		ProyectPanel.setBounds(230, 64, 758, 121);
+		WhiteBase.add(ProyectPanel);
+		ProyectPanel.setBackground(new Color(212, 227, 252));
+		ProyectPanel.setLayout(null);
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(106, 6, 632, 109);
+		scrollPane_1.setBackground(new Color(212, 227, 252));
+		ProyectPanel.add(scrollPane_1);
+		scrollPane_1.setBorder(BorderFactory.createEmptyBorder());
+		scrollPane_1.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+		
+		JPanel panel_1 = new JPanel();
+		panel_1.setBackground(Color.BLACK);
+		scrollPane_1.setViewportView(panel_1);
+		panel_1.setLayout(new BoxLayout(panel_1, BoxLayout.X_AXIS));
+		
+		JScrollPane scrollPane_3 = new JScrollPane();
+		panel_1.add(scrollPane_3);
+		scrollPane_3.setBorder(BorderFactory.createEmptyBorder());
+		
+		JPanel NodeGrid = new JPanel();
+		scrollPane_3.setViewportView(NodeGrid);
+		NodeGrid.setBackground(new Color(212, 227, 252));
+		GridBagLayout gbl_NodeGrid = new GridBagLayout();
+		gbl_NodeGrid.columnWidths = new int[] {76, 80, 79, 79, 79, 79, 79, 79, 79, 70, 70};
+		gbl_NodeGrid.rowHeights = new int[] {10, 40, 10};
+		gbl_NodeGrid.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_NodeGrid.rowWeights = new double[]{0.0, 0.0, 0.0};
+		NodeGrid.setLayout(gbl_NodeGrid);
+		
+		JLabel lblNewLabel_2 = new JLabel("17/7");
+		lblNewLabel_2.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 12));
+		lblNewLabel_2.setForeground(new Color(0, 128, 128));
+		lblNewLabel_2.setBackground(new Color(255, 250, 250));
+		GridBagConstraints gbc_lblNewLabel_2 = new GridBagConstraints();
+		gbc_lblNewLabel_2.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNewLabel_2.gridx = 4;
+		gbc_lblNewLabel_2.gridy = 0;
+		NodeGrid.add(lblNewLabel_2, gbc_lblNewLabel_2);
+		
+		NodeButton nodeButton_5 = new NodeButton("New button");
+		nodeButton_5.setForeground(new Color(255, 255, 255));
+		GridBagConstraints gbc_nodeButton_5 = new GridBagConstraints();
+		gbc_nodeButton_5.insets = new Insets(0, 0, 5, 5);
+		gbc_nodeButton_5.gridx = 4;
+		gbc_nodeButton_5.gridy = 1;
+		NodeGrid.add(nodeButton_5, gbc_nodeButton_5);
+		nodeButton_5.setBackground(new Color(255, 102, 51));
+		nodeButton_5.setPreferredSize(new Dimension(50, 50));  //maximo 50 para que quepan, minimo 10 para que se vea
+		nodeButton_5.setAlignmentX(0.5f);
+		
+		JLabel TaskLavel = new JLabel("Activity");
+		TaskLavel.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 12));
+		GridBagConstraints gbc_TaskLavel = new GridBagConstraints();
+		TaskLavel.setForeground(new Color(112, 150, 252));
+		gbc_TaskLavel.insets = new Insets(0, 0, 0, 5);
+		gbc_TaskLavel.gridx = 4;
+		gbc_TaskLavel.gridy = 2;
+		NodeGrid.add(TaskLavel, gbc_TaskLavel);
+		
+		JLabel ProyectLabel = new JLabel("Tarea");
+		ProyectLabel.setForeground(new Color(0, 128, 128));
+		ProyectLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		ProyectLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 18));
+		ProyectLabel.setBounds(6, 45, 101, 31);
+		ProyectPanel.add(ProyectLabel);
+		
+		JPanel TimeLinePane = new TimeLinePanel();
+		TimeLinePane.setBounds(0, 69, 1026, 584);
+		TimeLinePane.setBackground(new Color(0, 110, 142));
+		frame.getContentPane().add(TimeLinePane);
+		TimeLinePane.setVisible(false);
+		TimeLinePane.setLayout(null);
 		WhiteBase.setVisible(true);
 		
+		ProyectPanel prueba= new ProyectPanel("VamosCTM");
+		prueba.setLocation(230, 222);
+		
+		
+		Task t = new Task("PorfavorCTM");
+		Proyect p = new Proyect("VamosCTM");
+		p.AddTask(t);
+		prueba.AddTask(0, t);
+		WhiteBase.add(prueba);
 		
 		
 	}
