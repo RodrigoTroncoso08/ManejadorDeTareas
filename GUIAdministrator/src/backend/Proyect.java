@@ -22,6 +22,9 @@ public class Proyect {
 	Color color;
 	//Metodos
 	
+	public Color getColor() {
+		return color;
+	}
 	public Proyect(String name)
 	{
 		Name=name;

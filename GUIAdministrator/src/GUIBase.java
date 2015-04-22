@@ -63,6 +63,7 @@ public class GUIBase {
 	private Administrator admin;
 	private ArrayList<ProyectPanel> ProyectUI = new ArrayList<ProyectPanel>();
 	RoundedPanel WhiteBase = new RoundedPanel();
+	JPanel GlosaryPanel = new JPanel();
 	/**
 	 * Launch the application.
 	 */
@@ -108,7 +109,7 @@ public class GUIBase {
 		        }
 		    }
 		} catch (Exception e) {
-		    // If Nimbus is not available, you can set the GUI to another look and feel.
+		    System.out.println(":(");
 		}
 		
 		CreateAdmin();
@@ -324,8 +325,11 @@ public class GUIBase {
 				okbotom.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) 			////////////////////+ Proyecto
 					{
+						///comunicacion backend
 						Proyect p = new Proyect(Pnombre.getText());
 						admin.AddProyect(p);
+						
+						////Agregar a interfaz
 						ProyectPanel PP = new ProyectPanel(Pnombre.getText());
 						ProyectUI.add(PP);
 						WhiteBase.add(PP);
@@ -334,6 +338,15 @@ public class GUIBase {
 						WhiteBase.repaint();
 						AddProject.setVisible(false);
 						AddProject.dispose(); //pa cerrar el dialogo una vez que se acepta
+						
+						//// agregar a glosario
+						RoundedButton b= new RoundedButton(Pnombre.getText());
+						b.shady=false;
+						b.setBackground(p.getColor());
+						b.setForeground(Color.WHITE);
+						b.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
+						b.setBounds(10, 5+GlosaryPanel.getComponentCount()*45, 150, 35);
+						GlosaryPanel.add(b);
 						frame.revalidate();
 						frame.repaint();
 						
@@ -407,57 +420,11 @@ public class GUIBase {
 		MenuPanel.add(scrollPane);
 		scrollPane.setBorder(BorderFactory.createEmptyBorder());
 		
-		JPanel GlosaryPanel = new JPanel();
+		
 		GlosaryPanel.setForeground(Color.WHITE);
 		scrollPane.setViewportView(GlosaryPanel);
 		GlosaryPanel.setBackground(new Color(212, 227, 252));
 		GlosaryPanel.setLayout(null);
-		
-		
-		RoundedButton rndbtnClases = new RoundedButton("+ Task");
-		rndbtnClases.setBounds(6, 0, 164, 36);
-		rndbtnClases.setAlignmentX(Component.CENTER_ALIGNMENT);
-		GlosaryPanel.add(rndbtnClases);
-		rndbtnClases.setText("Clases");
-		rndbtnClases.setForeground(Color.WHITE);
-		rndbtnClases.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
-		rndbtnClases.setBackground(new Color(0, 0, 102));
-		
-		JLabel lblNewLabel_1 = new JLabel("  ");
-		lblNewLabel_1.setBounds(80, 36, 6, 16);
-		GlosaryPanel.add(lblNewLabel_1);
-		
-		RoundedButton rndbtnMicelaneo = new RoundedButton("+ Task");
-		rndbtnMicelaneo.setBounds(6, 52, 164, 36);
-		rndbtnMicelaneo.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				
-			}
-		});
-		rndbtnMicelaneo.setAlignmentX(Component.CENTER_ALIGNMENT);
-		GlosaryPanel.add(rndbtnMicelaneo);
-		rndbtnMicelaneo.setText("Micelaneo");
-		rndbtnMicelaneo.setForeground(Color.WHITE);
-		rndbtnMicelaneo.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
-		rndbtnMicelaneo.setBackground(new Color(102, 204, 153));
-		
-		JLabel label = new JLabel("  ");
-		label.setBounds(80, 88, 6, 16);
-		GlosaryPanel.add(label);
-		
-		RoundedButton roundedButton = new RoundedButton("+ Task");
-		roundedButton.shady=false;
-		roundedButton.setBounds(6, 104, 164, 36);
-		roundedButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-		GlosaryPanel.add(roundedButton);
-		roundedButton.setText("Trabajo");
-		roundedButton.setForeground(Color.WHITE);
-		roundedButton.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
-		roundedButton.setBackground(new Color(255, 204, 51));
-		
-		JLabel label_1 = new JLabel("  ");
-		label_1.setBounds(80, 140, 6, 16);
-		GlosaryPanel.add(label_1);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
 		scrollPane_1.setSize(new Dimension(100, 100));
@@ -482,6 +449,12 @@ public class GUIBase {
 		frame.getContentPane().add(TimeLinePane);
 		TimeLinePane.setVisible(false);
 		TimeLinePane.setLayout(null);
+		
+		JLabel Titulo = new JLabel("Proyect Administrator");
+		Titulo.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 33));
+		Titulo.setForeground(Color.WHITE);
+		Titulo.setBounds(276, 17, 422, 40);
+		frame.getContentPane().add(Titulo);
 		
 		
 		
