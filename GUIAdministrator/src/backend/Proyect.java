@@ -25,7 +25,7 @@ public class Proyect {
 	public Proyect(String name)
 	{
 		Name=name;
-		Random r = new Random(42132);
+		Random r = new Random();
 		color=new Color(r.nextInt(256),r.nextInt(256),r.nextInt(256));
 	}
 	public void AddTask(Task t) //mantiene ordenada la lista
@@ -37,7 +37,12 @@ public class Proyect {
 			for(int i=0; i<Tasks.size();i++)
 			{
 				
-				if(Tasks.get(i).Deadline.compareTo(t.Deadline)<0) //la tarea t viene despues que la evaluada
+				if(Tasks.get(i).Deadline==null)
+				{
+					Tasks.add(i,t);
+					break;
+				}
+				else if(Tasks.get(i).Deadline.compareTo(t.Deadline)<0) //la tarea t viene despues que la evaluada
 					continue;
 				else if(Tasks.get(i).Deadline.compareTo(t.Deadline)>0) 
 					{

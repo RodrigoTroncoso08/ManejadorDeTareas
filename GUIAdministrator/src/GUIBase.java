@@ -52,13 +52,17 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.util.ArrayList;
+import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.ColumnSpec;
+import com.jgoodies.forms.layout.RowSpec;
+import javax.swing.JList;
+import javax.swing.JScrollBar;
 public class GUIBase {
-
 	private JFrame frame;
 	private JTextField txtSearch;
 	private Administrator admin;
 	private ArrayList<ProyectPanel> ProyectUI = new ArrayList<ProyectPanel>();
-
+	RoundedPanel WhiteBase = new RoundedPanel();
 	/**
 	 * Launch the application.
 	 */
@@ -89,6 +93,9 @@ public class GUIBase {
 		admin= new Administrator();
 		admin.AddProyect(new Proyect("Miscelaneo"));
 		admin.AddContext("Miscelaneo");
+		ProyectPanel PP = new ProyectPanel("Miscelaneo");
+		ProyectUI.add(PP);
+		WhiteBase.add(PP);
 	}
 
 	/**
@@ -259,8 +266,13 @@ public class GUIBase {
 					{
 						for (int i=0; i < admin.getProyects().size();i++)
 						{
-						if(admin.getProyects().get(i).getName()== Proyectos.getSelectedItem().toString())	
-							admin.getProyects().get(i).AddTask(new Task(Tnombre.getText()));						
+						if(admin.getProyects().get(i).getName()== Proyectos.getSelectedItem().toString())
+						{
+							Task t = new Task(Tnombre.getText());
+							admin.getProyects().get(i).AddTask(t);
+							ProyectUI.get(i).AddTask(t); //es importante que los proyectos se agreguen logica y visualmente en el mismo orden
+							
+						}
 						}
 						Ask.setVisible(false);
 						Ask.dispose(); //pa cerrar el dialogo una vez que se acepta
@@ -314,9 +326,14 @@ public class GUIBase {
 				okbotom.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) 
 					{
-						admin.AddProyect(new Proyect(Pnombre.getText()));
+						Proyect p = new Proyect(Pnombre.getText());
+						admin.AddProyect(p);
+						ProyectPanel PP = new ProyectPanel(Pnombre.getText());
+						ProyectUI.add(PP);
+						WhiteBase.add(PP);
 						AddProject.setVisible(false);
 						AddProject.dispose(); //pa cerrar el dialogo una vez que se acepta
+						frame.repaint();
 						
 					}
 				});
@@ -433,90 +450,18 @@ public class GUIBase {
 		JLabel label_1 = new JLabel("  ");
 		GlosaryPanel.add(label_1);
 		
-		RoundedPanel WhiteBase = new RoundedPanel();
+		
 		WhiteBase.setBounds(6, 69, 1005, 576);
 		frame.getContentPane().add(WhiteBase);
 		WhiteBase.setForeground(Color.DARK_GRAY);
 		WhiteBase.setBackground(new Color(255, 255, 255));
 		WhiteBase.setLayout(null);
 		
-		JPanel ProyectPanel = new RoundedPanel();
-		ProyectPanel.setBounds(230, 64, 758, 121);
-		WhiteBase.add(ProyectPanel);
-		ProyectPanel.setBackground(new Color(212, 227, 252));
-		ProyectPanel.setLayout(null);
+		JScrollBar scrollBar = new JScrollBar();
+		scrollBar.setBounds(984, 37, 15, 514);
+		WhiteBase.add(scrollBar);
 		
-		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(106, 6, 632, 109);
-		scrollPane_1.setBackground(new Color(212, 227, 252));
-		ProyectPanel.add(scrollPane_1);
-		scrollPane_1.setBorder(BorderFactory.createEmptyBorder());
-		scrollPane_1.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 		
-		JPanel panel_1 = new JPanel();
-		panel_1.setBackground(Color.BLACK);
-		scrollPane_1.setViewportView(panel_1);
-		panel_1.setLayout(new BoxLayout(panel_1, BoxLayout.X_AXIS));
-		
-		JScrollPane scrollPane_3 = new JScrollPane();
-		panel_1.add(scrollPane_3);
-		scrollPane_3.setBorder(BorderFactory.createEmptyBorder());
-		
-		JPanel NodeGrid = new JPanel();
-		scrollPane_3.setViewportView(NodeGrid);
-		NodeGrid.setBackground(new Color(212, 227, 252));
-		GridBagLayout gbl_NodeGrid = new GridBagLayout();
-		gbl_NodeGrid.columnWidths = new int[] {76, 80, 79, 79, 79, 79, 79, 79, 79, 70, 70};
-		gbl_NodeGrid.rowHeights = new int[] {10, 40, 10};
-		gbl_NodeGrid.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-		gbl_NodeGrid.rowWeights = new double[]{0.0, 0.0, 0.0};
-		NodeGrid.setLayout(gbl_NodeGrid);
-		
-		JLabel lblNewLabel_2 = new JLabel("17/7");
-		lblNewLabel_2.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 12));
-		lblNewLabel_2.setForeground(new Color(0, 128, 128));
-		lblNewLabel_2.setBackground(new Color(255, 250, 250));
-		GridBagConstraints gbc_lblNewLabel_2 = new GridBagConstraints();
-		gbc_lblNewLabel_2.insets = new Insets(0, 0, 5, 5);
-		gbc_lblNewLabel_2.gridx = 4;
-		gbc_lblNewLabel_2.gridy = 0;
-		NodeGrid.add(lblNewLabel_2, gbc_lblNewLabel_2);
-		
-		NodeButton nodeButton_5 = new NodeButton("New button");
-		nodeButton_5.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				
-				Task t = new Task("hola");
-				Proyect p = new Proyect("hola");
-				p.AddTask(t);
-				ProyectUI.get(0).AddTask(0, t);
-			}
-		});
-		nodeButton_5.setForeground(new Color(255, 255, 255));
-		GridBagConstraints gbc_nodeButton_5 = new GridBagConstraints();
-		gbc_nodeButton_5.insets = new Insets(0, 0, 5, 5);
-		gbc_nodeButton_5.gridx = 4;
-		gbc_nodeButton_5.gridy = 1;
-		NodeGrid.add(nodeButton_5, gbc_nodeButton_5);
-		nodeButton_5.setBackground(new Color(255, 102, 51));
-		nodeButton_5.setPreferredSize(new Dimension(50, 50));  //maximo 50 para que quepan, minimo 10 para que se vea
-		nodeButton_5.setAlignmentX(0.5f);
-		
-		JLabel TaskLavel = new JLabel("Activity");
-		TaskLavel.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 12));
-		GridBagConstraints gbc_TaskLavel = new GridBagConstraints();
-		TaskLavel.setForeground(new Color(112, 150, 252));
-		gbc_TaskLavel.insets = new Insets(0, 0, 0, 5);
-		gbc_TaskLavel.gridx = 4;
-		gbc_TaskLavel.gridy = 2;
-		NodeGrid.add(TaskLavel, gbc_TaskLavel);
-		
-		JLabel ProyectLabel = new JLabel("Tarea");
-		ProyectLabel.setForeground(new Color(0, 128, 128));
-		ProyectLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		ProyectLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 18));
-		ProyectLabel.setBounds(6, 45, 101, 31);
-		ProyectPanel.add(ProyectLabel);
 		
 		JPanel TimeLinePane = new TimeLinePanel();
 		TimeLinePane.setBounds(0, 69, 1026, 584);
@@ -525,12 +470,6 @@ public class GUIBase {
 		TimeLinePane.setVisible(false);
 		TimeLinePane.setLayout(null);
 		WhiteBase.setVisible(true);
-		
-		ProyectPanel prueba= new ProyectPanel("VamosCTM");
-		prueba.setLocation(230, 222);
-		WhiteBase.add(prueba);
-		
-		ProyectUI.add(prueba);
 		
 		
 		
