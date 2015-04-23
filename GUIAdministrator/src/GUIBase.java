@@ -35,11 +35,13 @@ import javax.swing.BoxLayout;
 
 
 
+
 import sun.java2d.loops.DrawLine;
 
 import java.awt.BasicStroke;
 import java.awt.Component;
 import java.awt.Dimension;
+
 
 
 
@@ -52,9 +54,12 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.util.ArrayList;
+import java.util.Calendar;
+
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
+
 import javax.swing.JList;
 import javax.swing.JScrollBar;
 public class GUIBase {
@@ -94,6 +99,14 @@ public class GUIBase {
 		admin= new Administrator();
 		admin.AddProyect(new Proyect("Miscelaneo"));
 		admin.AddContext("Miscelaneo");
+		RoundedButton b= new RoundedButton("Miscelaneo");
+		b.shady=false;
+		b.setBackground(admin.getProyects().get(0).getColor());
+		b.setForeground(Color.WHITE);
+		b.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
+		b.setBounds(10, 5+GlosaryPanel.getComponentCount()*45, 150, 35);
+		GlosaryPanel.add(b);
+		GlosaryPanel.setPreferredSize(new Dimension(GlosaryPanel.getPreferredSize().width,GlosaryPanel.getPreferredSize().height+45));
 	}
 
 	/**
@@ -267,6 +280,10 @@ public class GUIBase {
 						if(admin.getProyects().get(i).getName()== Proyectos.getSelectedItem().toString())
 						{
 							Task t = new Task(Tnombre.getText());
+							Calendar c = Calendar.getInstance();
+							c.clear();
+							c.set(Integer.parseInt(Taño.getText()), Integer.parseInt(Tmes.getText()), Integer.parseInt(Tdia.getText()));
+							t.setDeadline(c);
 							t.setContext(admin.AddContext((String)Contextos.getSelectedItem()));
 							admin.getProyects().get(i).AddTask(t);
 							ProyectUI.get(i).AddTask(t); //es importante que los proyectos se agreguen logica y visualmente en el mismo orden
@@ -310,7 +327,8 @@ public class GUIBase {
 			public void actionPerformed(ActionEvent e) 
 			{
 				JDialog AddProject = new JDialog(frame,"Nuevo Proyecto");
-				AddProject.setSize(320, 100);
+				
+				AddProject.setSize(320, 150);
 				AddProject.setLocation(300,300);
 				JPanel panelsin = new JPanel();
 				panelsin.setBounds(0, 0, 0, 0);
@@ -331,6 +349,7 @@ public class GUIBase {
 						
 						////Agregar a interfaz
 						ProyectPanel PP = new ProyectPanel(Pnombre.getText());
+						PP.setColorName(p.getColor());
 						ProyectUI.add(PP);
 						WhiteBase.add(PP);
 						WhiteBase.setPreferredSize(new Dimension(WhiteBase.getPreferredSize().width, WhiteBase.getPreferredSize().height+140));
@@ -347,6 +366,7 @@ public class GUIBase {
 						b.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
 						b.setBounds(10, 5+GlosaryPanel.getComponentCount()*45, 150, 35);
 						GlosaryPanel.add(b);
+						GlosaryPanel.setPreferredSize(new Dimension(GlosaryPanel.getPreferredSize().width,GlosaryPanel.getPreferredSize().height+45));
 						frame.revalidate();
 						frame.repaint();
 						
@@ -432,6 +452,7 @@ public class GUIBase {
 		scrollPane_1.setBounds(6, 69, 1005, 576);
 		frame.getContentPane().add(scrollPane_1);
 		ProyectPanel PP = new ProyectPanel("Miscelaneo");
+		PP.setColorName(admin.getProyects().get(0).getColor());
 		ProyectUI.add(PP);
 		WhiteBase.setSize(new Dimension(100, 1000));
 		WhiteBase.setPreferredSize(new Dimension(500, 140));

@@ -15,7 +15,7 @@ public class Proyect {
 	int Id;
 	String Description;
 	State state;
-	Date Deadline;
+	Calendar Deadline;   //lo acmbie a Calendar porque Date no funcinaba nada
 	ArrayList<Task> Tasks= new ArrayList<Task>();
 	int Progress;
 	ArrayList<String> Members = new ArrayList<String>(); //la idea es tener los email de quienes participen del proyecto
@@ -157,10 +157,10 @@ public class Proyect {
 	public void setState(State state) {
 		this.state = state;
 	}
-	public Date getDeadline() {
+	public Calendar getDeadline() {
 		return Deadline;
 	}
-	public void setDeadline(Date deadline) {
+	public void setDeadline(Calendar deadline) {
 		Deadline = deadline;
 	}
 	public int getProgress() {

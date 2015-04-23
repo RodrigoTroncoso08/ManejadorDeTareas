@@ -99,17 +99,19 @@ public void AddTask(Task t)
 			NodeGrid.setSize(countTask+1,3);
 		}
 		
-		JLabel lblNewLabel_2 = new JLabel("");
-		lblNewLabel_2.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 12));
-		lblNewLabel_2.setForeground(new Color(0, 128, 128));
-		lblNewLabel_2.setBackground(new Color(255, 250, 250));
-		GridBagConstraints gbc_lblNewLabel_2 = new GridBagConstraints();
-		gbc_lblNewLabel_2.insets = new Insets(0, 0, 5, 5);
-		gbc_lblNewLabel_2.gridx = countTask;
-		gbc_lblNewLabel_2.gridy = 0;
-		NodeGrid.add(lblNewLabel_2, gbc_lblNewLabel_2);
-		
-		NodeButton nodeButton_5 = new NodeButton(t.getName().substring(0, 1));
+		if(t.getDeadline()!=null)
+		{
+			JLabel lblNewLabel_2 = new JLabel(t.getDeadline().DAY_OF_MONTH + "/"+t.getDeadline().DECEMBER+"/"+t.getDeadline().YEAR);  //Date
+			lblNewLabel_2.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 12));
+			lblNewLabel_2.setForeground(new Color(0, 128, 128));
+			lblNewLabel_2.setBackground(new Color(255, 250, 250));
+			GridBagConstraints gbc_lblNewLabel_2 = new GridBagConstraints();
+			gbc_lblNewLabel_2.insets = new Insets(0, 0, 5, 5);
+			gbc_lblNewLabel_2.gridx = countTask;
+			gbc_lblNewLabel_2.gridy = 0;
+			NodeGrid.add(lblNewLabel_2, gbc_lblNewLabel_2);
+		}
+		NodeButton nodeButton_5 = new NodeButton(t.getName().substring(0, 1));  //node
 		nodeButton_5.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 30));
 		nodeButton_5.setForeground(t.getContext());
 		GridBagConstraints gbc_nodeButton_5 = new GridBagConstraints();
@@ -121,7 +123,7 @@ public void AddTask(Task t)
 		nodeButton_5.setPreferredSize(new Dimension(25, 25));  //maximo 50 para que quepan, minimo 10 para que se vea
 		nodeButton_5.setAlignmentX(0.5f);
 		
-		JLabel TaskLabel = new JLabel(t.getName());
+		JLabel TaskLabel = new JLabel(t.getName());  //name
 		TaskLabel.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 12));
 		GridBagConstraints gbc_TaskLabel = new GridBagConstraints();
 		TaskLabel.setForeground(new Color(112, 150, 252));
@@ -185,6 +187,10 @@ protected void paintComponent(Graphics g) {
 public String GetName()
 {
 	return ProyectLabel.getText();
+}
+public void setColorName(Color c)
+{
+	ProyectLabel.setForeground(c);
 }
 }
 
