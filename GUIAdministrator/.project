@@ -3,6 +3,7 @@
 	<name>GUIAdministrator</name>
 	<comment></comment>
 	<projects>
+		<project>GUIAdmisitrator</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

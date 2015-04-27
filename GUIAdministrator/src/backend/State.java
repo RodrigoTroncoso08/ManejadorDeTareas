@@ -1,4 +1,5 @@
 package backend;
 
-
-public enum State {Pause, Active, Cancelled, Finished,Delayed}
+public enum State {
+	Pause, Active, Cancelled, Finished, Delayed
+}
