@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="jgoodies-forms-1.10.jar"/>
-	<classpathentry kind="lib" path="Lib/weblaf-complete-1.28.jar"/>
-	<classpathentry kind="lib" path="newSWT.jar"/>
-	<classpathentry kind="lib" path="joda-time-2.7.jar"/>
-	<classpathentry kind="lib" path="miglayout15-swing.jar" sourcepath="miglayout-src.zip"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="lib" path="jgoodies-forms-1.10.jar"/>
+	<classpathentry exported="true" kind="lib" path="Lib/weblaf-complete-1.28.jar"/>
+	<classpathentry exported="true" kind="lib" path="newSWT.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/rodrigo/Desktop/Roro/PUC/7-septimo/Ingenieria de Software/Proyecto/joda-time-2.7/joda-time-2.7.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/rodrigo/Desktop/Roro/PUC/7-septimo/Ingenieria de Software/Proyecto/ManejadorDeTareas/GUIAdministrator/miglayout-src.zip" sourcepath="miglayout-src.zip"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
