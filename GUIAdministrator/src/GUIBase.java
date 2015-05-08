@@ -262,7 +262,7 @@ public class GUIBase {
 							admin.getProyects().get(i).AddTask(new Task(Tnombre.getText()));						
 						}
 						Ask.setVisible(false);
-						Ask.dispose(); //pa cerrar el dialogo una vez que se acepta
+						Ask.dispose(); //para cerrar el dialogo una vez que se acepta
 					}
 				});
 				okbotom.setForeground(new Color(153, 204, 255));
