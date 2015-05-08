@@ -2,6 +2,7 @@ package backend;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 
@@ -9,9 +10,9 @@ public class Task {
 	
 	String Name;
 	String Description;
-	String Context; 	//Lo puse como string dado que me parecio practico por el momento
+	Color Context; 	//Lo puse como string dado que me parecio practico por el momento
 	State state;
-	Date Deadline;
+	Calendar Deadline;
 	int WorkingDays;
 	int Relevance;
 	double Urgency;  	//lo puse double dado que puede ser el resultado de algun procesamiento
@@ -54,10 +55,10 @@ public class Task {
 	public void setDescription(String description) {
 		Description = description;
 	}
-	public String getContext() {
+	public Color getContext() {
 		return Context;
 	}
-	public void setContext(String context) {
+	public void setContext(Color context) {
 		Context = context;
 	}
 	public State getState() {
@@ -66,10 +67,10 @@ public class Task {
 	public void setState(State state) {
 		this.state = state;
 	}
-	public Date getDeadline() {
+	public Calendar getDeadline() {
 		return Deadline;
 	}
-	public void setDeadline(Date deadline) {
+	public void setDeadline(Calendar deadline) {
 		Deadline = deadline;
 	}
 	public int getWorkingDays() {

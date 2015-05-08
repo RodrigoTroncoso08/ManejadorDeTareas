@@ -1,22 +1,22 @@
 package backend;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Random;
 
 
 public class Administrator {
 
 	ArrayList<Proyect> Proyects;
-	ArrayList<String> PosibleContext; //restringe que los usuarios pongan cualquier cosa en contexto	
+	ArrayList<String> PosibleContext; //restringe que los usuarios pongan cualquier cosa en contexto
+	ArrayList<Color> PosibleContextColor=new ArrayList<Color>();
 	
 	public Administrator ()
 	{
 		Proyects = new ArrayList<Proyect>();
 		PosibleContext = new ArrayList<String>();
 	}
-	
-	
-	
 	public boolean AddProyect (Proyect p)
 	{
 		boolean b = false;                      //si el nombre del proyecto que se quiere 
@@ -46,9 +46,18 @@ public class Administrator {
 		return r;
 	}
 	
-	public void AddContext(String cont)
+	public Color AddContext(String cont) ////Al agregar un contexto revisa si este ya existe y sino lo crea. Devuelve el color asociado al contexto
 	{
+		if(PosibleContext.contains(cont))
+		{
+			return PosibleContextColor.get(PosibleContext.indexOf(cont));
+		}
+		Random r = new Random();
 		PosibleContext.add(cont);
+		Color aux = new Color(r.nextInt(256),r.nextInt(256),r.nextInt(256));
+		PosibleContextColor.add(aux);
+		return aux;
+		
 	}
 	
 	/*estos metodos se basan en que al agrupar las tareas sin importar de que proyecto
@@ -96,15 +105,12 @@ public class Administrator {
 		}
 		return aux.getTasks();
 	}
-	
 	public ArrayList<String> getPosibleContext()
 	{
 		return PosibleContext;	
-	}
-	
+	}	
 	public ArrayList<Proyect> getProyects()
 	{
 		return Proyects;
 	}
-	
 }

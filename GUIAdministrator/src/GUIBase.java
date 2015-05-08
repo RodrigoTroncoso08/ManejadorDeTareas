@@ -35,11 +35,13 @@ import javax.swing.BoxLayout;
 
 
 
+
 import sun.java2d.loops.DrawLine;
 
 import java.awt.BasicStroke;
 import java.awt.Component;
 import java.awt.Dimension;
+
 
 
 
@@ -52,12 +54,21 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.util.ArrayList;
-public class GUIBase {
+import java.util.Calendar;
 
+import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.ColumnSpec;
+import com.jgoodies.forms.layout.RowSpec;
+
+import javax.swing.JList;
+import javax.swing.JScrollBar;
+public class GUIBase {
 	private JFrame frame;
 	private JTextField txtSearch;
 	private Administrator admin;
-
+	private ArrayList<ProyectPanel> ProyectUI = new ArrayList<ProyectPanel>();
+	RoundedPanel WhiteBase = new RoundedPanel();
+	JPanel GlosaryPanel = new JPanel();
 	/**
 	 * Launch the application.
 	 */
@@ -88,6 +99,14 @@ public class GUIBase {
 		admin= new Administrator();
 		admin.AddProyect(new Proyect("Miscelaneo"));
 		admin.AddContext("Miscelaneo");
+		RoundedButton b= new RoundedButton("Miscelaneo");
+		b.shady=false;
+		b.setBackground(admin.getProyects().get(0).getColor());
+		b.setForeground(Color.WHITE);
+		b.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
+		b.setBounds(10, 5+GlosaryPanel.getComponentCount()*45, 150, 35);
+		GlosaryPanel.add(b);
+		GlosaryPanel.setPreferredSize(new Dimension(GlosaryPanel.getPreferredSize().width,GlosaryPanel.getPreferredSize().height+45));
 	}
 
 	/**
@@ -103,7 +122,7 @@ public class GUIBase {
 		        }
 		    }
 		} catch (Exception e) {
-		    // If Nimbus is not available, you can set the GUI to another look and feel.
+		    System.out.println(":(");
 		}
 		
 		CreateAdmin();
@@ -254,12 +273,22 @@ public class GUIBase {
 				RoundedButton okbotom = new RoundedButton("OK");
 				okbotom.setVerticalAlignment(SwingConstants.BOTTOM);
 				okbotom.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) 
+					public void actionPerformed(ActionEvent e) 				//////////////////+ Tarea
 					{
 						for (int i=0; i < admin.getProyects().size();i++)
 						{
-						if(admin.getProyects().get(i).getName()== Proyectos.getSelectedItem().toString())	
-							admin.getProyects().get(i).AddTask(new Task(Tnombre.getText()));						
+						if(admin.getProyects().get(i).getName()== Proyectos.getSelectedItem().toString())
+						{
+							Task t = new Task(Tnombre.getText());
+							Calendar c = Calendar.getInstance();
+							c.clear();
+							c.set(Integer.parseInt(Taño.getText()), Integer.parseInt(Tmes.getText()), Integer.parseInt(Tdia.getText()));
+							t.setDeadline(c);
+							t.setContext(admin.AddContext((String)Contextos.getSelectedItem()));
+							admin.getProyects().get(i).AddTask(t);
+							ProyectUI.get(i).AddTask(t); //es importante que los proyectos se agreguen logica y visualmente en el mismo orden
+							
+						}
 						}
 						Ask.setVisible(false);
 						Ask.dispose(); //para cerrar el dialogo una vez que se acepta
@@ -298,7 +327,8 @@ public class GUIBase {
 			public void actionPerformed(ActionEvent e) 
 			{
 				JDialog AddProject = new JDialog(frame,"Nuevo Proyecto");
-				AddProject.setSize(320, 100);
+				
+				AddProject.setSize(320, 150);
 				AddProject.setLocation(300,300);
 				JPanel panelsin = new JPanel();
 				panelsin.setBounds(0, 0, 0, 0);
@@ -311,11 +341,34 @@ public class GUIBase {
 				RoundedButton okbotom = new RoundedButton("OK");
 				okbotom.setVerticalAlignment(SwingConstants.BOTTOM);
 				okbotom.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) 
+					public void actionPerformed(ActionEvent e) 			////////////////////+ Proyecto
 					{
-						admin.AddProyect(new Proyect(Pnombre.getText()));
+						///comunicacion backend
+						Proyect p = new Proyect(Pnombre.getText());
+						admin.AddProyect(p);
+						
+						////Agregar a interfaz
+						ProyectPanel PP = new ProyectPanel(Pnombre.getText());
+						PP.setColorName(p.getColor());
+						ProyectUI.add(PP);
+						WhiteBase.add(PP);
+						WhiteBase.setPreferredSize(new Dimension(WhiteBase.getPreferredSize().width, WhiteBase.getPreferredSize().height+140));
+						WhiteBase.revalidate();
+						WhiteBase.repaint();
 						AddProject.setVisible(false);
 						AddProject.dispose(); //pa cerrar el dialogo una vez que se acepta
+						
+						//// agregar a glosario
+						RoundedButton b= new RoundedButton(Pnombre.getText());
+						b.shady=false;
+						b.setBackground(p.getColor());
+						b.setForeground(Color.WHITE);
+						b.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
+						b.setBounds(10, 5+GlosaryPanel.getComponentCount()*45, 150, 35);
+						GlosaryPanel.add(b);
+						GlosaryPanel.setPreferredSize(new Dimension(GlosaryPanel.getPreferredSize().width,GlosaryPanel.getPreferredSize().height+45));
+						frame.revalidate();
+						frame.repaint();
 						
 					}
 				});
@@ -356,10 +409,6 @@ public class GUIBase {
 		
 		JButton MiselaneoItem = new RoundedButton("Miselaneo");
 		MiselaneoItem.setVerticalAlignment(SwingConstants.BOTTOM);
-		MiselaneoItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
 		MiselaneoItem.setText("+ Proyect  ");
 		MiselaneoItem.setForeground(new Color(153, 204, 255));
 		MiselaneoItem.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 16));
@@ -391,121 +440,29 @@ public class GUIBase {
 		MenuPanel.add(scrollPane);
 		scrollPane.setBorder(BorderFactory.createEmptyBorder());
 		
-		JPanel GlosaryPanel = new JPanel();
+		
 		GlosaryPanel.setForeground(Color.WHITE);
 		scrollPane.setViewportView(GlosaryPanel);
-		GlosaryPanel.setLayout(new BoxLayout(GlosaryPanel, BoxLayout.Y_AXIS));
 		GlosaryPanel.setBackground(new Color(212, 227, 252));
+		GlosaryPanel.setLayout(null);
 		
-		
-		RoundedButton rndbtnClases = new RoundedButton("+ Task");
-		rndbtnClases.setAlignmentX(Component.CENTER_ALIGNMENT);
-		GlosaryPanel.add(rndbtnClases);
-		rndbtnClases.setText("Clases");
-		rndbtnClases.setForeground(Color.WHITE);
-		rndbtnClases.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
-		rndbtnClases.setBackground(new Color(0, 0, 102));
-		
-		JLabel lblNewLabel_1 = new JLabel("  ");
-		GlosaryPanel.add(lblNewLabel_1);
-		
-		RoundedButton rndbtnMicelaneo = new RoundedButton("+ Task");
-		rndbtnMicelaneo.setAlignmentX(Component.CENTER_ALIGNMENT);
-		GlosaryPanel.add(rndbtnMicelaneo);
-		rndbtnMicelaneo.setText("Micelaneo");
-		rndbtnMicelaneo.setForeground(Color.WHITE);
-		rndbtnMicelaneo.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
-		rndbtnMicelaneo.setBackground(new Color(102, 204, 153));
-		
-		JLabel label = new JLabel("  ");
-		GlosaryPanel.add(label);
-		
-		RoundedButton roundedButton = new RoundedButton("+ Task");
-		roundedButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-		GlosaryPanel.add(roundedButton);
-		roundedButton.setText("Trabajo");
-		roundedButton.setForeground(Color.WHITE);
-		roundedButton.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
-		roundedButton.setBackground(new Color(255, 204, 51));
-		
-		JLabel label_1 = new JLabel("  ");
-		GlosaryPanel.add(label_1);
-		
-		RoundedPanel WhiteBase = new RoundedPanel();
-		WhiteBase.setBounds(6, 69, 1005, 576);
-		frame.getContentPane().add(WhiteBase);
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setSize(new Dimension(100, 100));
+		scrollPane_1.setPreferredSize(new Dimension(1000, 1000));
+		scrollPane_1.setBounds(6, 69, 1005, 576);
+		frame.getContentPane().add(scrollPane_1);
+		ProyectPanel PP = new ProyectPanel("Miscelaneo");
+		PP.setColorName(admin.getProyects().get(0).getColor());
+		ProyectUI.add(PP);
+		WhiteBase.setSize(new Dimension(100, 1000));
+		WhiteBase.setPreferredSize(new Dimension(500, 140));
+		scrollPane_1.setViewportView(WhiteBase);
+		WhiteBase.add(PP);
 		WhiteBase.setForeground(Color.DARK_GRAY);
 		WhiteBase.setBackground(new Color(255, 255, 255));
 		WhiteBase.setLayout(null);
+		WhiteBase.setVisible(true);
 		
-		JPanel ProyectPanel = new RoundedPanel();
-		ProyectPanel.setBounds(230, 64, 758, 121);
-		WhiteBase.add(ProyectPanel);
-		ProyectPanel.setBackground(new Color(212, 227, 252));
-		ProyectPanel.setLayout(null);
-		
-		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(106, 6, 632, 109);
-		scrollPane_1.setBackground(new Color(212, 227, 252));
-		ProyectPanel.add(scrollPane_1);
-		scrollPane_1.setBorder(BorderFactory.createEmptyBorder());
-		scrollPane_1.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
-		
-		JPanel panel_1 = new JPanel();
-		panel_1.setBackground(Color.BLACK);
-		scrollPane_1.setViewportView(panel_1);
-		panel_1.setLayout(new BoxLayout(panel_1, BoxLayout.X_AXIS));
-		
-		JScrollPane scrollPane_3 = new JScrollPane();
-		panel_1.add(scrollPane_3);
-		scrollPane_3.setBorder(BorderFactory.createEmptyBorder());
-		
-		JPanel NodeGrid = new JPanel();
-		scrollPane_3.setViewportView(NodeGrid);
-		NodeGrid.setBackground(new Color(212, 227, 252));
-		GridBagLayout gbl_NodeGrid = new GridBagLayout();
-		gbl_NodeGrid.columnWidths = new int[] {76, 80, 79, 79, 79, 79, 79, 79, 79, 70, 70};
-		gbl_NodeGrid.rowHeights = new int[] {10, 40, 10};
-		gbl_NodeGrid.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-		gbl_NodeGrid.rowWeights = new double[]{0.0, 0.0, 0.0};
-		NodeGrid.setLayout(gbl_NodeGrid);
-		
-		JLabel lblNewLabel_2 = new JLabel("17/7");
-		lblNewLabel_2.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 12));
-		lblNewLabel_2.setForeground(new Color(0, 128, 128));
-		lblNewLabel_2.setBackground(new Color(255, 250, 250));
-		GridBagConstraints gbc_lblNewLabel_2 = new GridBagConstraints();
-		gbc_lblNewLabel_2.insets = new Insets(0, 0, 5, 5);
-		gbc_lblNewLabel_2.gridx = 4;
-		gbc_lblNewLabel_2.gridy = 0;
-		NodeGrid.add(lblNewLabel_2, gbc_lblNewLabel_2);
-		
-		NodeButton nodeButton_5 = new NodeButton("New button");
-		nodeButton_5.setForeground(new Color(255, 255, 255));
-		GridBagConstraints gbc_nodeButton_5 = new GridBagConstraints();
-		gbc_nodeButton_5.insets = new Insets(0, 0, 5, 5);
-		gbc_nodeButton_5.gridx = 4;
-		gbc_nodeButton_5.gridy = 1;
-		NodeGrid.add(nodeButton_5, gbc_nodeButton_5);
-		nodeButton_5.setBackground(new Color(255, 102, 51));
-		nodeButton_5.setPreferredSize(new Dimension(50, 50));  //maximo 50 para que quepan, minimo 10 para que se vea
-		nodeButton_5.setAlignmentX(0.5f);
-		
-		JLabel TaskLavel = new JLabel("Activity");
-		TaskLavel.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 12));
-		GridBagConstraints gbc_TaskLavel = new GridBagConstraints();
-		TaskLavel.setForeground(new Color(112, 150, 252));
-		gbc_TaskLavel.insets = new Insets(0, 0, 0, 5);
-		gbc_TaskLavel.gridx = 4;
-		gbc_TaskLavel.gridy = 2;
-		NodeGrid.add(TaskLavel, gbc_TaskLavel);
-		
-		JLabel ProyectLabel = new JLabel("Tarea");
-		ProyectLabel.setForeground(new Color(0, 128, 128));
-		ProyectLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		ProyectLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 18));
-		ProyectLabel.setBounds(6, 45, 101, 31);
-		ProyectPanel.add(ProyectLabel);
 		
 		JPanel TimeLinePane = new TimeLinePanel();
 		TimeLinePane.setBounds(0, 69, 1026, 584);
@@ -513,17 +470,15 @@ public class GUIBase {
 		frame.getContentPane().add(TimeLinePane);
 		TimeLinePane.setVisible(false);
 		TimeLinePane.setLayout(null);
-		WhiteBase.setVisible(true);
 		
-		ProyectPanel prueba= new ProyectPanel("VamosCTM");
-		prueba.setLocation(230, 222);
+		JLabel Titulo = new JLabel("Proyect Administrator");
+		Titulo.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 33));
+		Titulo.setForeground(Color.WHITE);
+		Titulo.setBounds(276, 17, 422, 40);
+		frame.getContentPane().add(Titulo);
 		
 		
-		Task t = new Task("PorfavorCTM");
-		Proyect p = new Proyect("VamosCTM");
-		p.AddTask(t);
-		prueba.AddTask(0, t);
-		WhiteBase.add(prueba);
+		
 		
 		
 	}

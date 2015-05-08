@@ -15,17 +15,20 @@ public class Proyect {
 	int Id;
 	String Description;
 	State state;
-	Date Deadline;
+	Calendar Deadline;   //lo acmbie a Calendar porque Date no funcinaba nada
 	ArrayList<Task> Tasks= new ArrayList<Task>();
 	int Progress;
 	ArrayList<String> Members = new ArrayList<String>(); //la idea es tener los email de quienes participen del proyecto
 	Color color;
 	//Metodos
 	
+	public Color getColor() {
+		return color;
+	}
 	public Proyect(String name)
 	{
 		Name=name;
-		Random r = new Random(42132);
+		Random r = new Random();
 		color=new Color(r.nextInt(256),r.nextInt(256),r.nextInt(256));
 	}
 	public void AddTask(Task t) //mantiene ordenada la lista
@@ -37,7 +40,12 @@ public class Proyect {
 			for(int i=0; i<Tasks.size();i++)
 			{
 				
-				if(Tasks.get(i).Deadline.compareTo(t.Deadline)<0) //la tarea t viene despues que la evaluada
+				if(Tasks.get(i).Deadline==null)
+				{
+					Tasks.add(i,t);
+					break;
+				}
+				else if(Tasks.get(i).Deadline.compareTo(t.Deadline)<0) //la tarea t viene despues que la evaluada
 					continue;
 				else if(Tasks.get(i).Deadline.compareTo(t.Deadline)>0) 
 					{
@@ -149,10 +157,10 @@ public class Proyect {
 	public void setState(State state) {
 		this.state = state;
 	}
-	public Date getDeadline() {
+	public Calendar getDeadline() {
 		return Deadline;
 	}
-	public void setDeadline(Date deadline) {
+	public void setDeadline(Calendar deadline) {
 		Deadline = deadline;
 	}
 	public int getProgress() {
