@@ -36,11 +36,21 @@ public class Task {
 	}
 	public boolean RemoveRequireTask(Task t) 	//Si esta y lo remueve=true, si no esta =false
 	{
-		if(RequireTasks.contains(t))
+		boolean r = RequireTasks.contains(t);
+		if(r)
 			RequireTasks.remove(t);
-		return RequireTasks.contains(t); 
+		return r; 
 	}
 	
+	public void ExtraDay ()
+	{
+		Deadline.add(Calendar.DAY_OF_MONTH, 1);		
+	}
+	
+	public void ExtraWeek ()
+	{
+		Deadline.add(Calendar.DAY_OF_MONTH, 7);
+	}
 	
 	////Getters y Setters
 	public String getName() {

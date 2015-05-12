@@ -56,9 +56,7 @@ import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.RowSpec;
+
 
 import javax.swing.JList;
 import javax.swing.JScrollBar;
@@ -69,6 +67,7 @@ public class GUIBase {
 	private ArrayList<ProyectPanel> ProyectUI = new ArrayList<ProyectPanel>();
 	RoundedPanel WhiteBase = new RoundedPanel();
 	JPanel GlosaryPanel = new JPanel();
+	private JLabel Titulo;
 	/**
 	 * Launch the application.
 	 */
@@ -148,7 +147,7 @@ public class GUIBase {
 		AddTask.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JDialog Ask = new JDialog (frame,"Nueva Tarea");
-				Ask.setSize(400,320);
+				Ask.setSize(400,380);
 				Ask.setLocation(400, 200);
 				JPanel Paneldialog = new JPanel ();
 				Paneldialog.setLayout(null);
@@ -270,6 +269,27 @@ public class GUIBase {
 				Taño.setBounds(300, 195, 40, 25);
 				Paneldialog.add(Taño);
 				
+				JComboBox Importancia = new  JComboBox();
+				Importancia.setBorder(null);
+				Importancia.setEditable(true);
+				Importancia.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 13));
+				Importancia.setForeground(new Color(0,0,0));
+				String[] bla = new String[3];
+				bla[0]="Normal";
+				bla[1]="Importante";
+				bla[2]="Muy Importante";
+				Importancia.setModel(new DefaultComboBoxModel(bla));
+				Importancia.setSelectedIndex(0);
+				Importancia.setBackground(new Color(255,255,255));
+				Importancia.setBounds(220, 250, 160, 50);
+				Paneldialog.add(Importancia);
+				JLabel imp = new JLabel("Importancia");
+				imp.setHorizontalAlignment(SwingConstants.CENTER);
+				imp.setForeground(new Color(0,0,0));
+				imp.setFont(new Font("Arial Rounded MT Bold",Font.BOLD,13));
+				imp.setBounds(10, 250, 200, 50);
+				Paneldialog.add(imp);
+				
 				RoundedButton okbotom = new RoundedButton("OK");
 				okbotom.setVerticalAlignment(SwingConstants.BOTTOM);
 				okbotom.addActionListener(new ActionListener() {
@@ -280,10 +300,14 @@ public class GUIBase {
 						if(admin.getProyects().get(i).getName()== Proyectos.getSelectedItem().toString())
 						{
 							Task t = new Task(Tnombre.getText());
+							try{
 							Calendar c = Calendar.getInstance();
 							c.clear();
 							c.set(Integer.parseInt(Taño.getText()), Integer.parseInt(Tmes.getText()), Integer.parseInt(Tdia.getText()));
 							t.setDeadline(c);
+							}
+							catch(Exception ex)
+							{}
 							t.setContext(admin.AddContext((String)Contextos.getSelectedItem()));
 							admin.getProyects().get(i).AddTask(t);
 							ProyectUI.get(i).AddTask(t); //es importante que los proyectos se agreguen logica y visualmente en el mismo orden
@@ -297,7 +321,7 @@ public class GUIBase {
 				okbotom.setForeground(new Color(153, 204, 255));
 				okbotom.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 13));
 				okbotom.setBackground(Color.WHITE);
-				okbotom.setBounds(310,245 ,70 ,30 );
+				okbotom.setBounds(310,305 ,70 ,30 );
 				Paneldialog.add(okbotom);
 				
 				Ask.getContentPane().add(Paneldialog);
@@ -345,8 +369,8 @@ public class GUIBase {
 					{
 						///comunicacion backend
 						Proyect p = new Proyect(Pnombre.getText());
-						admin.AddProyect(p);
-						
+						if(admin.AddProyect(p))
+						{
 						////Agregar a interfaz
 						ProyectPanel PP = new ProyectPanel(Pnombre.getText());
 						PP.setColorName(p.getColor());
@@ -369,6 +393,24 @@ public class GUIBase {
 						GlosaryPanel.setPreferredSize(new Dimension(GlosaryPanel.getPreferredSize().width,GlosaryPanel.getPreferredSize().height+45));
 						frame.revalidate();
 						frame.repaint();
+						}
+						else
+						{
+							JDialog aviso = new JDialog(frame,"Warning");
+							aviso.setSize(300,100);
+							aviso.setLocation(310,310);
+							JPanel panelaviso = new JPanel();
+							panelaviso.setBounds(0,0,0,0);
+							panelaviso.setLayout(null);
+							JLabel Nosepuede = new JLabel("Ya existe un proyecto con ese nombre");
+							Nosepuede.setHorizontalAlignment(SwingConstants.CENTER);
+							Nosepuede.setForeground(new Color(0,0,0));
+							Nosepuede.setFont(new Font("Arial Rounded MT Bold",Font.BOLD,11));
+							Nosepuede.setBounds(10, 10, 250, 40);
+							panelaviso.add(Nosepuede);
+							aviso.getContentPane().add(panelaviso);
+							aviso.setVisible(true);
+						}
 						
 					}
 				});
@@ -471,7 +513,7 @@ public class GUIBase {
 		TimeLinePane.setVisible(false);
 		TimeLinePane.setLayout(null);
 		
-		JLabel Titulo = new JLabel("Proyect Administrator");
+		Titulo = new JLabel("Proyect Administrator");
 		Titulo.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 33));
 		Titulo.setForeground(Color.WHITE);
 		Titulo.setBounds(276, 17, 422, 40);
