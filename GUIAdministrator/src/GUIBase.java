@@ -308,6 +308,7 @@ public class GUIBase {
 							}
 							catch(Exception ex)
 							{}
+							t.setRelevance(Importancia.getSelectedIndex());
 							t.setContext(admin.AddContext((String)Contextos.getSelectedItem()));
 							admin.getProyects().get(i).AddTask(t);
 							ProyectUI.get(i).AddTask(t); //es importante que los proyectos se agreguen logica y visualmente en el mismo orden
