@@ -58,9 +58,9 @@ public class ProyectPanel extends JPanel{
 		
 		ProyectLabel.setText(Name);
 		ProyectLabel.setForeground(new Color(0, 128, 128));
-		ProyectLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		ProyectLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		ProyectLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 18));
-		ProyectLabel.setBounds(6, 45, 101, 31);
+		ProyectLabel.setBounds(6, 6, 401, 31);
 		this.add(ProyectLabel);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
