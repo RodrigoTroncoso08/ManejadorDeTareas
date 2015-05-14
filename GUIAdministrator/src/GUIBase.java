@@ -20,9 +20,13 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
+import javax.swing.JCheckBox;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
 import javax.swing.JComboBox;
@@ -40,6 +44,7 @@ import backend.*;
 import javax.swing.BoxLayout;
 
 //import org.eclipse.wb.swing.FocusTraversalOnArray;
+
 
 
 
@@ -76,6 +81,7 @@ import java.awt.Dimension;
 
 
 
+
 import javax.swing.JSlider;
 
 import java.awt.Rectangle;
@@ -88,18 +94,21 @@ import java.io.Console;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.RowSpec;
+
+
 
 import javax.swing.JList;
 import javax.swing.JScrollBar;
+
+
 public class GUIBase {
 	private JFrame frame;
 	private JTextField txtSearch;
 	private Administrator admin;
 	private ArrayList<ProyectPanel> ProyectUI = new ArrayList<ProyectPanel>();
 	RoundedPanel WhiteBase = new RoundedPanel();
+	RoundedPanel TaskDetail = new RoundedPanel();
+	RoundedPanel WhiteBase2 = new RoundedPanel();
 	JPanel GlosaryPanel = new JPanel();
 	private JLabel Titulo;
 	/**
