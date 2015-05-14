@@ -18,6 +18,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
 import javax.swing.JComboBox;
@@ -25,6 +26,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JPanel;
 import javax.swing.JDialog;
 import javax.swing.JSeparator;
+import javax.swing.Popup;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
@@ -34,6 +36,9 @@ import backend.*;
 import javax.swing.BoxLayout;
 
 //import org.eclipse.wb.swing.FocusTraversalOnArray;
+
+
+
 
 
 
@@ -56,6 +61,9 @@ import java.awt.Dimension;
 
 
 
+
+
+
 import javax.swing.JSlider;
 
 import java.awt.Rectangle;
@@ -64,6 +72,7 @@ import java.awt.GridLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.io.Console;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -111,13 +120,6 @@ public class GUIBase {
 		admin= new Administrator();
 		admin.AddProyect(new Proyect("Miscelaneo"));
 		admin.AddContext("Miscelaneo");
-		RoundedButton b= new RoundedButton("Miscelaneo");
-		b.shady=false;
-		b.setBackground(admin.getProyects().get(0).getColor());
-		b.setForeground(Color.WHITE);
-		b.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
-		b.setBounds(10, 5+GlosaryPanel.getComponentCount()*45, 150, 35);
-		GlosaryPanel.add(b);
 		GlosaryPanel.setPreferredSize(new Dimension(GlosaryPanel.getPreferredSize().width,GlosaryPanel.getPreferredSize().height+45));
 	}
 
@@ -175,11 +177,47 @@ public class GUIBase {
 		});
 			
 			*/	
+		
+		JButton MiselaneoItem = new RoundedButton("Miselaneo");
+		MiselaneoItem.setVerticalAlignment(SwingConstants.BOTTOM);
+		MiselaneoItem.setText("+ Proyect  ");
+		MiselaneoItem.setForeground(new Color(153, 204, 255));
+		MiselaneoItem.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 16));
+		MiselaneoItem.setBackground(Color.WHITE);
+		MiselaneoItem.setBounds(33, 83, 147, 48);
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setSize(new Dimension(100, 100));
+		scrollPane_1.setPreferredSize(new Dimension(1000, 1000));
+		scrollPane_1.setBounds(6, 69, 1005, 576);
+		scrollPane_1.getViewport().setBackground(new Color(0, 110, 142));
+		
+		
+		
+		frame.getContentPane().add(scrollPane_1);
+		ProyectPanel PP = new ProyectPanel("Miscelaneo");
+		PP.setLocation(245, 25);
+		//PP.setColorName(admin.getProyects().get(0).getColor());
+		ProyectUI.add(PP);
+		WhiteBase.setSize(new Dimension(100, 1000));
+		WhiteBase.setPreferredSize(new Dimension(500, 140));
+		scrollPane_1.setViewportView(WhiteBase);
+		WhiteBase.add(PP);
+		WhiteBase.setForeground(Color.DARK_GRAY);
+		WhiteBase.setBackground(new Color(255, 255, 255));
+		WhiteBase.setLayout(null);
+		RoundedButton b= new RoundedButton("Miscelaneo");
+		b.shady=false;
+		b.setBackground(admin.getProyects().get(0).getColor());
+		b.setForeground(Color.WHITE);
+		b.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
+		b.setBounds(10, 5+GlosaryPanel.getComponentCount()*45, 150, 35);
+		GlosaryPanel.add(b);
 		RoundedPanel MenuPanel = new RoundedPanel();
+		MenuPanel.setBounds(10, 11, 214, 545);
+		WhiteBase.add(MenuPanel);
 		MenuPanel.setBackground(new Color(212, 227, 252));
 		MenuPanel.setForeground(new Color(255, 255, 255));
-		MenuPanel.setBounds(10, 91, 214, 545);
-		frame.getContentPane().add(MenuPanel);
 		MenuPanel.setLayout(null);
 		
 		
@@ -345,11 +383,21 @@ public class GUIBase {
 							try{
 							Calendar c = Calendar.getInstance();
 							c.clear();
+							if(Integer.parseInt(Tmes.getText())>12|| Integer.parseInt(Tdia.getText())>31)
+								throw new Exception();
 							c.set(Integer.parseInt(Taño.getText()), Integer.parseInt(Tmes.getText()), Integer.parseInt(Tdia.getText()));
 							t.setDeadline(c);
 							}
 							catch(Exception ex)
-							{}
+							{
+								JOptionPane.showMessageDialog(null, "Recuerde ingresar una fecha cuando pueda",	"Recordatorio de Fecha", JOptionPane.INFORMATION_MESSAGE);
+								t.setContext(admin.AddContext((String)Contextos.getSelectedItem()));
+								t.setRelevance(Importancia.getSelectedIndex());
+								admin.getProyects().get(i).AddTask(t);
+								ProyectUI.get(i).AddTask(t);
+								Ask.setVisible(false);
+								Ask.dispose();
+							}
 							t.setRelevance(Importancia.getSelectedIndex());
 							t.setContext(admin.AddContext((String)Contextos.getSelectedItem()));
 							admin.getProyects().get(i).AddTask(t);
@@ -492,14 +540,6 @@ public class GUIBase {
 		GlosayLabel.setBounds(34, 233, 128, 34);
 		MenuPanel.add(GlosayLabel);
 		
-		JButton MiselaneoItem = new RoundedButton("Miselaneo");
-		MiselaneoItem.setVerticalAlignment(SwingConstants.BOTTOM);
-		MiselaneoItem.setText("+ Proyect  ");
-		MiselaneoItem.setForeground(new Color(153, 204, 255));
-		MiselaneoItem.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 16));
-		MiselaneoItem.setBackground(Color.WHITE);
-		MiselaneoItem.setBounds(33, 83, 147, 48);
-		
 		
 		JComboBox comboBox = new JComboBox();
 		comboBox.setBorder(null);
@@ -530,23 +570,6 @@ public class GUIBase {
 		scrollPane.setViewportView(GlosaryPanel);
 		GlosaryPanel.setBackground(new Color(212, 227, 252));
 		GlosaryPanel.setLayout(null);
-		
-		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setSize(new Dimension(100, 100));
-		scrollPane_1.setPreferredSize(new Dimension(1000, 1000));
-		scrollPane_1.setBounds(6, 69, 1005, 576);
-		frame.getContentPane().add(scrollPane_1);
-		ProyectPanel PP = new ProyectPanel("Miscelaneo");
-		PP.setLocation(245, 25);
-		//PP.setColorName(admin.getProyects().get(0).getColor());
-		ProyectUI.add(PP);
-		WhiteBase.setSize(new Dimension(100, 1000));
-		WhiteBase.setPreferredSize(new Dimension(500, 140));
-		scrollPane_1.setViewportView(WhiteBase);
-		WhiteBase.add(PP);
-		WhiteBase.setForeground(Color.DARK_GRAY);
-		WhiteBase.setBackground(new Color(255, 255, 255));
-		WhiteBase.setLayout(null);
 		WhiteBase.setVisible(true);
 		
 		

@@ -1,4 +1,5 @@
 import java.awt.BasicStroke;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -8,6 +9,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.RenderingHints;
+import java.util.Calendar;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -53,8 +55,9 @@ public class ProyectPanel extends JPanel{
 		this.setBounds(230, 20+130*ProyectCount, 748, 119);
 		this.setBackground(new Color(212, 227, 252));
 		this.setLayout(null);
+		this.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
 		ProyectCount++;
-		
+		this.setForeground(new Color(0, 110, 142));
 		
 		ProyectLabel.setText(Name);
 		ProyectLabel.setForeground(new Color(0, 128, 128));
@@ -98,8 +101,11 @@ public void AddTask(Task t)
 		{
 			NodeGrid.setSize(countTask+1,3);
 		}
-		
-		JLabel lblNewLabel_2 = new JLabel("");
+		Calendar c= t.getDeadline();
+		int month = c.get(c.MONTH);
+		if(month==0)
+			month=12;
+		JLabel lblNewLabel_2 = new JLabel(c.get(c.DAY_OF_MONTH)+"/"+month+"/"+c.get(c.YEAR));
 		lblNewLabel_2.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 12));
 		lblNewLabel_2.setForeground(new Color(0, 128, 128));
 		lblNewLabel_2.setBackground(new Color(255, 250, 250));
@@ -180,6 +186,7 @@ protected void paintComponent(Graphics g) {
 	height - shadowGap, arcs.width, arcs.height);
     graphics.setColor(getForeground());
     graphics.setStroke(new BasicStroke(strokeSize));
+    
     graphics.drawRoundRect(0, 0, width - shadowGap, 
 	height - shadowGap, arcs.width, arcs.height);
 
