@@ -6,7 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 
-public class Task {
+public class Task implements Comparable<Task> {
 	
 	String Name;
 	String Description;
@@ -113,6 +113,12 @@ public class Task {
 
 	public void setColor(Color color) {
 		this.color = color;
+	}
+
+	@Override
+	public int compareTo(Task o) {
+		// TODO Auto-generated method stub
+		return getDeadline().compareTo(o.getDeadline());
 	}
 	
 	

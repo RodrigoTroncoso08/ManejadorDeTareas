@@ -195,7 +195,7 @@ public class GUIBase {
 		
 		
 		frame.getContentPane().add(scrollPane_1);
-		ProyectPanel PP = new ProyectPanel("Miscelaneo");
+		ProyectPanel PP = new ProyectPanel("Miscelaneo", admin.getProyects().get(0));
 		PP.setLocation(245, 25);
 		//PP.setColorName(admin.getProyects().get(0).getColor());
 		ProyectUI.add(PP);
@@ -227,6 +227,7 @@ public class GUIBase {
 		AddTask.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JDialog Ask = new JDialog (frame,"Nueva Tarea");
+				
 				Ask.setSize(400,380);
 				Ask.setLocation(400, 200);
 				JPanel Paneldialog = new JPanel ();
@@ -349,6 +350,7 @@ public class GUIBase {
 				Taño.setBounds(300, 195, 40, 25);
 				Paneldialog.add(Taño);
 				
+				
 				JComboBox Importancia = new  JComboBox();
 				Importancia.setBorder(null);
 				Importancia.setEditable(true);
@@ -371,6 +373,7 @@ public class GUIBase {
 				Paneldialog.add(imp);
 				
 				RoundedButton okbotom = new RoundedButton("OK");
+				Ask.getRootPane().setDefaultButton(okbotom);
 				okbotom.setVerticalAlignment(SwingConstants.BOTTOM);
 				okbotom.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) 				//////////////////+ Tarea
@@ -463,7 +466,7 @@ public class GUIBase {
 						if(admin.AddProyect(p))
 						{
 						////Agregar a interfaz
-						ProyectPanel PP = new ProyectPanel(Pnombre.getText());
+						ProyectPanel PP = new ProyectPanel(Pnombre.getText(),p);
 						//PP.setColorName(p.getColor());
 						ProyectUI.add(PP);
 						WhiteBase.add(PP);
