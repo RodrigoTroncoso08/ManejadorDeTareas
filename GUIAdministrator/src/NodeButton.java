@@ -1,9 +1,11 @@
+import backend.*;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
@@ -12,7 +14,7 @@ import javax.swing.JButton;
 
 
 public class NodeButton extends JButton {
-	protected int strokeSize = 4;
+	protected int strokeSize = 3;
     /** Color of shadow */
     protected Color shadowColor = Color.black;
     /** Sets if it drops shadow */
@@ -28,10 +30,11 @@ public class NodeButton extends JButton {
     
     protected int nodeOffset =getPreferredSize().width/4;
     /** The transparency value of shadow. ( 0 - 255) */
+    protected Task task;
     protected int shadowAlpha = 150;
-	  public NodeButton(String label) {
+	  public NodeButton(String label, Task t) {
 	    super("");
-
+	    task=t;
 	    
 	// These statements enlarge the button so that it 
 	// becomes a circle rather than an oval.
@@ -57,38 +60,34 @@ public class NodeButton extends JButton {
 	        		 shadowColor.getGreen(), shadowColor.getBlue(), shadowAlpha);
 	         Graphics2D graphics = (Graphics2D) g;
 	         g.setClip(0, 0, width+10, height+10);
-
+	         
 	         //Sets antialiasing if HQ.
 	         if (highQuality) {
 	             graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, 
 	 			RenderingHints.VALUE_ANTIALIAS_ON);
 	         }
 
-	         //Draws shadow borders if any. no por ahora
-	         if (false) {
-	             graphics.setColor(shadowColorA);
-	             graphics.fillRoundRect(
-	                     shadowOffset,// X position
-	                     shadowOffset,// Y position
-	                     width - strokeSize - shadowOffset, // width
-	                     height - strokeSize - shadowOffset, // height
-	                     arcs.width, arcs.height);// arc Dimension
-	         } else {
-	             shadowGap = 1;
-	         }
 
 	         //Draws the rounded opaque panel with borders.
 	         
 	         graphics.setColor(getBackground());
-	         graphics.fillRoundRect(strokeSize, strokeSize, width, 
-	        height, arcs.width, arcs.height);
+	         graphics.fillRoundRect(5+strokeSize, 5+strokeSize, width, 
+	         height, arcs.width, arcs.height);
 	         graphics.setColor(getForeground());
-	         float[] dash3 = {3f, 3f, 3f};
 	         BasicStroke bs3 = new BasicStroke(strokeSize);
-	         
+	         graphics.drawRoundRect(5+strokeSize, 5+strokeSize, width , 
+	 		        height, arcs.width, arcs.height);
 	         graphics.setStroke(bs3);
-	         graphics.drawRoundRect(strokeSize, strokeSize, width , 
-	 		height, arcs.width, arcs.height);
+	         if(task.getState()!=State.Active)
+	         {
+		        if(task.getState()==State.Delayed)
+		        	 graphics.setColor(Color.red);
+		        else if(task.getState()==State.Pause)
+		        	 graphics.setColor(Color.YELLOW);
+		        
+		         graphics.setClip(new Rectangle(width+20, height+20));
+		        graphics.drawRect(0, 0, width+10+strokeSize, height+10+strokeSize);
+	         }
 
 	         super.paintComponent(g);
 	    }

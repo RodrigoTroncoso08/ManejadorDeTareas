@@ -16,6 +16,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
@@ -48,11 +52,19 @@ import javax.swing.BoxLayout;
 
 
 
+
+
+
+
 import sun.java2d.loops.DrawLine;
 
 import java.awt.BasicStroke;
 import java.awt.Component;
 import java.awt.Dimension;
+
+
+
+
 
 
 
@@ -118,7 +130,9 @@ public class GUIBase {
 		//automaticamente para poder ingresar tareas desde un comienzo
 		
 		admin= new Administrator();
-		admin.AddProyect(new Proyect("Miscelaneo"));
+		Proyect p =new Proyect("Miscelaneo");
+		p.setState(State.Active);
+		admin.AddProyect(p);
 		admin.AddContext("Miscelaneo");
 		GlosaryPanel.setPreferredSize(new Dimension(GlosaryPanel.getPreferredSize().width,GlosaryPanel.getPreferredSize().height+45));
 	}
@@ -191,12 +205,13 @@ public class GUIBase {
 		scrollPane_1.setPreferredSize(new Dimension(1000, 1000));
 		scrollPane_1.setBounds(6, 69, 1005, 576);
 		scrollPane_1.getViewport().setBackground(new Color(0, 110, 142));
+		scrollPane_1.setBorder(BorderFactory.createEmptyBorder());
 		
 		
 		
 		frame.getContentPane().add(scrollPane_1);
 		ProyectPanel PP = new ProyectPanel("Miscelaneo", admin.getProyects().get(0));
-		PP.setLocation(245, 25);
+		PP.setLocation(230, 25);
 		//PP.setColorName(admin.getProyects().get(0).getColor());
 		ProyectUI.add(PP);
 		WhiteBase.setSize(new Dimension(100, 1000));
@@ -248,7 +263,9 @@ public class GUIBase {
 				Tnombre.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 13));
 				Tnombre.setForeground(new Color(0,0,0));
 				Tnombre.setBounds(220, 10, 160, 50);
+				
 				Paneldialog.add(Tnombre);
+				
 				
 				JLabel ProyectoTarea = new JLabel("Proyecto de la tarea");
 				ProyectoTarea.setHorizontalAlignment(SwingConstants.CENTER);
@@ -383,6 +400,7 @@ public class GUIBase {
 						if(admin.getProyects().get(i).getName()== Proyectos.getSelectedItem().toString())
 						{
 							Task t = new Task(Tnombre.getText());
+							t.setState(State.Delayed);
 							try{
 							Calendar c = Calendar.getInstance();
 							c.clear();
@@ -455,14 +473,49 @@ public class GUIBase {
 				JTextField Pnombre = new JTextField();
 				Pnombre.setText("Nombre Proyecto");
 				Pnombre.setBounds(20, 20, 200, 50);
+				Pnombre.addMouseListener(new MouseListener() {
+					
+					@Override
+					public void mouseReleased(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void mousePressed(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+						
+					}
+					
+					@Override
+					public void mouseExited(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void mouseEntered(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						// TODO Auto-generated method stub
+						Pnombre.setText("");
+					}
+				});
 				
 				RoundedButton okbotom = new RoundedButton("OK");
+				AddProject.getRootPane().setDefaultButton(okbotom);
 				okbotom.setVerticalAlignment(SwingConstants.BOTTOM);
 				okbotom.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) 			////////////////////+ Proyecto
 					{
 						///comunicacion backend
 						Proyect p = new Proyect(Pnombre.getText());
+						p.setState(State.Active);
 						if(admin.AddProyect(p))
 						{
 						////Agregar a interfaz
@@ -504,6 +557,7 @@ public class GUIBase {
 							panelaviso.add(Nosepuede);
 							aviso.getContentPane().add(panelaviso);
 							aviso.setVisible(true);
+							frame.requestFocus();
 						}
 						
 					}
