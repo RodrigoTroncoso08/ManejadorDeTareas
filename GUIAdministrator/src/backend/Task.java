@@ -12,7 +12,7 @@ public class Task {
 	String Description;
 	Color Context; 	//Lo puse como string dado que me parecio practico por el momento
 	State state;
-	Date Deadline;
+	Calendar Deadline;
 	int WorkingDays;
 	int Relevance;
 	double Urgency;  	//lo puse double dado que puede ser el resultado de algun procesamiento
@@ -77,10 +77,10 @@ public class Task {
 	public void setState(State state) {
 		this.state = state;
 	}
-	public Date getDeadline() {
+	public Calendar getDeadline() {
 		return Deadline;
 	}
-	public void setDeadline(Date deadline) {
+	public void setDeadline(Calendar deadline) {
 		Deadline = deadline;
 	}
 	public int getWorkingDays() {

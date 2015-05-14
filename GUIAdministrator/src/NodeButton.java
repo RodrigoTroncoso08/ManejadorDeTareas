@@ -12,7 +12,7 @@ import javax.swing.JButton;
 
 
 public class NodeButton extends JButton {
-	protected int strokeSize = 1;
+	protected int strokeSize = 4;
     /** Color of shadow */
     protected Color shadowColor = Color.black;
     /** Sets if it drops shadow */
@@ -56,6 +56,7 @@ public class NodeButton extends JButton {
 	         Color shadowColorA = new Color(shadowColor.getRed(), 
 	        		 shadowColor.getGreen(), shadowColor.getBlue(), shadowAlpha);
 	         Graphics2D graphics = (Graphics2D) g;
+	         g.setClip(0, 0, width+10, height+10);
 
 	         //Sets antialiasing if HQ.
 	         if (highQuality) {
@@ -77,15 +78,16 @@ public class NodeButton extends JButton {
 	         }
 
 	         //Draws the rounded opaque panel with borders.
+	         
 	         graphics.setColor(getBackground());
-	         graphics.fillRoundRect(0, 0, width , 
+	         graphics.fillRoundRect(strokeSize, strokeSize, width, 
 	        height, arcs.width, arcs.height);
 	         graphics.setColor(getForeground());
 	         float[] dash3 = {3f, 3f, 3f};
-	         BasicStroke bs3 = new BasicStroke(3, BasicStroke.CAP_BUTT,
-	                 BasicStroke.JOIN_BEVEL, 1f, dash3, 1f);
+	         BasicStroke bs3 = new BasicStroke(strokeSize);
+	         
 	         graphics.setStroke(bs3);
-	         graphics.drawRoundRect(0, 0, width , 
+	         graphics.drawRoundRect(strokeSize, strokeSize, width , 
 	 		height, arcs.width, arcs.height);
 
 	         super.paintComponent(g);

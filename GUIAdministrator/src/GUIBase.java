@@ -13,6 +13,9 @@ import javax.swing.JButton;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JTextField;
@@ -35,11 +38,21 @@ import javax.swing.BoxLayout;
 
 
 
+
+
+
+
+
 import sun.java2d.loops.DrawLine;
 
 import java.awt.BasicStroke;
 import java.awt.Component;
 import java.awt.Dimension;
+
+
+
+
+
 
 
 
@@ -52,9 +65,12 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.util.ArrayList;
+import java.util.Calendar;
+
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
+
 import javax.swing.JList;
 import javax.swing.JScrollBar;
 public class GUIBase {
@@ -128,8 +144,37 @@ public class GUIBase {
 		frame.setBounds(100, 50, 1043, 697);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
-		
-		
+		JButton size = new JButton();
+		size.setVisible(false);
+		size.setSize(frame.getSize());
+		frame.setVisible(false);
+		//esta parte se usara para hacer que todo se mueva junto al agrandar la ventana. No es requerimiento. Po ahora dejo el frame sin movilidad
+		/*
+		frame.addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentResized(ComponentEvent e) {
+				// TODO Auto-generated method stub
+			JFrame frame=(JFrame)e.getComponent();
+			int Xbase = size.getSize().width;
+			int ybase = size.getSize().height;
+			super.componentResized(e);
+			size.setSize(frame.getSize());
+			double XchangeRate = (double)frame.getSize().width/(double)Xbase;
+			double YchangeRate = (double)frame.getSize().height/(double)ybase;
+				for(Component c : frame.getContentPane().getComponents())
+				{
+					int prueba = (int)(c.getSize().width*XchangeRate);
+					
+					c.setSize((int)(c.getSize().width*XchangeRate),(int)(c.getSize().height*YchangeRate));
+					Dimension d= new Dimension((int)(c.getSize().width*XchangeRate),(int)(c.getSize().height*YchangeRate));
+					c.setPreferredSize(d);
+					c.validate();
+					c.repaint();
+				}
+			}
+		});
+			
+			*/	
 		RoundedPanel MenuPanel = new RoundedPanel();
 		MenuPanel.setBackground(new Color(212, 227, 252));
 		MenuPanel.setForeground(new Color(255, 255, 255));
@@ -371,7 +416,7 @@ public class GUIBase {
 						{
 						////Agregar a interfaz
 						ProyectPanel PP = new ProyectPanel(Pnombre.getText());
-						PP.setColorName(p.getColor());
+						//PP.setColorName(p.getColor());
 						ProyectUI.add(PP);
 						WhiteBase.add(PP);
 						WhiteBase.setPreferredSize(new Dimension(WhiteBase.getPreferredSize().width, WhiteBase.getPreferredSize().height+140));
@@ -430,7 +475,7 @@ public class GUIBase {
 		MenuPanel.add(rndbtnProyect);
 		
 		txtSearch = new JTextField();
-		txtSearch.setBorder(null);
+		txtSearch.setBorder(BorderFactory.createSoftBevelBorder(1));
 		txtSearch.setBackground(new Color(255, 255, 255));
 		txtSearch.setHorizontalAlignment(SwingConstants.LEFT);
 		txtSearch.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 14));
@@ -492,7 +537,8 @@ public class GUIBase {
 		scrollPane_1.setBounds(6, 69, 1005, 576);
 		frame.getContentPane().add(scrollPane_1);
 		ProyectPanel PP = new ProyectPanel("Miscelaneo");
-		PP.setColorName(admin.getProyects().get(0).getColor());
+		PP.setLocation(245, 25);
+		//PP.setColorName(admin.getProyects().get(0).getColor());
 		ProyectUI.add(PP);
 		WhiteBase.setSize(new Dimension(100, 1000));
 		WhiteBase.setPreferredSize(new Dimension(500, 140));

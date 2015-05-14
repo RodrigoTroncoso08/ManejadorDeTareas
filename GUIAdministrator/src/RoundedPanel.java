@@ -1,9 +1,14 @@
 import java.awt.*;
+import java.awt.event.ComponentEvent;
 
 import javax.swing.JPanel;
 
 
 public class RoundedPanel extends JPanel {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2266314735256380422L;
 	/** Stroke size. it is recommended to set it to 1 for better view */
     protected int strokeSize = 1;
     /** Color of shadow */
@@ -69,4 +74,5 @@ public class RoundedPanel extends JPanel {
         graphics.setStroke(new BasicStroke());
     }
     
+  
 }

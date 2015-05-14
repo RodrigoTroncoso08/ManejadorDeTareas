@@ -83,7 +83,7 @@ public class ProyectPanel extends JPanel{
 		NodeGrid.setBackground(new Color(212, 227, 252));
 		GridBagLayout gbl_NodeGrid = new GridBagLayout();
 		gbl_NodeGrid.columnWidths = new int[] {79,79,79,79,79,77,79,79,79,79,79,79};
-		gbl_NodeGrid.rowHeights = new int[] {10, 40, 10};
+		gbl_NodeGrid.rowHeights = new int[] {10, 50, 10};
 		gbl_NodeGrid.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		gbl_NodeGrid.rowWeights = new double[]{0.0, 0.0, 0.0};
 		NodeGrid.setLayout(gbl_NodeGrid);
@@ -104,21 +104,25 @@ public void AddTask(Task t)
 		lblNewLabel_2.setForeground(new Color(0, 128, 128));
 		lblNewLabel_2.setBackground(new Color(255, 250, 250));
 		GridBagConstraints gbc_lblNewLabel_2 = new GridBagConstraints();
-		gbc_lblNewLabel_2.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNewLabel_2.insets = new Insets(0, 0, 0, 0);
 		gbc_lblNewLabel_2.gridx = countTask;
 		gbc_lblNewLabel_2.gridy = 0;
+		gbc_lblNewLabel_2.weighty=1;
 		NodeGrid.add(lblNewLabel_2, gbc_lblNewLabel_2);
 		
 		NodeButton nodeButton_5 = new NodeButton(t.getName().substring(0, 1));
 		nodeButton_5.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 30));
 		nodeButton_5.setForeground(t.getContext());
 		GridBagConstraints gbc_nodeButton_5 = new GridBagConstraints();
-		gbc_nodeButton_5.insets = new Insets(0, 0, 5, 5);
+		gbc_nodeButton_5.insets = new Insets(0, 0, 0, 0);
 		gbc_nodeButton_5.gridx = countTask;
 		gbc_nodeButton_5.gridy = 1;
+		gbc_nodeButton_5.weightx=1;
+		
 		NodeGrid.add(nodeButton_5, gbc_nodeButton_5);
 		nodeButton_5.setBackground(t.getColor());
-		nodeButton_5.setPreferredSize(new Dimension(25, 25));  //maximo 50 para que quepan, minimo 10 para que se vea
+		nodeButton_5.setPreferredSize(new Dimension(35, 35));  //maximo 50 para que quepan, minimo 10 para que se vea\
+		
 		nodeButton_5.setAlignmentX(0.5f);
 		
 		JLabel TaskLabel = new JLabel(t.getName());
@@ -128,6 +132,7 @@ public void AddTask(Task t)
 		gbc_TaskLabel.insets = new Insets(0, 0, 0, 5);
 		gbc_TaskLabel.gridx = countTask;
 		gbc_TaskLabel.gridy = 2;
+		gbc_TaskLabel.anchor = gbc_TaskLabel.CENTER;
 		NodeGrid.add(TaskLabel, gbc_TaskLabel);
 		this.revalidate();
 		this.repaint();
