@@ -14,7 +14,7 @@ import javax.swing.JButton;
 
 
 public class NodeButton extends JButton {
-	protected int strokeSize = 3;
+	protected int strokeSize = 2;
     /** Color of shadow */
     protected Color shadowColor = Color.black;
     /** Sets if it drops shadow */
@@ -74,10 +74,11 @@ public class NodeButton extends JButton {
 	         graphics.fillRoundRect(5+strokeSize, 5+strokeSize, width, 
 	         height, arcs.width, arcs.height);
 	         graphics.setColor(getForeground());
-	         BasicStroke bs3 = new BasicStroke(strokeSize);
+	         BasicStroke bs3 = new BasicStroke((float) 3.5);
+	         graphics.setStroke(bs3);
 	         graphics.drawRoundRect(5+strokeSize, 5+strokeSize, width , 
 	 		        height, arcs.width, arcs.height);
-	         graphics.setStroke(bs3);
+	         graphics.setStroke(new BasicStroke(strokeSize));
 	         if(task.getState()!=State.Active)
 	         {
 		        if(task.getState()==State.Delayed)
