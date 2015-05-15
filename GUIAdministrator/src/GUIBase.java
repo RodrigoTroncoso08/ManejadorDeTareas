@@ -225,13 +225,8 @@ public class GUIBase {
 		b_1.setBounds(10, 5+GlosaryPanel.getComponentCount()*45, 150, 35);
 		GlosaryPanel.add(b_1);
 		RoundedPanel MenuPanel = new RoundedPanel();
-<<<<<<< HEAD
-		MenuPanel.setBounds(10, 11, 214, 545);
-		frame.add(MenuPanel);
-=======
 		MenuPanel.setBounds(15, 80, 214, 545);
 		frame.getContentPane().add(MenuPanel);
->>>>>>> 0a2a042a86b5eafe581cbf4219937b74a3ed4864
 		MenuPanel.setBackground(new Color(212, 227, 252));
 		MenuPanel.setForeground(new Color(255, 255, 255));
 		MenuPanel.setLayout(null);
@@ -664,6 +659,7 @@ public class GUIBase {
 		Titulo.setBounds(276, 17, 422, 40);
 		frame.getContentPane().add(Titulo);
 		
+		frame.getContentPane().add(WhiteBase2);
 		WhiteBase2.setBounds(6, 69, 1005, 576);
 		WhiteBase2.setLayout(null);
 		WhiteBase2.add(TaskDetail);
