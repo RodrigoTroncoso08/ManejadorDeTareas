@@ -140,7 +140,7 @@ public class GUIBase {
 		
 		admin= new Administrator();
 		Proyect p =new Proyect("Miscelaneo");
-		p.setState(State.Active);
+		p.setState(State.Delayed);
 		admin.AddProyect(p);
 		admin.AddContext("Miscelaneo");
 		GlosaryPanel.setPreferredSize(new Dimension(GlosaryPanel.getPreferredSize().width,GlosaryPanel.getPreferredSize().height+45));
