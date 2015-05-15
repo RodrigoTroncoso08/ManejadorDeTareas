@@ -143,7 +143,7 @@ public class GUIBase {
 		
 		admin= new Administrator();
 		Proyect p =new Proyect("Miscelaneo");
-		p.setState(State.Active);
+		p.setState(State.Delayed);
 		admin.AddProyect(p);
 		admin.AddContext("Miscelaneo");
 		GlosaryPanel.setPreferredSize(new Dimension(GlosaryPanel.getPreferredSize().width,GlosaryPanel.getPreferredSize().height+45));
@@ -217,32 +217,21 @@ public class GUIBase {
 		scrollPane_1.setPreferredSize(new Dimension(1000, 1000));
 		scrollPane_1.setBounds(6, 69, 1005, 576);
 		scrollPane_1.getViewport().setBackground(new Color(0, 110, 142));
-		scrollPane_1.setBorder(BorderFactory.createEmptyBorder());
-		
-		
-		
-		frame.getContentPane().add(scrollPane_1);
-		ProyectPanel PP = new ProyectPanel("Miscelaneo", admin.getProyects().get(0));
-		PP.setLocation(230, 25);
-		//PP.setColorName(admin.getProyects().get(0).getColor());
-		ProyectUI.add(PP);
-		WhiteBase.setSize(new Dimension(100, 1000));
-		WhiteBase.setPreferredSize(new Dimension(500, 140));
-		scrollPane_1.setViewportView(WhiteBase);
-		WhiteBase.add(PP);
-		WhiteBase.setForeground(Color.DARK_GRAY);
-		WhiteBase.setBackground(new Color(255, 255, 255));
-		WhiteBase.setLayout(null);
-		RoundedButton b= new RoundedButton("Miscelaneo");
-		b.shady=false;
-		b.setBackground(admin.getProyects().get(0).getColor());
-		b.setForeground(Color.WHITE);
-		b.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
-		b.setBounds(10, 5+GlosaryPanel.getComponentCount()*45, 150, 35);
-		GlosaryPanel.add(b);
+		RoundedButton b_1= new RoundedButton("Miscelaneo");
+		b_1.shady=false;
+		b_1.setBackground(admin.getProyects().get(0).getColor());
+		b_1.setForeground(Color.WHITE);
+		b_1.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
+		b_1.setBounds(10, 5+GlosaryPanel.getComponentCount()*45, 150, 35);
+		GlosaryPanel.add(b_1);
 		RoundedPanel MenuPanel = new RoundedPanel();
+<<<<<<< HEAD
 		MenuPanel.setBounds(10, 11, 214, 545);
 		frame.add(MenuPanel);
+=======
+		MenuPanel.setBounds(15, 80, 214, 545);
+		frame.getContentPane().add(MenuPanel);
+>>>>>>> 0a2a042a86b5eafe581cbf4219937b74a3ed4864
 		MenuPanel.setBackground(new Color(212, 227, 252));
 		MenuPanel.setForeground(new Color(255, 255, 255));
 		MenuPanel.setLayout(null);
@@ -459,14 +448,16 @@ public class GUIBase {
 		AddTask.setBackground(new Color(255, 255, 255));
 		AddTask.setForeground(new Color(153, 204, 255));
 		
-		AddTask.setBounds(25, 51, 147, 28);
+		AddTask.setBounds(25, 60, 147, 28);
 		MenuPanel.add(AddTask);
 		
 		JLabel lblNewLabel = new JLabel("Menu");
+		lblNewLabel.setOpaque(true);
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setForeground(new Color(110, 160, 250));
+		lblNewLabel.setForeground(new Color(255, 255, 255));
 		lblNewLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 30));
-		lblNewLabel.setBounds(49, 6, 99, 34);
+		lblNewLabel.setBackground(new Color(110,160,250));
+		lblNewLabel.setBounds(0, 21, 210, 28);
 		MenuPanel.add(lblNewLabel);
 		
 		RoundedButton rndbtnProyect = new RoundedButton("+ Project");
@@ -535,7 +526,7 @@ public class GUIBase {
 						//PP.setColorName(p.getColor());
 						ProyectUI.add(PP);
 						WhiteBase.add(PP);
-						WhiteBase.setPreferredSize(new Dimension(WhiteBase.getPreferredSize().width, WhiteBase.getPreferredSize().height+140));
+						WhiteBase.setPreferredSize(new Dimension(WhiteBase.getPreferredSize().width, WhiteBase.getPreferredSize().height+155));
 						WhiteBase.revalidate();
 						WhiteBase.repaint();
 						AddProject.setVisible(false);
@@ -588,7 +579,7 @@ public class GUIBase {
 		rndbtnProyect.setForeground(new Color(153, 204, 255));
 		rndbtnProyect.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 16));
 		rndbtnProyect.setBackground(Color.WHITE);
-		rndbtnProyect.setBounds(25, 88, 147, 28);
+		rndbtnProyect.setBounds(25, 94, 147, 28);
 		MenuPanel.add(rndbtnProyect);
 		
 		txtSearch = new JTextField();
@@ -598,15 +589,17 @@ public class GUIBase {
 		txtSearch.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 14));
 		txtSearch.setForeground(new Color(102, 204, 204));
 		txtSearch.setText("   Search...");
-		txtSearch.setBounds(25, 127, 147, 34);
+		txtSearch.setBounds(25, 133, 147, 34);
 		MenuPanel.add(txtSearch);
 		txtSearch.setColumns(10);
 		
 		JLabel GlosayLabel = new JLabel("Glosary");
+		GlosayLabel.setOpaque(true);
 		GlosayLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		GlosayLabel.setForeground(new Color(255, 255, 255));
+		GlosayLabel.setBackground(new Color(110,160,250));
 		GlosayLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 30));
-		GlosayLabel.setBounds(34, 233, 128, 34);
+		GlosayLabel.setBounds(0, 239, 209, 28);
 		MenuPanel.add(GlosayLabel);
 		
 		
@@ -618,7 +611,7 @@ public class GUIBase {
 		comboBox.setModel(new DefaultComboBoxModel(new String[] {"       Miselaneo"}));
 		comboBox.setSelectedIndex(0);
 		comboBox.setBackground(new Color(255, 255, 255));
-		comboBox.setBounds(25, 172, 147, 28);
+		comboBox.setBounds(25, 178, 147, 28);
 		comboBox.addItem("Miselaneo");
 		comboBox.addItem("patatas");
 		MenuPanel.add(comboBox);
@@ -639,6 +632,22 @@ public class GUIBase {
 		scrollPane.setViewportView(GlosaryPanel);
 		GlosaryPanel.setBackground(new Color(212, 227, 252));
 		GlosaryPanel.setLayout(null);
+		scrollPane_1.setBorder(BorderFactory.createEmptyBorder());
+		
+		
+		
+		frame.getContentPane().add(scrollPane_1);
+		ProyectPanel PP = new ProyectPanel("Miscelaneo", admin.getProyects().get(0));
+		PP.setLocation(230, 25);
+		//PP.setColorName(admin.getProyects().get(0).getColor());
+		ProyectUI.add(PP);
+		WhiteBase.setSize(new Dimension(100, 1000));
+		WhiteBase.setPreferredSize(new Dimension(500, 140));
+		scrollPane_1.setViewportView(WhiteBase);
+		WhiteBase.add(PP);
+		WhiteBase.setForeground(Color.DARK_GRAY);
+		WhiteBase.setBackground(new Color(255, 255, 255));
+		WhiteBase.setLayout(null);
 		WhiteBase.setVisible(true);
 		
 		

@@ -63,7 +63,7 @@ public class ProyectPanel extends JPanel{
 		NodeGrid.setOpaque(false);
 		
 		setOpaque(false);
-		this.setBounds(230, 20+130*ProyectCount, 748, 129);
+		this.setBounds(230, 20+145*ProyectCount, 748, 139);
 		this.setBackground(new Color(212, 227, 252));
 		this.setLayout(null);
 		this.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
@@ -73,7 +73,7 @@ public class ProyectPanel extends JPanel{
 		ProyectLabel.setText(Name);
 		ProyectLabel.setForeground(proyect.getColor());
 		ProyectLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		ProyectLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 20));
+		ProyectLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 25));
 		ProyectLabel.setBounds(6, 0, 401, 31);
 		this.add(ProyectLabel);
 		
@@ -93,14 +93,14 @@ public class ProyectPanel extends JPanel{
 		JScrollPane scrollPane_1 = new JScrollPane();
 		scrollPane_1.setOpaque(false);
 		scrollPane_1.getViewport().setOpaque(false);
-		scrollPane_1.setBounds(40, 23, 697, 105);
+		scrollPane_1.setBounds(40, 28, 697, 105);
 		scrollPane_1.setForeground(shadowColor);
 		
 		
 		this.add(scrollPane_1);
 		scrollPane_1.setBorder(BorderFactory.createEmptyBorder());
 		scrollPane_1.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
-		
+		scrollPane_1.setViewportBorder(BorderFactory.createEmptyBorder());
 		
 		JPanel panel_1 = new JPanel();
 		panel_1.setOpaque(false);
@@ -117,6 +117,7 @@ public class ProyectPanel extends JPanel{
 		scrollPane_3.setViewportView(NodeGrid);
 		scrollPane_3.getViewport().setScrollMode(scrollPane_3.getViewport().BLIT_SCROLL_MODE);
 		scrollPane_3.getViewport().setOpaque(false);
+		scrollPane_3.setViewportBorder(BorderFactory.createEmptyBorder());
 		NodeGrid.setOpaque(false);
 		NodeGrid.setBorder(BorderFactory.createEmptyBorder());
 		GridBagLayout gbl_NodeGrid = new GridBagLayout();
@@ -252,8 +253,8 @@ protected void paintComponent(Graphics g) {
     //Draws the rounded opaque panel with borders.
     graphics.setColor(getBackground());
     
-    graphics.fillRoundRect(0, 40, width - shadowGap, 
-	height - shadowGap-57, arcs.width, arcs.height);
+    graphics.fillRoundRect(0, 45, width - shadowGap, 
+	height - shadowGap-67, arcs.width, arcs.height);
     graphics.setColor(getForeground());
     if(proyect.getState()==State.Delayed){
     	 graphics.setColor(Color.RED);strokeSize=2;}
@@ -261,25 +262,25 @@ protected void paintComponent(Graphics g) {
    	 graphics.setColor(Color.YELLOW);strokeSize=2;}
     graphics.setStroke(new BasicStroke(strokeSize));
     
-    graphics.drawRoundRect(0, 40, width - shadowGap, 
-	height - shadowGap-57, arcs.width, arcs.height);
+    graphics.drawRoundRect(0, 45, width - shadowGap, 
+	height - shadowGap-67, arcs.width, arcs.height);
 
     if(proyect.getState() ==State.Active)
     {
     	graphics.setColor(Color.GREEN);
-        graphics.fillRoundRect(10, 64, 20, 
+        graphics.fillRoundRect(10, 70, 20, 
     	20, arcs.width, arcs.height);
         graphics.setColor(Color.white);
         graphics.setStroke(new BasicStroke(strokeSize));
-        graphics.drawRoundRect(10, 64, 20, 
+        graphics.drawRoundRect(10, 70, 20, 
     	20, arcs.width, arcs.height);
     }
     else if(proyect.getState() ==State.Delayed)
     {
     	graphics.setColor(Color.RED);
-        graphics.fill(new Rectangle(new Point(10, 64), new Dimension(20, 20)));
+        graphics.fill(new Rectangle(new Point(10, 70), new Dimension(20, 20)));
         graphics.setColor(Color.WHITE);
-        graphics.draw(new Rectangle(new Point(10, 64), new Dimension(20, 20)));
+        graphics.draw(new Rectangle(new Point(10, 70), new Dimension(20, 20)));
     	
     }
     else if(proyect.getState() ==State.Pause)
