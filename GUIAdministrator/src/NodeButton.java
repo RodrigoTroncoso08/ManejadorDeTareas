@@ -8,12 +8,21 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Shape;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.geom.Ellipse2D;
+import java.lang.reflect.InvocationTargetException;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.JButton;
+import javax.swing.SwingUtilities;
+import javax.swing.Timer;
+import javax.xml.ws.Dispatch;
+
+import com.sun.glass.ui.InvokeLaterDispatcher;
 
 
-public class NodeButton extends JButton {
+public class NodeButton extends JButton implements ActionListener {
 	protected int strokeSize = 2;
     /** Color of shadow */
     protected Color shadowColor = Color.black;
@@ -35,7 +44,11 @@ public class NodeButton extends JButton {
 	  public NodeButton(String label, Task t) {
 	    super("");
 	    task=t;
-	    
+	    NodeButton n = this;
+	    Timer clock =new Timer(10000,this);
+	    clock.setRepeats(true);
+	    clock.setCoalesce(true);;
+	    clock.start();
 	// These statements enlarge the button so that it 
 	// becomes a circle rather than an oval.
 	    Dimension size = getPreferredSize();
@@ -82,17 +95,29 @@ public class NodeButton extends JButton {
 	         if(task.getState()!=State.Active)
 	         {
 		        if(task.getState()==State.Delayed)
-		        	 graphics.setColor(Color.red);
+		        	 graphics.setColor(new Color(210,0,0));
 		        else if(task.getState()==State.Pause)
 		        	 graphics.setColor(Color.YELLOW);
 		        
 		         graphics.setClip(new Rectangle(width+20, height+20));
-		        graphics.drawRect(0, 0, width+10+strokeSize, height+10+strokeSize);
+		        //graphics.drawRect(0, 0, width+10+strokeSize, height+10+strokeSize);
+		        graphics.drawRoundRect(1, 1, width +10+strokeSize, 
+		        		height+10+strokeSize, 10, 10);
 	         }
 
 	         super.paintComponent(g);
 	    }
 	  }
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		if(this.task.getChange())
+		{
+			this.repaint();
+			this.task.setChange(false);
+		}
+	}
 
 	
 }

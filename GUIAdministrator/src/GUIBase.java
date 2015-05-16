@@ -62,11 +62,13 @@ import javax.swing.BoxLayout;
 
 
 
+
 import sun.java2d.loops.DrawLine;
 
 import java.awt.BasicStroke;
 import java.awt.Component;
 import java.awt.Dimension;
+
 
 
 
@@ -95,6 +97,7 @@ import java.awt.Insets;
 import java.io.Console;
 import java.util.ArrayList;
 import java.util.Calendar;
+
 
 
 
@@ -148,7 +151,6 @@ public class GUIBase {
 		admin.AddContext("Miscelaneo");
 		GlosaryPanel.setPreferredSize(new Dimension(GlosaryPanel.getPreferredSize().width,GlosaryPanel.getPreferredSize().height+45));
 	}
-
 	/**
 	 * Initialize the contents of the frame.
 	 */
@@ -234,7 +236,7 @@ public class GUIBase {
 		
 		
 		
-		JButton AddTask = new RoundedButton("+ Task");
+		JButton AddTask = new RoundedButton("+ Task"); 
 		AddTask.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JDialog Ask = new JDialog (frame,"Nueva Tarea");
@@ -387,16 +389,21 @@ public class GUIBase {
 				
 				RoundedButton okbotom = new RoundedButton("OK");
 				Ask.getRootPane().setDefaultButton(okbotom);
-				okbotom.setVerticalAlignment(SwingConstants.BOTTOM);
+				okbotom.setVerticalAlignment(SwingConstants.BOTTOM); //////////////////+ Tarea
 				okbotom.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) 				//////////////////+ Tarea
+					public void actionPerformed(ActionEvent e) 
 					{
 						for (int i=0; i < admin.getProyects().size();i++)
 						{
 						if(admin.getProyects().get(i).getName()== Proyectos.getSelectedItem().toString())
 						{
 							Task t = new Task(Tnombre.getText());
-							t.setState(State.Delayed);
+							try {
+								Thread.sleep(100);
+							} catch (InterruptedException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
 							try{
 							Calendar c = Calendar.getInstance();
 							c.clear();
@@ -663,10 +670,11 @@ public class GUIBase {
 		WhiteBase2.setBounds(6, 69, 1005, 576);
 		WhiteBase2.setLayout(null);
 		WhiteBase2.add(TaskDetail);
+		WhiteBase2.setVisible(false);
 		TaskDetail.setBackground(new Color(30, 144, 255));
 		TaskDetail.setLayout(null);
 		TaskDetail.setBounds(645, 11, 350, 545);
-		scrollPane_1.setVisible(false);
+		scrollPane_1.setVisible(true);
 		
 		
 		

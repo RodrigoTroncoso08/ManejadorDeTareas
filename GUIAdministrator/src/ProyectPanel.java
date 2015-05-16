@@ -13,6 +13,9 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.ScrollPane;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Calendar;
 import java.util.Collections;
 
@@ -24,10 +27,11 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 
 import backend.*;
 
-public class ProyectPanel extends JPanel{
+public class ProyectPanel extends JPanel implements ActionListener{
 	
 		
 		public JLabel ProyectLabel = new JLabel("Proyect");
@@ -60,8 +64,12 @@ public class ProyectPanel extends JPanel{
 		// TODO Auto-generated constructor stub
 		super();
 		proyect =p;
-		NodeGrid.setOpaque(false);
+		Timer clock = new Timer(5000,this); //cada 5 segundos verifica si algun task cambio de estado
+		clock.setRepeats(true);
+		clock.setInitialDelay(1000);
+		clock.start();
 		
+		NodeGrid.setOpaque(false);
 		setOpaque(false);
 		this.setBounds(230, 20+145*ProyectCount, 748, 139);
 		this.setBackground(new Color(212, 227, 252));
@@ -171,9 +179,9 @@ public void AddTask(Task t)
 		
 		if(month==0)
 			month=12;
-		JLabel lblNewLabel_2 = new JLabel("   "+c.get(Calendar.DAY_OF_MONTH)+"/"+month+"/"+(c.get(c.YEAR)-1)); //se le resta 1 a year para que funcione..
-		lblNewLabel_2.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 12));
-		lblNewLabel_2.setForeground(new Color(112, 150, 252));
+		JLabel lblNewLabel_2 = new JLabel("     "+c.get(Calendar.DAY_OF_MONTH)+"/"+month+"/"+(c.get(c.YEAR)-1)); //se le resta 1 a year para que funcione..
+		lblNewLabel_2.setFont(new Font("Bodoni MT Bold", Font.BOLD, 12));
+		lblNewLabel_2.setForeground(proyect.getColor());
 		lblNewLabel_2.setBackground(new Color(255, 250, 250));
 		GridBagConstraints gbc_lblNewLabel_2 = new GridBagConstraints();
 		gbc_lblNewLabel_2.insets = new Insets(0, 0, 0, 0);
@@ -198,10 +206,10 @@ public void AddTask(Task t)
 		
 		nodeButton_5.setAlignmentX(0.5f);
 		
-		JLabel TaskLabel = new JLabel("    "+t.getName());
-		TaskLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 12));
+		JLabel TaskLabel = new JLabel("       "+t.getName());
+		TaskLabel.setFont(new Font("Bodoni MT Bold", Font.BOLD, 12));
 		GridBagConstraints gbc_TaskLabel = new GridBagConstraints();
-		TaskLabel.setForeground(new Color(112, 150, 252));
+		TaskLabel.setForeground(proyect.getColor());
 		gbc_TaskLabel.insets = new Insets(0, 0, 0, 5);
 		gbc_TaskLabel.gridx = proyect.getTasks().indexOf(t);
 		gbc_TaskLabel.gridy = 2;
@@ -301,6 +309,32 @@ protected void paintComponent(Graphics g) {
 public String GetName()
 {
 	return ProyectLabel.getText();
+}
+@Override
+public void actionPerformed(ActionEvent e) {
+	// TODO Auto-generated method stub
+	for(Task t:proyect.getTasks())
+	{
+		if(t.getState()==State.Delayed)
+		{
+			proyect.setState(State.Delayed);
+			this.repaint();
+			return;
+		}
+		else if(t.getState()==State.Pause)
+		{
+			proyect.setState(State.Pause);
+		}
+	}
+	if(proyect.getState()==State.Pause)
+	{
+		this.repaint();
+	}
+	else
+	{
+		proyect.setState(State.Active);
+		this.repaint();
+	}
 }
 }
 

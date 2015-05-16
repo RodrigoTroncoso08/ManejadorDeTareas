@@ -1,9 +1,13 @@
 package backend;
 
 import java.awt.Color;
+import java.io.Console;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
+
+import javax.management.monitor.Monitor;
 
 
 public class Task implements Comparable<Task> {
@@ -20,6 +24,7 @@ public class Task implements Comparable<Task> {
 	ArrayList<Task> RequireTasks;
 	int ProyectId; // necesario para poder saber de manera facil el color de la tarea (proyeto al que pertenece)
 	Color color;  //lo agregue para gemerarlo al iniciar un proyecto y se,le agrega a cada tarea cuando se agrega a un proyecto
+	Boolean Change;
 	
 
 	////Metodos
@@ -28,7 +33,41 @@ public class Task implements Comparable<Task> {
 	{                        //dasen: le saque lo de la fecha, que en realidad lo puede pedir despues
 		Name=name;
 		state= State.Active;
+		Change = false;
+		Thread clock = new Thread(new Runnable() {
+			
+			
+			public void run() {
+				// TODO Auto-generated method stub
+				
+				while(true)
+				{
+					//System.out.println("entro");
+					try {
+						Thread.sleep(1);
+					} catch (InterruptedException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					if(Deadline==null)
+						continue;
+					else if(Calendar.getInstance().compareTo(Deadline)>0)
+					{
+						setState(State.Delayed);
+						Change = true;
+						}
+					try {
+						TimeUnit.DAYS.sleep(1);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		});
+		clock.start();
 	}
+	
 	
 	public void AddRequireTask(Task t)
 	{
@@ -119,6 +158,16 @@ public class Task implements Comparable<Task> {
 	public int compareTo(Task o) {
 		// TODO Auto-generated method stub
 		return getDeadline().compareTo(o.getDeadline());
+	}
+
+
+	public Boolean getChange() {
+		return Change;
+	}
+
+
+	public void setChange(Boolean change) {
+		Change = change;
 	}
 	
 	
