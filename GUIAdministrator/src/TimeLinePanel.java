@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.ScrollPane;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -17,6 +18,8 @@ import backend.Task;
 import net.miginfocom.swing.MigLayout;
 
 import java.awt.BasicStroke;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -27,7 +30,7 @@ public class TimeLinePanel extends JPanel {
 	Calendar initial;
 	Calendar end;
 	JPanel TaskPanel = new JPanel();
-	
+	JScrollPane scrollTask;
 	Administrator Admin;
 	public TimeLinePanel(Administrator admin)
 	{
@@ -54,19 +57,19 @@ public class TimeLinePanel extends JPanel {
 		separator_3.setBounds(100, 20, 10, 490);
 		this.add(separator_3);
 		
-		JScrollPane scrollTask = new JScrollPane();
+		scrollTask = new JScrollPane();
 		scrollTask.setBorder(BorderFactory.createEmptyBorder());
 		scrollTask.setBounds(110, 10, 628, 521);
 		this.add(scrollTask);
+		TimeLinePanel aux = this;
 		scrollTask.getViewport().addChangeListener(new ChangeListener() {
 			
 			@Override
 			public void stateChanged(ChangeEvent arg0) {
 				// TODO Auto-generated method stub
-				separator_1.revalidate();
-				separator_1.repaint();
-				separator_2.revalidate();
-				separator_2.repaint();
+				aux.revalidate();
+				aux.repaint();
+				
 			}
 		});
 		
@@ -81,15 +84,6 @@ public class TimeLinePanel extends JPanel {
 		
 		TaskPanel.setLayout(mig);
 		
-		JPanel Fechas = new JPanel();
-		Fechas.setBackground(new Color(255, 255, 255));
-		TaskPanel.add(Fechas, "cell 1 0,grow");
-		Fechas.setLayout(null);
-		
-		JLabel fecha1 = new JLabel("New label");
-		fecha1.setHorizontalAlignment(SwingConstants.CENTER);
-		fecha1.setBounds(10, 11, 65, 13);
-		Fechas.add(fecha1);
 		TaskPanel.setVisible(true);
 		
 		
@@ -100,6 +94,19 @@ public class TimeLinePanel extends JPanel {
 		lblTareas.setBounds(10, 11, 75, 27);
 		this.add(lblTareas);
 		TaskPanel.setVisible(true);
+		
+		
+		
+		JPanel Fechas = new JPanel();
+		Fechas.setBackground(new Color(255, 255, 255));
+		Fechas.setBounds(0, 0, 800, 50);
+		TaskPanel.add(Fechas, "cell 1 0,grow");
+		MigLayout dateMig = new MigLayout("fillx", "[30]15", "[50]");
+		Fechas.setLayout(dateMig);
+		
+		
+		
+		
 	}
 
 
@@ -130,23 +137,43 @@ public void AddTasks(Task t){
 		
 		TaskPanel task = (TaskPanel)TaskPanel.getComponent(index);
 		TaskPanel.remove(TaskPanel.getComponent(index));
-		String constr = "cell 1 "+(i+1);   /// lo mueve a la siguiente posicion
+		String constr = "cell 1 "+(i+1)+",grow, h 50!";   /// lo mueve a la siguiente posicion
 		TaskPanel.add(task, constr);
-		MigLayout m =(MigLayout)TaskPanel.getLayout();
 		
 	}
 	TaskPanel task = new TaskPanel(t,((t.getDeadline().get(Calendar.YEAR)-initial.get(Calendar.YEAR))*365)+
 			(t.getDeadline().get(Calendar.DAY_OF_YEAR)-initial.get(Calendar.DAY_OF_YEAR)) );  ////////calcula la posicion del nodo de acuerdo a la distancia en fecha
 	
-	String constr = "cell 1 "+index+",grow";
-	TaskPanel.add(task, constr);
+	String constr = "cell 1 "+index+",grow, h 50!";
+	TaskPanel.add(task, constr,index);
 	MigLayout m =(MigLayout)TaskPanel.getLayout();
 	task.setBackground(new Color(212, 227, 252));
-	m.setRowConstraints(m.getRowConstraints()+"10[50]");
+	String constrain = m.getRowConstraints()+"10[50]";
+	m.setRowConstraints(constrain);
+	
 	
 	int total = ((end.get(Calendar.YEAR)-initial.get(Calendar.YEAR))*365)+
 			(end.get(Calendar.DAY_OF_YEAR)-initial.get(Calendar.DAY_OF_YEAR));
-	this.setPreferredSize(new Dimension(10*total, getHeight()));
+	TaskPanel.setPreferredSize(new Dimension(30*total, 100+tasks.size()*60));
+	JPanel fechas = (JPanel)TaskPanel.getComponent(0);
+	MigLayout MigFechas = (MigLayout)fechas.getLayout();
+	fechas.removeAll();
+	for(int i = 0; i <total; i++ )
+	{
+		
+		Calendar c = Calendar.getInstance();
+		c.setTime(initial.getTime()); ///esto esta mal
+		c.add(Calendar.DAY_OF_MONTH, i);
+		//JLabel d = new JLabel(c.get(Calendar.DAY_OF_MONTH)+"/"+c.get(Calendar.MONTH));
+		
+		JLabel fecha1 = new JLabel("17/"+i);
+		fecha1.setHorizontalAlignment(SwingConstants.CENTER);
+		fecha1.setSize(30, 50);
+		fechas.setPreferredSize(new Dimension(30*i,50));
+		fechas.add(fecha1,"cell "+i+" 0 , grow , w 30!");
+		MigFechas.setColumnConstraints(MigFechas.getColumnConstraints()+"10[30]");
+		
+	}
 	this.revalidate();
 	this.repaint();
 }
