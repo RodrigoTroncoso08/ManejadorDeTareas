@@ -32,6 +32,7 @@ public class Task implements Comparable<Task> {
 	public Task(String name) //pide lo menos posible para crear una tarea
 	{                        //dasen: le saque lo de la fecha, que en realidad lo puede pedir despues
 		Name=name;
+		
 		state= State.Active;
 		Change = false;
 		Thread clock = new Thread(new Runnable() {

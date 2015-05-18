@@ -7,5 +7,6 @@
 	<classpathentry exported="true" kind="lib" path="newSWT.jar"/>
 	<classpathentry exported="true" kind="lib" path="C:/Users/rodrigo/Desktop/Roro/PUC/7-septimo/Ingenieria de Software/Proyecto/joda-time-2.7/joda-time-2.7.jar"/>
 	<classpathentry exported="true" kind="lib" path="C:/Users/rodrigo/Desktop/Roro/PUC/7-septimo/Ingenieria de Software/Proyecto/ManejadorDeTareas/GUIAdministrator/miglayout-src.zip" sourcepath="miglayout-src.zip"/>
+	<classpathentry kind="lib" path="miglayout15-swing.jar" sourcepath="miglayout-src.zip"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

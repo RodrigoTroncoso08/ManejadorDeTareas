@@ -105,6 +105,8 @@ import java.util.Calendar;
 
 import javax.swing.JList;
 import javax.swing.JScrollBar;
+import javax.swing.SpringLayout;
+import net.miginfocom.swing.MigLayout;
 
 
 public class GUIBase {
@@ -214,12 +216,32 @@ public class GUIBase {
 		MiselaneoItem.setBackground(Color.WHITE);
 		MiselaneoItem.setBounds(33, 83, 147, 48);
 		
-		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setSize(new Dimension(100, 100));
-		scrollPane_1.setPreferredSize(new Dimension(1000, 1000));
-		scrollPane_1.setBounds(6, 69, 1005, 576);
-		scrollPane_1.getViewport().setBackground(new Color(0, 110, 142));
+		JScrollPane scrollMainView = new JScrollPane();
+		scrollMainView.setSize(new Dimension(100, 100));
+		scrollMainView.setPreferredSize(new Dimension(1000, 1000));
+		scrollMainView.setBounds(6, 69, 1005, 576);
+		scrollMainView.getViewport().setBackground(new Color(0, 110, 142));
+		
+		
+		JScrollPane scrollTime = new JScrollPane();
+		scrollTime.setBounds(240, 91, 750, 534);
+		frame.getContentPane().add(scrollTime);
+		scrollTime.setOpaque(false);
+		scrollTime.getViewport().setOpaque(false);
+		scrollTime.setBorder(BorderFactory.createEmptyBorder());
+		scrollTime.setViewportBorder(BorderFactory.createEmptyBorder());
+		scrollTime.setVisible(true);											//////scolltime set visible
+		
+		TimeLinePanel TimeLinePanel = new TimeLinePanel(admin);
+		TimeLinePanel.setBackground(new Color(255, 255, 255));
+		scrollTime.setViewportView(TimeLinePanel);
+		TimeLinePanel.setLayout(null);
+		TimeLinePanel.setVisible(true);
+		
+		
+		
 		RoundedButton b_1= new RoundedButton("Miscelaneo");
+		
 		b_1.shady=false;
 		b_1.setBackground(admin.getProyects().get(0).getColor());
 		b_1.setForeground(Color.WHITE);
@@ -426,6 +448,8 @@ public class GUIBase {
 							t.setContext(admin.AddContext((String)Contextos.getSelectedItem()));
 							admin.getProyects().get(i).AddTask(t);
 							ProyectUI.get(i).AddTask(t); //es importante que los proyectos se agreguen logica y visualmente en el mismo orden
+							t.setColor(admin.getProyects().get(i).getColor());
+							TimeLinePanel.AddTasks(t);
 							
 						}
 						}
@@ -634,37 +658,30 @@ public class GUIBase {
 		scrollPane.setViewportView(GlosaryPanel);
 		GlosaryPanel.setBackground(new Color(212, 227, 252));
 		GlosaryPanel.setLayout(null);
-		scrollPane_1.setBorder(BorderFactory.createEmptyBorder());
+		scrollMainView.setBorder(BorderFactory.createEmptyBorder());
 		
 		
 		
-		frame.getContentPane().add(scrollPane_1);
+		frame.getContentPane().add(scrollMainView);
 		ProyectPanel PP = new ProyectPanel("Miscelaneo", admin.getProyects().get(0));
 		PP.setLocation(230, 25);
 		//PP.setColorName(admin.getProyects().get(0).getColor());
 		ProyectUI.add(PP);
 		WhiteBase.setSize(new Dimension(100, 1000));
 		WhiteBase.setPreferredSize(new Dimension(500, 140));
-		scrollPane_1.setViewportView(WhiteBase);
+		scrollMainView.setViewportView(WhiteBase);
 		WhiteBase.add(PP);
 		WhiteBase.setForeground(Color.DARK_GRAY);
 		WhiteBase.setBackground(new Color(255, 255, 255));
 		WhiteBase.setLayout(null);
-		WhiteBase.setVisible(true);
-		
-		
-		JPanel TimeLinePane = new TimeLinePanel();
-		TimeLinePane.setBounds(0, 69, 1026, 584);
-		TimeLinePane.setBackground(new Color(0, 110, 142));
-		frame.getContentPane().add(TimeLinePane);
-		TimeLinePane.setVisible(false);
-		TimeLinePane.setLayout(null);
+		WhiteBase.setVisible(false);												///////////////whitebase visible
 		
 		Titulo = new JLabel("Proyect Administrator");
 		Titulo.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 33));
 		Titulo.setForeground(Color.WHITE);
 		Titulo.setBounds(276, 17, 422, 40);
 		frame.getContentPane().add(Titulo);
+		WhiteBase2.setBackground(new Color(255, 255, 255));
 		
 		frame.getContentPane().add(WhiteBase2);
 		WhiteBase2.setBounds(6, 69, 1005, 576);
@@ -674,7 +691,7 @@ public class GUIBase {
 		TaskDetail.setBackground(new Color(30, 144, 255));
 		TaskDetail.setLayout(null);
 		TaskDetail.setBounds(645, 11, 350, 545);
-		scrollPane_1.setVisible(true);
+		scrollMainView.setVisible(true);
 		
 		
 		

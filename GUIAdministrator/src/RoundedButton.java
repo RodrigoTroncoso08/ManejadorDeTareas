@@ -27,6 +27,11 @@ public class RoundedButton extends JButton {
     protected int shadowOffset = 4;
     /** The transparency value of shadow. ( 0 - 255) */
     protected int shadowAlpha = 150;
+    
+    public void setArcs(Dimension d)
+    {
+    	arcs=d;
+    }
 	  public RoundedButton(String label) {
 	    super(label);
 

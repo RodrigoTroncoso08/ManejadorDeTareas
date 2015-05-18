@@ -105,6 +105,20 @@ public class Administrator {
 		}
 		return aux.getTasks();
 	}
+	public ArrayList<Task> AllTasks()
+	{
+		
+		Proyect aux = new Proyect("Aux"); //funcion add de proyect ya ordena por fecha
+		for(Proyect p : Proyects)
+		{
+			for(Task t : p.getTasks())
+			{
+				aux.AddTask(t);
+			}
+		}
+		return aux.getTasks();
+	}
+	
 	public ArrayList<String> getPosibleContext()
 	{
 		return PosibleContext;	

@@ -33,6 +33,7 @@ public class Proyect {
 	}
 	public void AddTask(Task t) //mantiene ordenada la lista
 	{
+		
 		if(Tasks.isEmpty())
 			Tasks.add(t);
 		else
@@ -66,7 +67,7 @@ public class Proyect {
 			}
 			Tasks.add(t);	//si no se incerta entremedio, queda al ultimo
 		}
-		t.color = color;
+		
 	}
 	public ArrayList<Task> TodayTasks()
 	{

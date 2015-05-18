@@ -200,8 +200,8 @@ public void AddTask(Task t)
 		gbc_nodeButton_5.gridy = 1;
 		gbc_nodeButton_5.weightx=1;
 		
-		
 		nodeButton_5.setBackground(proyect.getColor());
+		t.setColor(proyect.getColor());
 		nodeButton_5.setPreferredSize(new Dimension(15*(t.getRelevance()+1), 15*(t.getRelevance()+1)));  //maximo 50 para que quepan, minimo 10 para que se vea\
 		
 		nodeButton_5.setAlignmentX(0.5f);
