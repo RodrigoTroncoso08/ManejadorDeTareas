@@ -36,6 +36,7 @@ import javax.swing.JDialog;
 import javax.swing.JSeparator;
 import javax.swing.Popup;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.Timer;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
@@ -44,6 +45,9 @@ import backend.*;
 import javax.swing.BoxLayout;
 
 //import org.eclipse.wb.swing.FocusTraversalOnArray;
+
+
+
 
 
 
@@ -86,6 +90,9 @@ import java.awt.Dimension;
 
 
 
+
+
+
 import javax.swing.JSlider;
 
 import java.awt.Rectangle;
@@ -95,8 +102,13 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.io.Console;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+
+
+
 
 
 
@@ -106,6 +118,7 @@ import java.util.Calendar;
 import javax.swing.JList;
 import javax.swing.JScrollBar;
 import javax.swing.SpringLayout;
+
 import net.miginfocom.swing.MigLayout;
 
 
@@ -236,7 +249,7 @@ public class GUIBase {
 		TimeLinePanel.setBackground(new Color(255, 255, 255));
 		scrollTime.setViewportView(TimeLinePanel);
 		TimeLinePanel.setLayout(null);
-		TimeLinePanel.setVisible(true);
+		TimeLinePanel.setVisible(false);
 		
 		
 		
@@ -420,6 +433,26 @@ public class GUIBase {
 						if(admin.getProyects().get(i).getName()== Proyectos.getSelectedItem().toString())
 						{
 							Task t = new Task(Tnombre.getText());
+							Timer StateCheck = new Timer(10000,new ActionListener() {
+							
+								@Override
+								public void actionPerformed(ActionEvent arg0) {
+									// TODO Auto-generated method stub
+									if(t.getChange())
+									{
+										t.isCheck(1);
+										
+										DateFormat format2=new SimpleDateFormat("EEEE"); 
+										String finalDay=format2.format(t.getDeadline().getTime());
+										JOptionPane.showMessageDialog(null, "Recuerde que el plazo de la tarea "+t.getName()+" vencio el día "+finalDay+
+												" "+t.getDeadline().get(Calendar.DAY_OF_MONTH)+"/"+(t.getDeadline().get(Calendar.MONTH)+1)+"/"+t.getDeadline().get(Calendar.YEAR),	
+												"Recordatorio Vencimiento", JOptionPane.INFORMATION_MESSAGE);
+										
+									}
+								}
+							});
+							StateCheck.setInitialDelay(1000);
+							StateCheck.start();
 							try {
 								Thread.sleep(100);
 							} catch (InterruptedException e1) {
@@ -431,7 +464,7 @@ public class GUIBase {
 							c.clear();
 							if(Integer.parseInt(Tmes.getText())>12|| Integer.parseInt(Tdia.getText())>31)
 								throw new Exception();
-							c.set(Integer.parseInt(Taño.getText()), Integer.parseInt(Tmes.getText()), Integer.parseInt(Tdia.getText()));
+							c.set(Integer.parseInt(Taño.getText()), Integer.parseInt(Tmes.getText())-1, Integer.parseInt(Tdia.getText()));
 							t.setDeadline(c);
 							}
 							catch(Exception ex)
@@ -674,7 +707,7 @@ public class GUIBase {
 		WhiteBase.setForeground(Color.DARK_GRAY);
 		WhiteBase.setBackground(new Color(255, 255, 255));
 		WhiteBase.setLayout(null);
-		WhiteBase.setVisible(false);												///////////////whitebase visible
+		WhiteBase.setVisible(true);												///////////////whitebase visible
 		
 		Titulo = new JLabel("Proyect Administrator");
 		Titulo.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 33));

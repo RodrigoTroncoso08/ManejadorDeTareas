@@ -44,7 +44,6 @@ public class NodeButton extends JButton implements ActionListener {
 	  public NodeButton(String label, Task t) {
 	    super("");
 	    task=t;
-	    NodeButton n = this;
 	    Timer clock =new Timer(10000,this);
 	    clock.setRepeats(true);
 	    clock.setCoalesce(true);;
@@ -68,9 +67,6 @@ public class NodeButton extends JButton implements ActionListener {
 	   // a property of the RoundButton class.
 	    	 int width = getPreferredSize().width;
 	         int height = getPreferredSize().width;
-	         int shadowGap = this.shadowGap;
-	         Color shadowColorA = new Color(shadowColor.getRed(), 
-	        		 shadowColor.getGreen(), shadowColor.getBlue(), shadowAlpha);
 	         Graphics2D graphics = (Graphics2D) g;
 	         g.setClip(0, 0, width+10, height+10);
 	         
@@ -116,6 +112,7 @@ public class NodeButton extends JButton implements ActionListener {
 		{
 			this.repaint();
 			this.task.setChange(false);
+			task.isCheck(0);
 		}
 	}
 

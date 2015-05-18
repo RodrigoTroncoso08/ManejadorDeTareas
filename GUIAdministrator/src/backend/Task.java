@@ -25,6 +25,7 @@ public class Task implements Comparable<Task> {
 	int ProyectId; // necesario para poder saber de manera facil el color de la tarea (proyeto al que pertenece)
 	Color color;  //lo agregue para gemerarlo al iniciar un proyecto y se,le agrega a cada tarea cuando se agrega a un proyecto
 	Boolean Change;
+	Boolean[] check;
 	
 
 	////Metodos
@@ -32,7 +33,9 @@ public class Task implements Comparable<Task> {
 	public Task(String name) //pide lo menos posible para crear una tarea
 	{                        //dasen: le saque lo de la fecha, que en realidad lo puede pedir despues
 		Name=name;
-		
+		check = new Boolean[2];  //2 controles, en nodebutton y en guibase
+		check[0]=false;
+		check[1]=false;
 		state= State.Active;
 		Change = false;
 		Thread clock = new Thread(new Runnable() {
@@ -45,17 +48,24 @@ public class Task implements Comparable<Task> {
 				{
 					//System.out.println("entro");
 					try {
-						Thread.sleep(1);
+						Thread.sleep(100);
 					} catch (InterruptedException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 					if(Deadline==null)
 						continue;
-					else if(Calendar.getInstance().compareTo(Deadline)>0)
+					Calendar aux=Calendar.getInstance();
+					int year = aux.get(Calendar.YEAR);
+					int day = aux.get(Calendar.DAY_OF_YEAR);
+					int yprueba = Deadline.get(Calendar.YEAR);
+					int prueba = Deadline.get(Calendar.DAY_OF_YEAR);
+					
+					if(Deadline.get(Calendar.DAY_OF_YEAR)<day && Deadline.get(Calendar.YEAR)<=year)
 					{
 						setState(State.Delayed);
 						Change = true;
+						
 						}
 					try {
 						TimeUnit.DAYS.sleep(1);
@@ -162,7 +172,7 @@ public class Task implements Comparable<Task> {
 	}
 
 
-	public Boolean getChange() {
+	public boolean getChange() {
 		return Change;
 	}
 
@@ -170,7 +180,16 @@ public class Task implements Comparable<Task> {
 	public void setChange(Boolean change) {
 		Change = change;
 	}
-	
+	public void isCheck(int index)
+	{
+		check[index]=true;
+		for(int i =0; i<check.length; i++)
+			if(!check[i])
+				return ;
+		for(int i =0; i<check.length; i++)
+			check[i]=false;
+				
+	}
 	
 	
 

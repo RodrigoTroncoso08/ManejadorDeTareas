@@ -175,11 +175,14 @@ public void AddTask(Task t)
 		}
 		
 		Calendar c= t.getDeadline();
-		int month = c.get(c.MONTH);
-		
-		if(month==0)
+		int month = c.get(Calendar.MONTH)+1;
+		int year = c.get(Calendar.YEAR);
+		/*if(month==0)
 			month=12;
-		JLabel lblNewLabel_2 = new JLabel("     "+c.get(Calendar.DAY_OF_MONTH)+"/"+month+"/"+(c.get(c.YEAR)-1)); //se le resta 1 a year para que funcione..
+		if(month== 12)
+			year--;
+			*/
+		JLabel lblNewLabel_2 = new JLabel("     "+c.get(Calendar.DAY_OF_MONTH)+"/"+month+"/"+year); //se le resta 1 a year para que funcione..
 		lblNewLabel_2.setFont(new Font("Bodoni MT Bold", Font.BOLD, 12));
 		lblNewLabel_2.setForeground(proyect.getColor());
 		lblNewLabel_2.setBackground(new Color(255, 250, 250));
