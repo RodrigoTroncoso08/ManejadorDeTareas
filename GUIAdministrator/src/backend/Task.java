@@ -61,7 +61,7 @@ public class Task implements Comparable<Task> {
 					int yprueba = Deadline.get(Calendar.YEAR);
 					int prueba = Deadline.get(Calendar.DAY_OF_YEAR);
 					
-					if(Deadline.get(Calendar.DAY_OF_YEAR)<day && Deadline.get(Calendar.YEAR)<=year)
+					if((Deadline.get(Calendar.DAY_OF_YEAR)<day && Deadline.get(Calendar.YEAR)==year)||Deadline.get(Calendar.YEAR)<year)
 					{
 						setState(State.Delayed);
 						Change = true;

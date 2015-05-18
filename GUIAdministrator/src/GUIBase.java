@@ -132,6 +132,7 @@ public class GUIBase {
 	RoundedPanel WhiteBase2 = new RoundedPanel();
 	JPanel GlosaryPanel = new JPanel();
 	private JLabel Titulo;
+	MailSender mailSender;
 	/**
 	 * Launch the application.
 	 */
@@ -183,7 +184,7 @@ public class GUIBase {
 		}
 		
 		CreateAdmin();
-		
+		mailSender = new MailSender("rorotm@hotmail.com");
 		frame = new JFrame();
 		frame.getContentPane().setBackground(new Color(0, 110, 142));
 		frame.setBounds(100, 50, 1043, 697);
@@ -447,6 +448,7 @@ public class GUIBase {
 										JOptionPane.showMessageDialog(null, "Recuerde que el plazo de la tarea "+t.getName()+" vencio el día "+finalDay+
 												" "+t.getDeadline().get(Calendar.DAY_OF_MONTH)+"/"+(t.getDeadline().get(Calendar.MONTH)+1)+"/"+t.getDeadline().get(Calendar.YEAR),	
 												"Recordatorio Vencimiento", JOptionPane.INFORMATION_MESSAGE);
+										mailSender.sendMail(t);
 										
 									}
 								}
