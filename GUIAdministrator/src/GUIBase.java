@@ -47,30 +47,6 @@ import backend.*;
 import javax.swing.BoxLayout;
 
 //import org.eclipse.wb.swing.FocusTraversalOnArray;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import sun.java2d.loops.DrawLine;
 
 import java.awt.BasicStroke;
@@ -112,23 +88,11 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-
-
-
-
-
-
-
-
-
-
-
 import javax.swing.JList;
 import javax.swing.JScrollBar;
 import javax.swing.SpringLayout;
 
 import net.miginfocom.swing.MigLayout;
-
 
 public class GUIBase {
 	private JFrame frame;
@@ -468,9 +432,11 @@ public class GUIBase {
 									t.setRelevance(Importancia.getSelectedIndex());
 									admin.getProyects().get(i).AddTask(t);
 									ProyectUI.get(i).AddTask(t);
+									
 									Ask.setVisible(false);
 									Ask.dispose();
 								}
+								t.setProyectId(i);
 								t.setRelevance(Importancia.getSelectedIndex());
 								t.setContext(admin.AddContext((String)Contextos.getSelectedItem()));
 								t.setColor(admin.getProyects().get(i).getColor());

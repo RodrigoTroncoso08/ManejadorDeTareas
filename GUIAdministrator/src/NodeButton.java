@@ -80,13 +80,13 @@ public class NodeButton extends JButton implements ActionListener {
 	         //Draws the rounded opaque panel with borders.
 	         
 	         graphics.setColor(getBackground());
-	         graphics.fillRoundRect(strokeSize, strokeSize, width-strokeSize, 
-	         height-strokeSize, arcs.width, arcs.height);
+	         graphics.fillRoundRect(strokeSize+4, strokeSize+4, width-strokeSize-10, 
+	         height-strokeSize-10, arcs.width, arcs.height);
 	         graphics.setColor(getForeground());
 	         BasicStroke bs3 = new BasicStroke((float) 3.5);
 	         graphics.setStroke(bs3);
-	         graphics.drawRoundRect(strokeSize, strokeSize, width-strokeSize , 
-	 		        height-strokeSize, arcs.width, arcs.height);
+	         graphics.drawRoundRect(strokeSize+4, strokeSize+4, width-strokeSize-10 , 
+	 		        height-strokeSize-10, arcs.width, arcs.height);
 	         graphics.setStroke(new BasicStroke(strokeSize));
 	         if(task.getState()!=State.Active)
 	         {
@@ -95,10 +95,11 @@ public class NodeButton extends JButton implements ActionListener {
 		        else if(task.getState()==State.Pause)
 		        	 graphics.setColor(Color.YELLOW);
 		        
-		         graphics.setClip(new Rectangle(width+20, height+20));
+		         graphics.setClip(new Rectangle(width, height));
 		        //graphics.drawRect(0, 0, width+10+strokeSize, height+10+strokeSize);
-		        graphics.drawRoundRect(1, 1, width +10+strokeSize, 
-		        		height+10+strokeSize, 10, 10);
+		        graphics.drawRoundRect(strokeSize+1, strokeSize+1, width-strokeSize-5, 
+		        		height-strokeSize-5, height/5
+		        		, height/5);
 	         }
 
 	         super.paintComponent(g);
