@@ -1,5 +1,7 @@
 import java.awt.EventQueue;
 
+import javafx.scene.control.ComboBox;
+
 import javax.swing.JFrame;
 
 import java.awt.Color;
@@ -67,11 +69,15 @@ import javax.swing.BoxLayout;
 
 
 
+
+
 import sun.java2d.loops.DrawLine;
 
 import java.awt.BasicStroke;
 import java.awt.Component;
 import java.awt.Dimension;
+
+
 
 
 
@@ -115,6 +121,8 @@ import java.util.Calendar;
 
 
 
+
+
 import javax.swing.JList;
 import javax.swing.JScrollBar;
 import javax.swing.SpringLayout;
@@ -127,11 +135,16 @@ public class GUIBase {
 	private JTextField txtSearch;
 	private Administrator admin;
 	private ArrayList<ProyectPanel> ProyectUI = new ArrayList<ProyectPanel>();
+	private ArrayList<ProjectLine> Parreglo = new ArrayList<ProjectLine>();
 	RoundedPanel WhiteBase = new RoundedPanel();
 	RoundedPanel TaskDetail = new RoundedPanel();
 	RoundedPanel WhiteBase2 = new RoundedPanel();
 	JPanel GlosaryPanel = new JPanel();
 	private JLabel Titulo;
+	private Task SelectedTask;	//importante para poder editar las tareas
+	private TimeLinePanel TimeLinePanel;
+	private JScrollPane scrollMainView;
+	
 	MailSender mailSender;
 	/**
 	 * Launch the application.
@@ -230,28 +243,6 @@ public class GUIBase {
 		MiselaneoItem.setBackground(Color.WHITE);
 		MiselaneoItem.setBounds(33, 83, 147, 48);
 		
-		JScrollPane scrollMainView = new JScrollPane();
-		scrollMainView.setSize(new Dimension(100, 100));
-		scrollMainView.setPreferredSize(new Dimension(1000, 1000));
-		scrollMainView.setBounds(6, 69, 1005, 576);
-		scrollMainView.getViewport().setBackground(new Color(0, 110, 142));
-		
-		
-		JScrollPane scrollTime = new JScrollPane();
-		scrollTime.setBounds(240, 91, 750, 534);
-		frame.getContentPane().add(scrollTime);
-		scrollTime.setOpaque(false);
-		scrollTime.getViewport().setOpaque(false);
-		scrollTime.setBorder(BorderFactory.createEmptyBorder());
-		scrollTime.setViewportBorder(BorderFactory.createEmptyBorder());
-		scrollTime.setVisible(true);											//////scolltime set visible
-		
-		TimeLinePanel TimeLinePanel = new TimeLinePanel(admin);
-		TimeLinePanel.setBackground(new Color(255, 255, 255));
-		scrollTime.setViewportView(TimeLinePanel);
-		TimeLinePanel.setLayout(null);
-		TimeLinePanel.setVisible(false);
-		
 		
 		
 		RoundedButton b_1= new RoundedButton("Miscelaneo");
@@ -265,6 +256,7 @@ public class GUIBase {
 		RoundedPanel MenuPanel = new RoundedPanel();
 		MenuPanel.setBounds(15, 80, 214, 545);
 		frame.getContentPane().add(MenuPanel);
+		frame.getContentPane().setComponentZOrder(MenuPanel, 0);
 		MenuPanel.setBackground(new Color(212, 227, 252));
 		MenuPanel.setForeground(new Color(255, 255, 255));
 		MenuPanel.setLayout(null);
@@ -431,63 +423,139 @@ public class GUIBase {
 					{
 						for (int i=0; i < admin.getProyects().size();i++)
 						{
-						if(admin.getProyects().get(i).getName()== Proyectos.getSelectedItem().toString())
-						{
-							Task t = new Task(Tnombre.getText());
-							Timer StateCheck = new Timer(10000,new ActionListener() {
-							
-								@Override
-								public void actionPerformed(ActionEvent arg0) {
-									// TODO Auto-generated method stub
-									if(t.getChange())
-									{
-										t.isCheck(1);
-										
-										DateFormat format2=new SimpleDateFormat("EEEE"); 
-										String finalDay=format2.format(t.getDeadline().getTime());
-										JOptionPane.showMessageDialog(null, "Recuerde que el plazo de la tarea "+t.getName()+" vencio el día "+finalDay+
-												" "+t.getDeadline().get(Calendar.DAY_OF_MONTH)+"/"+(t.getDeadline().get(Calendar.MONTH)+1)+"/"+t.getDeadline().get(Calendar.YEAR),	
-												"Recordatorio Vencimiento", JOptionPane.INFORMATION_MESSAGE);
-										mailSender.sendMail(t);
+							if(admin.getProyects().get(i).getName()== Proyectos.getSelectedItem().toString())
+							{
+								Task t = new Task(Tnombre.getText());
+								Timer StateCheck = new Timer(10000,new ActionListener() {
+								
+									@Override
+									public void actionPerformed(ActionEvent arg0) {
+										// TODO Auto-generated method stub
+										if(t.getChange())
+										{
+											t.isCheck(1);
+											
+											DateFormat format2=new SimpleDateFormat("EEEE"); 
+											String finalDay=format2.format(t.getDeadline().getTime());
+											JOptionPane.showMessageDialog(null, "Recuerde que el plazo de la tarea "+t.getName()+" vencio el día "+finalDay+
+													" "+t.getDeadline().get(Calendar.DAY_OF_MONTH)+"/"+(t.getDeadline().get(Calendar.MONTH)+1)+"/"+t.getDeadline().get(Calendar.YEAR),	
+													"Recordatorio Vencimiento", JOptionPane.INFORMATION_MESSAGE);
+											mailSender.sendMail(t);
+											
+										}
+									}
+								});
+								StateCheck.setInitialDelay(1000);
+								StateCheck.start();
+								try {
+									Thread.sleep(100);
+								} catch (InterruptedException e1) {
+									// TODO Auto-generated catch block
+									e1.printStackTrace();
+								}
+								try{
+								Calendar c = Calendar.getInstance();
+								c.clear();
+								if(Integer.parseInt(Tmes.getText())>12|| Integer.parseInt(Tdia.getText())>31)
+									throw new Exception();
+								c.set(Integer.parseInt(Taño.getText()), Integer.parseInt(Tmes.getText())-1, Integer.parseInt(Tdia.getText()));
+								t.setDeadline(c);
+								}
+								catch(Exception ex)
+								{
+									JOptionPane.showMessageDialog(null, "Recuerde ingresar una fecha cuando pueda",	"Recordatorio de Fecha", JOptionPane.INFORMATION_MESSAGE);
+									t.setContext(admin.AddContext((String)Contextos.getSelectedItem()));
+									t.setRelevance(Importancia.getSelectedIndex());
+									admin.getProyects().get(i).AddTask(t);
+									ProyectUI.get(i).AddTask(t);
+									Ask.setVisible(false);
+									Ask.dispose();
+								}
+								t.setRelevance(Importancia.getSelectedIndex());
+								t.setContext(admin.AddContext((String)Contextos.getSelectedItem()));
+								t.setColor(admin.getProyects().get(i).getColor());
+								admin.getProyects().get(i).AddTask(t);
+								NodeButton n =ProyectUI.get(i).AddTask(t); //es importante que los proyectos se agreguen logica y visualmente en el mismo orden
+								NodeButton n2 = new NodeButton(n.getTask().getName().substring(0,1),n.getTask());
+								Parreglo.get(i).AddTask(n2);
+				                n.addActionListener(new ActionListener() {
+									
+									@Override
+									public void actionPerformed(ActionEvent e) {
+										// TODO Auto-generated method stub
+										WhiteBase.setVisible(false);
+				                		WhiteBase2.setVisible(true);
+				                		TaskDetail.setVisible(true);
+				                		frame.getContentPane().setComponentZOrder(scrollMainView,2);
+				                		frame.getContentPane().setComponentZOrder(WhiteBase2,1);
+				                		for(int i=0;i<Parreglo.size();i++){
+				                			Parreglo.get(i).setVisible(false);
+				                		}
+				                		Parreglo.get(n.getTask().getProyectId()).SelectTask(n);
+				                		Parreglo.get(n.getTask().getProyectId()).setVisible(true);
+				                		SelectedTask = n.getTask();
+				                		DetallarTarea(SelectedTask);
+									}
+								});
+				                n.addMouseListener(new MouseListener() {
+									
+									@Override
+									public void mouseReleased(MouseEvent arg0) {
+										// TODO Auto-generated method stub
 										
 									}
-								}
-							});
-							StateCheck.setInitialDelay(1000);
-							StateCheck.start();
-							try {
-								Thread.sleep(100);
-							} catch (InterruptedException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
+									
+									@Override
+									public void mousePressed(MouseEvent arg0) {
+										// TODO Auto-generated method stub
+										
+									}
+									
+									@Override
+									public void mouseExited(MouseEvent arg0) {
+										// TODO Auto-generated method stub
+										
+									}
+									
+									@Override
+									public void mouseEntered(MouseEvent arg0) {
+										// TODO Auto-generated method stub
+										
+									}
+									
+									@Override
+									public void mouseClicked(MouseEvent arg0) {
+										// TODO Auto-generated method stub
+										WhiteBase.setVisible(false);
+				                		WhiteBase2.setVisible(true);
+				                		TaskDetail.setVisible(true);
+				                		for(int i=0;i<Parreglo.size();i++){
+				                			Parreglo.get(i).setVisible(false);
+				                		}
+				                		Parreglo.get(n.getTask().getProyectId()).SelectTask(n);
+				                		Parreglo.get(n.getTask().getProyectId()).setVisible(true);
+				                		SelectedTask = n.getTask();
+				                		DetallarTarea(SelectedTask);
+									}
+								});
+				                n2.addActionListener(new ActionListener() {
+									
+									@Override
+									public void actionPerformed(ActionEvent e) {
+										// TODO Auto-generated method stub
+										Parreglo.get(n2.getTask().getProyectId()).SelectTask(n2);
+				                		SelectedTask = n2.getTask();
+				                		DetallarTarea(SelectedTask);
+									}
+								});
+				                
+				                TimeLinePanel.AddTasks(t);
+								
 							}
-							try{
-							Calendar c = Calendar.getInstance();
-							c.clear();
-							if(Integer.parseInt(Tmes.getText())>12|| Integer.parseInt(Tdia.getText())>31)
-								throw new Exception();
-							c.set(Integer.parseInt(Taño.getText()), Integer.parseInt(Tmes.getText())-1, Integer.parseInt(Tdia.getText()));
-							t.setDeadline(c);
-							}
-							catch(Exception ex)
-							{
-								JOptionPane.showMessageDialog(null, "Recuerde ingresar una fecha cuando pueda",	"Recordatorio de Fecha", JOptionPane.INFORMATION_MESSAGE);
-								t.setContext(admin.AddContext((String)Contextos.getSelectedItem()));
-								t.setRelevance(Importancia.getSelectedIndex());
-								admin.getProyects().get(i).AddTask(t);
-								ProyectUI.get(i).AddTask(t);
-								Ask.setVisible(false);
-								Ask.dispose();
-							}
-							t.setRelevance(Importancia.getSelectedIndex());
-							t.setContext(admin.AddContext((String)Contextos.getSelectedItem()));
-							admin.getProyects().get(i).AddTask(t);
-							ProyectUI.get(i).AddTask(t); //es importante que los proyectos se agreguen logica y visualmente en el mismo orden
-							t.setColor(admin.getProyects().get(i).getColor());
-							TimeLinePanel.AddTasks(t);
 							
 						}
-						}
+						
+						
 						Ask.setVisible(false);
 						Ask.dispose(); //para cerrar el dialogo una vez que se acepta
 					}
@@ -585,6 +653,12 @@ public class GUIBase {
 						////Agregar a interfaz
 						ProyectPanel PP = new ProyectPanel(Pnombre.getText(),p);
 						//PP.setColorName(p.getColor());
+						ProjectLine PL = new ProjectLine(p);
+						Parreglo.add(PL); //los projectLine se agragan en el mismo orden que los proyectPanel
+						PL.setBounds(200,11,440,545);
+						PL.setVisible(false);
+						WhiteBase2.add(PL);
+
 						ProyectUI.add(PP);
 						WhiteBase.add(PP);
 						WhiteBase.setPreferredSize(new Dimension(WhiteBase.getPreferredSize().width, WhiteBase.getPreferredSize().height+155));
@@ -669,12 +743,11 @@ public class GUIBase {
 		comboBox.setEditable(true);
 		comboBox.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 12));
 		comboBox.setForeground(new Color(0, 204, 255));
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"       Miselaneo"}));
+		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Todos","Miselaneo"}));
 		comboBox.setSelectedIndex(0);
 		comboBox.setBackground(new Color(255, 255, 255));
 		comboBox.setBounds(25, 178, 147, 28);
 		comboBox.addItem("Miselaneo");
-		comboBox.addItem("patatas");
 		MenuPanel.add(comboBox);
 		
 		JSeparator separator = new JSeparator();
@@ -693,40 +766,65 @@ public class GUIBase {
 		scrollPane.setViewportView(GlosaryPanel);
 		GlosaryPanel.setBackground(new Color(212, 227, 252));
 		GlosaryPanel.setLayout(null);
+		
+		RoundedButton HomeView = new RoundedButton("Home");
+		HomeView.setBackground(Color.WHITE);
+		HomeView.setBounds(25, 494, 147, 28);
+		HomeView.setForeground(new Color(153, 204, 255));
+		HomeView.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 16));
+		MenuPanel.add(HomeView);
+		HomeView.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				WhiteBase.setVisible(true);
+        		WhiteBase2.setVisible(false);
+        		TaskDetail.setVisible(false);
+        		frame.getContentPane().setComponentZOrder(scrollMainView,1);
+        		frame.getContentPane().setComponentZOrder(WhiteBase2,2);
+			}
+		});
+		
+		scrollMainView = new JScrollPane();
+		scrollMainView.setSize(new Dimension(100, 100));
+		scrollMainView.setPreferredSize(new Dimension(1000, 1000));
+		scrollMainView.setBounds(6, 69, 1005, 576);
+		scrollMainView.getViewport().setBackground(new Color(0, 110, 142));
 		scrollMainView.setBorder(BorderFactory.createEmptyBorder());
 		
 		
 		
 		frame.getContentPane().add(scrollMainView);
-		ProyectPanel PP = new ProyectPanel("Miscelaneo", admin.getProyects().get(0));
-		PP.setLocation(230, 25);
+		ProyectPanel PP_1 = new ProyectPanel("Miselaneo", admin.getProyects().get(0));
+		PP_1.setLocation(230, 25);
 		//PP.setColorName(admin.getProyects().get(0).getColor());
-		ProyectUI.add(PP);
+		ProyectUI.add(PP_1);
 		WhiteBase.setSize(new Dimension(100, 1000));
 		WhiteBase.setPreferredSize(new Dimension(500, 140));
 		scrollMainView.setViewportView(WhiteBase);
-		WhiteBase.add(PP);
+		WhiteBase.add(PP_1);
 		WhiteBase.setForeground(Color.DARK_GRAY);
 		WhiteBase.setBackground(new Color(255, 255, 255));
 		WhiteBase.setLayout(null);
 		WhiteBase.setVisible(true);												///////////////whitebase visible
-		
-		Titulo = new JLabel("Proyect Administrator");
-		Titulo.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 33));
-		Titulo.setForeground(Color.WHITE);
-		Titulo.setBounds(276, 17, 422, 40);
-		frame.getContentPane().add(Titulo);
+		scrollMainView.setVisible(true);
+		ProjectLine PL_1 = new ProjectLine(admin.getProyects().get(0)); //el paralelo del proyecto, donde se ven los detalles
+		Parreglo.add(PL_1);
 		WhiteBase2.setBackground(new Color(255, 255, 255));
 		
 		frame.getContentPane().add(WhiteBase2);
 		WhiteBase2.setBounds(6, 69, 1005, 576);
 		WhiteBase2.setLayout(null);
 		WhiteBase2.add(TaskDetail);
+		WhiteBase2.add(PL_1);
 		WhiteBase2.setVisible(false);
+		PL_1.setBounds(200, 11, 440, 545);
+		PL_1.setVisible(false);
+		TaskDetail.setVisible(false);
 		TaskDetail.setBackground(new Color(30, 144, 255));
 		TaskDetail.setLayout(null);
 		TaskDetail.setBounds(645, 11, 350, 545);
-		scrollMainView.setVisible(true);
 		
 		
 		
@@ -734,99 +832,159 @@ public class GUIBase {
 		//mas comentarios para que se marque la wea
 		//jiji asjidaiofuahdjasbjaks
 		
-		JTextArea textArea = new JTextArea();
-		textArea.setBackground(new Color(102, 205, 170));
-		textArea.setBounds(30, 100, 290, 210);
-		TaskDetail.add(textArea);
+		JTextArea textArea_1 = new JTextArea();
+		textArea_1.setBackground(new Color(102, 205, 170));
+		textArea_1.setBounds(30, 100, 290, 210);
+		TaskDetail.add(textArea_1);						/////Descrpcion [0]
 		
-		JLabel lblNombreTarea = new JLabel("Nombre Tarea");
-		lblNombreTarea.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblNombreTarea.setForeground(new Color(255, 255, 255));
-		lblNombreTarea.setBounds(73, 44, 200, 50);
-		TaskDetail.add(lblNombreTarea);
+		JLabel lblNombreTarea_1 = new JLabel("Nombre Tarea");
+		lblNombreTarea_1.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lblNombreTarea_1.setForeground(new Color(255, 255, 255));
+		lblNombreTarea_1.setBounds(140, 44, 200, 50);
+		TaskDetail.add(lblNombreTarea_1);				/////Nombre [1]
 		
-		JComboBox ctx = new JComboBox();
-		ctx.setBounds(30, 344, 90, 20);
-		TaskDetail.add(ctx);
+		JComboBox ctx_1 = new JComboBox();
+		ctx_1.setBounds(30, 344, 90, 20);
+		TaskDetail.add(ctx_1);					/////Contextos [2]
 		
-		JComboBox impo = new JComboBox();
-		impo.setBounds(230, 28, 90, 20);
-		TaskDetail.add(impo);
+		JComboBox impo_1 = new JComboBox();
+		impo_1.setBounds(230, 28, 90, 20);
+		impo_1.addItem("Normal");
+		impo_1.addItem("Importante");
+		impo_1.addItem("Muy Importante");
+		TaskDetail.add(impo_1);					/////importancia [3]
 		
 		JCheckBox chckbxTareaLista = new JCheckBox("Tarea Lista");
 		chckbxTareaLista.setBackground(new Color(30, 144, 255));
 		chckbxTareaLista.setBounds(30, 487, 97, 23);
 		chckbxTareaLista.setBorder(null);
-		TaskDetail.add(chckbxTareaLista);
+		TaskDetail.add(chckbxTareaLista);			/////tarea lista [4]
 		
 		JLabel lblProceso = new JLabel("Progreso");
 		lblProceso.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblProceso.setBounds(29, 510, 69, 23);
-		TaskDetail.add(lblProceso);
+		TaskDetail.add(lblProceso);					/////Progreso [5]
 		
-		JSlider slider = new JSlider();
-		slider.setBackground(new Color(30, 144, 255));
-		slider.setForeground(new Color(64, 224, 208));
-		slider.setBounds(61, 544, 200, 20);
-		TaskDetail.add(slider);
+		JSlider slider_1 = new JSlider();
+		slider_1.setBackground(new Color(30, 144, 255));
+		slider_1.setForeground(new Color(64, 224, 208));
+		slider_1.setBounds(61, 544, 200, 20);
+		TaskDetail.add(slider_1);					/////SliderProgreso [6]
 		
 		JButton btnD = new JButton("+ D");
 		btnD.setBounds(180, 385, 51, 23);
-		TaskDetail.add(btnD);
+		TaskDetail.add(btnD);						/////Button +D [7]
 		
 		JButton btnW = new JButton("+ W");
 		btnW.setBounds(251, 385, 69, 23);
-		TaskDetail.add(btnW);
+		TaskDetail.add(btnW);						/////Button +W [8]
 		
-		JTextField txtHh = new JTextField();
-		txtHh.addFocusListener(new FocusAdapter() {
+		JTextField txtHh_1 = new JTextField();		
+		txtHh_1.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent arg0) {
-				if(txtHh.getText().equals("HH"))
-					txtHh.setText("");
+				if(txtHh_1.getText().equals("HH"))
+					txtHh_1.setText("");
 			}
 			@Override
 			public void focusLost(FocusEvent e) {
-				if(txtHh.getText().equals(""))
-					txtHh.setText("HH");				
+				if(txtHh_1.getText().equals(""))
+					txtHh_1.setText("HH");				
 			}
 		});
-		txtHh.setForeground(new Color(255, 255, 255));
-		txtHh.setFont(new Font("Tahoma", Font.PLAIN, 19));
-		txtHh.setBackground(new Color(30, 144, 255));
-		txtHh.setText("HH");
-		txtHh.setBounds(151, 431, 32, 34);
-		TaskDetail.add(txtHh);
-		txtHh.setColumns(10);
+		txtHh_1.setForeground(new Color(255, 255, 255));
+		txtHh_1.setFont(new Font("Tahoma", Font.PLAIN, 19));
+		txtHh_1.setBackground(new Color(30, 144, 255));
+		txtHh_1.setText("HH");
+		txtHh_1.setBounds(151, 431, 32, 34);
+		TaskDetail.add(txtHh_1);					////HH [9]
+		txtHh_1.setColumns(10);
 		
-		JTextField txtMm = new JTextField();
-		txtMm.addFocusListener(new FocusAdapter() {
+		JTextField txtMm_1 = new JTextField();
+		txtMm_1.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
-				if(txtMm.getText().equals("MM"))
-					txtMm.setText("");
+				if(txtMm_1.getText().equals("MM"))
+					txtMm_1.setText("");
 			}
 			@Override
 			public void focusLost(FocusEvent e) {
-				if(txtMm.getText().equals(""))
-					txtMm.setText("MM");
+				if(txtMm_1.getText().equals(""))
+					txtMm_1.setText("MM");
 			}
 		});
-		txtMm.setBackground(new Color(30, 144, 255));
-		txtMm.setForeground(new Color(255, 255, 255));
-		txtMm.setFont(new Font("Tahoma", Font.PLAIN, 19));
-		txtMm.setText("MM");
-		txtMm.setBounds(193, 431, 38, 34);
-		TaskDetail.add(txtMm);
-		txtMm.setColumns(10);
+		txtMm_1.setBackground(new Color(30, 144, 255));
+		txtMm_1.setForeground(new Color(255, 255, 255));
+		txtMm_1.setFont(new Font("Tahoma", Font.PLAIN, 19));
+		txtMm_1.setText("MM");
+		txtMm_1.setBounds(193, 431, 38, 34);
+		TaskDetail.add(txtMm_1);
+		txtMm_1.setColumns(10);						/////MM [10]
 		
 		JButton btnGuardar = new JButton("GUARDAR");
 		btnGuardar.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		btnGuardar.setBackground(new Color(0, 255, 0));
 		btnGuardar.setBounds(203, 476, 117, 38);
 		TaskDetail.add(btnGuardar);
+		btnGuardar.addActionListener(new ActionListener(){
+			public void actionPerformed (ActionEvent e)
+			{
+				//SelectedTask.setContext(admin.ContColor.get(ctx_1.getSelectedItem().toString()));				
+				SelectedTask.setRelevance(impo_1.getSelectedIndex());
+				SelectedTask.setDescription(textArea_1.getText());
+				SelectedTask.setProgress(slider_1.getValue());
+				//faltan las fechas tambien
+				//hay que hacer un try and catcha para las fechas y para las horas
+				//de que se pueda parsear lo que hay en los textfields
+			}
+		});
+		TaskDetail.add(btnGuardar);					/////Guardar [11]
 		
 		//hasta aca llegan los componentes del taskdetails
+////////////////////////		////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		JScrollPane scrollTime = new JScrollPane();
+		scrollTime.setBounds(240, 91, 750, 534);
+		frame.getContentPane().add(scrollTime);
+		scrollTime.setOpaque(false);
+		scrollTime.getViewport().setOpaque(false);
+		scrollTime.setBorder(BorderFactory.createEmptyBorder());
+		scrollTime.setViewportBorder(BorderFactory.createEmptyBorder());
+		scrollTime.setVisible(true);											//////scolltime set visible
+		
+		TimeLinePanel = new TimeLinePanel(admin);
+		TimeLinePanel.setBackground(new Color(255, 255, 255));
+		scrollTime.setViewportView(TimeLinePanel);
+		TimeLinePanel.setLayout(null);
+		TimeLinePanel.setVisible(false);
+		
+		Titulo = new JLabel("Proyect Administrator");
+		Titulo.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 33));
+		Titulo.setForeground(Color.WHITE);
+		Titulo.setBounds(276, 17, 422, 40);
+		frame.getContentPane().add(Titulo);
+
+		
 		
 	}
+		
+		private void DetallarTarea(Task t)
+	    {
+	    	//al seleccionar una tarea muestra sus detalles en el panel de TaskDetail
+			JComboBox impo =(JComboBox)TaskDetail.getComponent(3);
+			JComboBox ctx =(JComboBox)TaskDetail.getComponent(2);
+			JLabel lblNombreTarea = (JLabel)TaskDetail.getComponent(1);
+			JTextArea Description = (JTextArea)TaskDetail.getComponent(0);
+			JSlider slider = (JSlider)TaskDetail.getComponent(6);
+			impo.setSelectedIndex(t.getRelevance());
+			ctx.addItem(admin.ColorCont.get(t.getContext()));
+	    	ctx.setSelectedItem(admin.ColorCont.get(t.getContext()));
+	    	//diccionario para pasar del color del contexto a un string reconocible por el combobox
+	    	Description.setText(t.getDescription());
+	    	lblNombreTarea.setText(t.getName());
+	    	//poner las fechas y horas en orden tambien
+	    	slider.setValue(t.getProgress());
+	    	
+	    }
 }

@@ -80,13 +80,13 @@ public class NodeButton extends JButton implements ActionListener {
 	         //Draws the rounded opaque panel with borders.
 	         
 	         graphics.setColor(getBackground());
-	         graphics.fillRoundRect(5+strokeSize, 5+strokeSize, width, 
-	         height, arcs.width, arcs.height);
+	         graphics.fillRoundRect(strokeSize, strokeSize, width-strokeSize, 
+	         height-strokeSize, arcs.width, arcs.height);
 	         graphics.setColor(getForeground());
 	         BasicStroke bs3 = new BasicStroke((float) 3.5);
 	         graphics.setStroke(bs3);
-	         graphics.drawRoundRect(5+strokeSize, 5+strokeSize, width , 
-	 		        height, arcs.width, arcs.height);
+	         graphics.drawRoundRect(strokeSize, strokeSize, width-strokeSize , 
+	 		        height-strokeSize, arcs.width, arcs.height);
 	         graphics.setStroke(new BasicStroke(strokeSize));
 	         if(task.getState()!=State.Active)
 	         {
@@ -105,7 +105,7 @@ public class NodeButton extends JButton implements ActionListener {
 	    }
 	  }
 
-	@Override
+	
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if(this.task.getChange())
@@ -116,5 +116,8 @@ public class NodeButton extends JButton implements ActionListener {
 		}
 	}
 
-	
+	public Task getTask(){
+		return task;
+	}
+
 }

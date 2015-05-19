@@ -80,6 +80,16 @@ public class Task implements Comparable<Task> {
 	}
 	
 	
+	public int getProyectId() {
+		return ProyectId;
+	}
+
+
+	public void setProyectId(int proyectId) {
+		ProyectId = proyectId;
+	}
+
+
 	public void AddRequireTask(Task t)
 	{
 		RequireTasks.add(t);

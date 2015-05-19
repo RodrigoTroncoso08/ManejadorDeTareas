@@ -140,7 +140,7 @@ public class ProyectPanel extends JPanel implements ActionListener{
 		
 		
 	}
-public void AddTask(Task t)
+public NodeButton AddTask(Task t)
 	{
 		Collections.sort(proyect.getTasks());//ordena los tasks para luego re agregarlos
 		if(NodeGrid.getSize().getHeight()<countTask) //verifica que el grid tenga el espacio indicado
@@ -224,6 +224,8 @@ public void AddTask(Task t)
 		this.revalidate();
 		this.repaint();
 		countTask++;
+		
+		return nodeButton_5;
 	}
 public void ChangeName(String newName)
 

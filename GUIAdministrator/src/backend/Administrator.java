@@ -3,6 +3,7 @@ package backend;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Random;
 
 
@@ -11,6 +12,8 @@ public class Administrator {
 	ArrayList<Proyect> Proyects;
 	ArrayList<String> PosibleContext; //restringe que los usuarios pongan cualquier cosa en contexto
 	ArrayList<Color> PosibleContextColor=new ArrayList<Color>();
+	public HashMap<Color,String> ColorCont = new HashMap<Color,String>();
+	public HashMap<String,Color> ContColor = new HashMap<String,Color>();
 	
 	public Administrator ()
 	{
