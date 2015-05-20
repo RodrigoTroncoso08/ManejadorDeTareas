@@ -127,10 +127,22 @@ public void AddTasks(Task t){
 	
 	
 	ArrayList<Task> tasks = Admin.AllTasks();
+	int total;
 	if(tasks.size()==0)
 		return;
 	initial =  tasks.get(0).getDeadline();
-	end = tasks.get(tasks.size()-1).getDeadline();
+	int k = tasks.size()-1;
+	end = tasks.get(k).getDeadline();
+	int year = end.get(Calendar.YEAR);
+	while(year==9999&&k>=0)
+	{
+		
+		end = tasks.get(k).getDeadline();
+		year = end.get(Calendar.YEAR);
+		k--;
+	}
+	if(year==9999)
+		total=0;
 	int index =tasks.indexOf(t)+1;
 	for(int i = tasks.indexOf(t)+1; i<tasks.size();i++)
 	{
@@ -152,13 +164,13 @@ public void AddTasks(Task t){
 	m.setRowConstraints(constrain);
 	
 	
-	int total = ((end.get(Calendar.YEAR)-initial.get(Calendar.YEAR))*365)+
+	total = ((end.get(Calendar.YEAR)-initial.get(Calendar.YEAR))*365)+
 			(end.get(Calendar.DAY_OF_YEAR)-initial.get(Calendar.DAY_OF_YEAR));
 	TaskPanel.setPreferredSize(new Dimension(30*total, 100+tasks.size()*60));
 	JPanel fechas = (JPanel)TaskPanel.getComponent(0);
 	MigLayout MigFechas = (MigLayout)fechas.getLayout();
 	fechas.removeAll();
-	for(int i = 0; i <total; i++ )
+	for(int i = 0; i <total&&i<2000; i++ )
 	{
 		
 		Calendar c = Calendar.getInstance();

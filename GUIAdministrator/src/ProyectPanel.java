@@ -175,14 +175,24 @@ public NodeButton AddTask(Task t)
 		}
 		
 		Calendar c= t.getDeadline();
-		int month = c.get(Calendar.MONTH)+1;
-		int year = c.get(Calendar.YEAR);
-		/*if(month==0)
-			month=12;
-		if(month== 12)
-			year--;
-			*/
-		JLabel lblNewLabel_2 = new JLabel("     "+c.get(Calendar.DAY_OF_MONTH)+"/"+month+"/"+year); //se le resta 1 a year para que funcione..
+		JLabel lblNewLabel_2;
+		
+			int month = c.get(Calendar.MONTH)+1;
+			int year = c.get(Calendar.YEAR);
+			/*if(month==0)
+				month=12;
+			if(month== 12)
+				year--;
+				*/
+		if(year!=9999)
+		{
+			 lblNewLabel_2 = new JLabel(c.get(Calendar.DAY_OF_MONTH)+"/"+month+"/"+year); //se le resta 1 a year para que funcione..
+		}
+		else
+		{
+			lblNewLabel_2 = new JLabel("Fecha No Especificada");
+			
+		}
 		lblNewLabel_2.setFont(new Font("Bodoni MT Bold", Font.BOLD, 12));
 		lblNewLabel_2.setForeground(proyect.getColor());
 		lblNewLabel_2.setBackground(new Color(255, 250, 250));
@@ -193,8 +203,12 @@ public NodeButton AddTask(Task t)
 		gbc_lblNewLabel_2.weighty=1;
 		gbc_lblNewLabel_2.anchor= gbc_lblNewLabel_2.SOUTH;
 		
+		NodeButton nodeButton_5;
+		if(t.getName()=="")
+			nodeButton_5 = new NodeButton(t.getName().substring(0, 1),t);
+		else
+			nodeButton_5 = new NodeButton("((?)",t);
 		
-		NodeButton nodeButton_5 = new NodeButton(t.getName().substring(0, 1),t);
 		nodeButton_5.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 30));
 		nodeButton_5.setForeground(t.getContext());
 		GridBagConstraints gbc_nodeButton_5 = new GridBagConstraints();
@@ -202,14 +216,18 @@ public NodeButton AddTask(Task t)
 		gbc_nodeButton_5.gridx = proyect.getTasks().indexOf(t);
 		gbc_nodeButton_5.gridy = 1;
 		gbc_nodeButton_5.weightx=1;
-		
+		gbc_nodeButton_5.anchor=GridBagConstraints.CENTER;
+		gbc_nodeButton_5.fill=GridBagConstraints.BOTH;
 		nodeButton_5.setBackground(proyect.getColor());
 		t.setColor(proyect.getColor());
-		nodeButton_5.setPreferredSize(new Dimension(13*(t.getRelevance()+1)+10, 13*(t.getRelevance()+1)+10));  //maximo 50 para que quepan, minimo 10 para que se vea\
 		
 		nodeButton_5.setAlignmentX(0.5f);
 		
-		JLabel TaskLabel = new JLabel("       "+t.getName());
+		JLabel TaskLabel;
+		if(t.getName()=="")
+			TaskLabel = new JLabel(t.getName());
+		else
+			TaskLabel = new JLabel("(?)");
 		TaskLabel.setFont(new Font("Bodoni MT Bold", Font.BOLD, 12));
 		GridBagConstraints gbc_TaskLabel = new GridBagConstraints();
 		TaskLabel.setForeground(proyect.getColor());
@@ -273,8 +291,7 @@ protected void paintComponent(Graphics g) {
     	 graphics.setColor(Color.RED);strokeSize=2;}
     else if(proyect.getState()==State.Pause){
    	 graphics.setColor(Color.YELLOW);strokeSize=2;}
-    graphics.setStroke(new BasicStroke(strokeSize));
-    
+    graphics.setStroke(new BasicStroke(strokeSize=2));
     graphics.drawRoundRect(0, 45, width - shadowGap, 
 	height - shadowGap-67, arcs.width, arcs.height);
 
@@ -284,7 +301,7 @@ protected void paintComponent(Graphics g) {
         graphics.fillRoundRect(10, 70, 20, 
     	20, arcs.width, arcs.height);
         graphics.setColor(Color.white);
-        graphics.setStroke(new BasicStroke(strokeSize));
+        graphics.setStroke(new BasicStroke());
         graphics.drawRoundRect(10, 70, 20, 
     	20, arcs.width, arcs.height);
     }
@@ -340,6 +357,13 @@ public void actionPerformed(ActionEvent e) {
 		proyect.setState(State.Active);
 		this.repaint();
 	}
+}
+@Override
+public void repaint() {
+	// TODO Auto-generated method stub
+	super.repaint();
+	
+	
 }
 }
 

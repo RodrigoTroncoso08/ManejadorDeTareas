@@ -174,6 +174,18 @@ public class Task implements Comparable<Task> {
 	public void setColor(Color color) {
 		this.color = color;
 	}
+	
+	public void CheckDate()
+	{
+		Calendar c = Calendar.getInstance();
+		if(c.compareTo(Deadline)>0)
+		{
+			state= State.Delayed;
+			Change=true;
+			check[0]=false;
+			check[1]=false;
+		}
+	}
 
 	@Override
 	public int compareTo(Task o) {
@@ -185,8 +197,6 @@ public class Task implements Comparable<Task> {
 	public boolean getChange() {
 		return Change;
 	}
-
-
 	public void setChange(Boolean change) {
 		Change = change;
 	}

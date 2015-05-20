@@ -36,6 +36,8 @@ public class Proyect {
 		
 		if(Tasks.isEmpty())
 			Tasks.add(t);
+		else if(t.getDeadline()==null)
+			Tasks.add(t);
 		else
 		{
 			for(int i=0; i<Tasks.size();i++)

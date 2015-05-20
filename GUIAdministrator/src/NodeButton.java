@@ -65,10 +65,11 @@ public class NodeButton extends JButton implements ActionListener {
 		  {
 	// You might want to make the highlight color 
 	   // a property of the RoundButton class.
-	    	 int width = getPreferredSize().width;
-	         int height = getPreferredSize().width;
+			   //maximo 50 para que quepan, minimo 10 para que se vea\
+				
+	    	 int width = 10+12*(task.getRelevance()+1);
+	         int height = width;
 	         Graphics2D graphics = (Graphics2D) g;
-	         g.setClip(0, 0, width+10, height+10);
 	         
 	         //Sets antialiasing if HQ.
 	         if (highQuality) {
@@ -78,15 +79,15 @@ public class NodeButton extends JButton implements ActionListener {
 
 
 	         //Draws the rounded opaque panel with borders.
-	         
+	         int prueba= (this.getWidth()-width)/2;
 	         graphics.setColor(getBackground());
-	         graphics.fillRoundRect(strokeSize+4, strokeSize+4, width-strokeSize-10, 
-	         height-strokeSize-10, arcs.width, arcs.height);
+	         graphics.fillRoundRect((this.getWidth()-width)/2, (this.getHeight()-height)/2, width, 
+	         height, arcs.width, arcs.height);
 	         graphics.setColor(getForeground());
 	         BasicStroke bs3 = new BasicStroke((float) 3.5);
 	         graphics.setStroke(bs3);
-	         graphics.drawRoundRect(strokeSize+4, strokeSize+4, width-strokeSize-10 , 
-	 		        height-strokeSize-10, arcs.width, arcs.height);
+	         graphics.drawRoundRect((this.getWidth()-width)/2, (this.getHeight()-height)/2, width , 
+	 		        height, arcs.width, arcs.height);
 	         graphics.setStroke(new BasicStroke(strokeSize));
 	         if(task.getState()!=State.Active)
 	         {
@@ -95,10 +96,9 @@ public class NodeButton extends JButton implements ActionListener {
 		        else if(task.getState()==State.Pause)
 		        	 graphics.setColor(Color.YELLOW);
 		        
-		         graphics.setClip(new Rectangle(width, height));
 		        //graphics.drawRect(0, 0, width+10+strokeSize, height+10+strokeSize);
-		        graphics.drawRoundRect(strokeSize+1, strokeSize+1, width-strokeSize-5, 
-		        		height-strokeSize-5, height/5
+		        graphics.drawRoundRect((this.getWidth()-width)/2-3,(this.getHeight()-height)/2-3, width+6, 
+		        		height+6, height/5
 		        		, height/5);
 	         }
 

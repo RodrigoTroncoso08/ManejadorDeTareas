@@ -46,6 +46,7 @@ import backend.*;
 
 import javax.swing.BoxLayout;
 
+
 //import org.eclipse.wb.swing.FocusTraversalOnArray;
 import sun.java2d.loops.DrawLine;
 
@@ -75,8 +76,10 @@ import java.awt.Dimension;
 
 
 
+
 import javax.swing.JSlider;
 
+import java.awt.Label;
 import java.awt.Rectangle;
 import java.awt.GridLayout;
 //import net.miginfocom.swing.MigLayout;
@@ -88,6 +91,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+
 import javax.swing.JList;
 import javax.swing.JScrollBar;
 import javax.swing.SpringLayout;
@@ -108,6 +112,7 @@ public class GUIBase {
 	private Task SelectedTask;	//importante para poder editar las tareas
 	private TimeLinePanel TimeLinePanel;
 	private JScrollPane scrollMainView;
+	JScrollPane scrollTaskPane = new JScrollPane();
 	
 	MailSender mailSender;
 	/**
@@ -171,6 +176,13 @@ public class GUIBase {
 		size.setVisible(false);
 		size.setSize(frame.getSize());
 		frame.setVisible(false);
+		
+		scrollTaskPane.setBounds(240,10, 440, 545);
+		scrollTaskPane.setBorder(BorderFactory.createEmptyBorder());
+		scrollTaskPane.setViewportBorder(BorderFactory.createEmptyBorder());
+		scrollTaskPane.setOpaque(false);
+		scrollTaskPane.getViewport().setOpaque(false);
+		scrollTaskPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		//esta parte se usara para hacer que todo se mueva junto al agrandar la ventana. No es requerimiento. Po ahora dejo el frame sin movilidad
 		/*
 		frame.addComponentListener(new ComponentAdapter() {
@@ -210,7 +222,19 @@ public class GUIBase {
 		
 		
 		RoundedButton b_1= new RoundedButton("Miscelaneo");
-		
+		b_1.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				WhiteBase.setVisible(false);
+        		WhiteBase2.setVisible(true);
+        		TaskDetail.setVisible(true);
+        		frame.getContentPane().setComponentZOrder(scrollMainView,2);
+        		frame.getContentPane().setComponentZOrder(WhiteBase2,1);
+        		scrollTaskPane.setViewportView(Parreglo.get(0));
+			}
+		});
 		b_1.shady=false;
 		b_1.setBackground(admin.getProyects().get(0).getColor());
 		b_1.setForeground(Color.WHITE);
@@ -218,6 +242,8 @@ public class GUIBase {
 		b_1.setBounds(10, 5+GlosaryPanel.getComponentCount()*45, 150, 35);
 		GlosaryPanel.add(b_1);
 		RoundedPanel MenuPanel = new RoundedPanel();
+		MenuPanel.arcs= new Dimension(7,7);
+		MenuPanel.shady=false;
 		MenuPanel.setBounds(15, 80, 214, 545);
 		frame.getContentPane().add(MenuPanel);
 		frame.getContentPane().setComponentZOrder(MenuPanel, 0);
@@ -402,7 +428,8 @@ public class GUIBase {
 											DateFormat format2=new SimpleDateFormat("EEEE"); 
 											String finalDay=format2.format(t.getDeadline().getTime());
 											JOptionPane.showMessageDialog(null, "Recuerde que el plazo de la tarea "+t.getName()+" vencio el día "+finalDay+
-													" "+t.getDeadline().get(Calendar.DAY_OF_MONTH)+"/"+(t.getDeadline().get(Calendar.MONTH)+1)+"/"+t.getDeadline().get(Calendar.YEAR),	
+													" "+t.getDeadline().get(Calendar.DAY_OF_MONTH)+"/"+(t.getDeadline().get(Calendar.MONTH)+1)+"/"+
+													t.getDeadline().get(Calendar.YEAR),	
 													"Recordatorio Vencimiento", JOptionPane.INFORMATION_MESSAGE);
 											mailSender.sendMail(t);
 											
@@ -430,8 +457,10 @@ public class GUIBase {
 									JOptionPane.showMessageDialog(null, "Recuerde ingresar una fecha cuando pueda",	"Recordatorio de Fecha", JOptionPane.INFORMATION_MESSAGE);
 									t.setContext(admin.AddContext((String)Contextos.getSelectedItem()));
 									t.setRelevance(Importancia.getSelectedIndex());
-									admin.getProyects().get(i).AddTask(t);
-									ProyectUI.get(i).AddTask(t);
+									Calendar c = Calendar.getInstance();
+									c.clear();
+									c.set(10000, 0, 0);
+									t.setDeadline(c);
 									
 									Ask.setVisible(false);
 									Ask.dispose();
@@ -442,7 +471,8 @@ public class GUIBase {
 								t.setColor(admin.getProyects().get(i).getColor());
 								admin.getProyects().get(i).AddTask(t);
 								NodeButton n =ProyectUI.get(i).AddTask(t); //es importante que los proyectos se agreguen logica y visualmente en el mismo orden
-								NodeButton n2 = new NodeButton(n.getTask().getName().substring(0,1),n.getTask());
+								NodeButton n2 = new NodeButton(n.getText(),n.getTask());
+								n2.setSize(n.getSize());
 								Parreglo.get(i).AddTask(n2);
 				                n.addActionListener(new ActionListener() {
 									
@@ -454,52 +484,8 @@ public class GUIBase {
 				                		TaskDetail.setVisible(true);
 				                		frame.getContentPane().setComponentZOrder(scrollMainView,2);
 				                		frame.getContentPane().setComponentZOrder(WhiteBase2,1);
-				                		for(int i=0;i<Parreglo.size();i++){
-				                			Parreglo.get(i).setVisible(false);
-				                		}
 				                		Parreglo.get(n.getTask().getProyectId()).SelectTask(n);
-				                		Parreglo.get(n.getTask().getProyectId()).setVisible(true);
-				                		SelectedTask = n.getTask();
-				                		DetallarTarea(SelectedTask);
-									}
-								});
-				                n.addMouseListener(new MouseListener() {
-									
-									@Override
-									public void mouseReleased(MouseEvent arg0) {
-										// TODO Auto-generated method stub
-										
-									}
-									
-									@Override
-									public void mousePressed(MouseEvent arg0) {
-										// TODO Auto-generated method stub
-										
-									}
-									
-									@Override
-									public void mouseExited(MouseEvent arg0) {
-										// TODO Auto-generated method stub
-										
-									}
-									
-									@Override
-									public void mouseEntered(MouseEvent arg0) {
-										// TODO Auto-generated method stub
-										
-									}
-									
-									@Override
-									public void mouseClicked(MouseEvent arg0) {
-										// TODO Auto-generated method stub
-										WhiteBase.setVisible(false);
-				                		WhiteBase2.setVisible(true);
-				                		TaskDetail.setVisible(true);
-				                		for(int i=0;i<Parreglo.size();i++){
-				                			Parreglo.get(i).setVisible(false);
-				                		}
-				                		Parreglo.get(n.getTask().getProyectId()).SelectTask(n);
-				                		Parreglo.get(n.getTask().getProyectId()).setVisible(true);
+				                		scrollTaskPane.setViewportView(Parreglo.get(n.getTask().getProyectId()));
 				                		SelectedTask = n.getTask();
 				                		DetallarTarea(SelectedTask);
 									}
@@ -509,12 +495,17 @@ public class GUIBase {
 									@Override
 									public void actionPerformed(ActionEvent e) {
 										// TODO Auto-generated method stub
-										Parreglo.get(n2.getTask().getProyectId()).SelectTask(n2);
+										WhiteBase.setVisible(false);
+				                		WhiteBase2.setVisible(true);
+				                		TaskDetail.setVisible(true);
+				                		frame.getContentPane().setComponentZOrder(scrollMainView,2);
+				                		frame.getContentPane().setComponentZOrder(WhiteBase2,1);
+				                		Parreglo.get(n2.getTask().getProyectId()).SelectTask(n2);
+				                		scrollTaskPane.setViewportView(Parreglo.get(n2.getTask().getProyectId()));
 				                		SelectedTask = n2.getTask();
 				                		DetallarTarea(SelectedTask);
 									}
 								});
-				                
 				                TimeLinePanel.AddTasks(t);
 								
 							}
@@ -620,11 +611,11 @@ public class GUIBase {
 						ProyectPanel PP = new ProyectPanel(Pnombre.getText(),p);
 						//PP.setColorName(p.getColor());
 						ProjectLine PL = new ProjectLine(p);
+						
 						Parreglo.add(PL); //los projectLine se agragan en el mismo orden que los proyectPanel
-						PL.setBounds(200,11,440,545);
-						PL.setVisible(false);
-						WhiteBase2.add(PL);
-
+						PL.setBounds(0,0,440,545);
+						PL.setVisible(true);
+						
 						ProyectUI.add(PP);
 						WhiteBase.add(PP);
 						WhiteBase.setPreferredSize(new Dimension(WhiteBase.getPreferredSize().width, WhiteBase.getPreferredSize().height+155));
@@ -640,6 +631,19 @@ public class GUIBase {
 						b.setForeground(Color.WHITE);
 						b.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
 						b.setBounds(10, 5+GlosaryPanel.getComponentCount()*45, 150, 35);
+						b.addActionListener(new ActionListener() {
+					
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								// TODO Auto-generated method stub
+								WhiteBase.setVisible(false);
+		                		WhiteBase2.setVisible(true);
+		                		TaskDetail.setVisible(true);
+		                		frame.getContentPane().setComponentZOrder(scrollMainView,2);
+		                		frame.getContentPane().setComponentZOrder(WhiteBase2,1);
+		                		scrollTaskPane.setViewportView(PL);
+							}
+						});
 						GlosaryPanel.add(b);
 						GlosaryPanel.setPreferredSize(new Dimension(GlosaryPanel.getPreferredSize().width,GlosaryPanel.getPreferredSize().height+45));
 						frame.revalidate();
@@ -745,7 +749,7 @@ public class GUIBase {
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
 				WhiteBase.setVisible(true);
-        		WhiteBase2.setVisible(false);
+        		WhiteBase2.setVisible(true);
         		TaskDetail.setVisible(false);
         		frame.getContentPane().setComponentZOrder(scrollMainView,1);
         		frame.getContentPane().setComponentZOrder(WhiteBase2,2);
@@ -778,19 +782,18 @@ public class GUIBase {
 		ProjectLine PL_1 = new ProjectLine(admin.getProyects().get(0)); //el paralelo del proyecto, donde se ven los detalles
 		Parreglo.add(PL_1);
 		WhiteBase2.setBackground(new Color(255, 255, 255));
-		
+		scrollTaskPane.setViewportView(PL_1);
 		frame.getContentPane().add(WhiteBase2);
 		WhiteBase2.setBounds(6, 69, 1005, 576);
 		WhiteBase2.setLayout(null);
 		WhiteBase2.add(TaskDetail);
-		WhiteBase2.add(PL_1);
+		WhiteBase2.add(scrollTaskPane);
 		WhiteBase2.setVisible(false);
-		PL_1.setBounds(200, 11, 440, 545);
-		PL_1.setVisible(false);
+		PL_1.setBounds(0, 0, 440, 545);
 		TaskDetail.setVisible(false);
-		TaskDetail.setBackground(new Color(30, 144, 255));
+		TaskDetail.setBackground(new Color(0,141,177));
 		TaskDetail.setLayout(null);
-		TaskDetail.setBounds(645, 11, 350, 545);
+		TaskDetail.setBounds(745, 11, 250, 545);
 		
 		
 		
@@ -799,22 +802,24 @@ public class GUIBase {
 		//jiji asjidaiofuahdjasbjaks
 		
 		JTextArea textArea_1 = new JTextArea();
-		textArea_1.setBackground(new Color(102, 205, 170));
-		textArea_1.setBounds(30, 100, 290, 210);
+		textArea_1.setBackground(Color.white);
+		textArea_1.setBounds(5, 100, 235, 210);
 		TaskDetail.add(textArea_1);						/////Descrpcion [0]
 		
 		JLabel lblNombreTarea_1 = new JLabel("Nombre Tarea");
 		lblNombreTarea_1.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lblNombreTarea_1.setForeground(new Color(255, 255, 255));
-		lblNombreTarea_1.setBounds(140, 44, 200, 50);
+		lblNombreTarea_1.setBounds(0, 44, 250, 50);
+		lblNombreTarea_1.setHorizontalAlignment(JLabel.CENTER);
+		
 		TaskDetail.add(lblNombreTarea_1);				/////Nombre [1]
 		
 		JComboBox ctx_1 = new JComboBox();
-		ctx_1.setBounds(30, 344, 90, 20);
+		ctx_1.setBounds(10, 355, 100, 20);
 		TaskDetail.add(ctx_1);					/////Contextos [2]
 		
 		JComboBox impo_1 = new JComboBox();
-		impo_1.setBounds(230, 28, 90, 20);
+		impo_1.setBounds(130, 28, 90, 20);
 		impo_1.addItem("Normal");
 		impo_1.addItem("Importante");
 		impo_1.addItem("Muy Importante");
@@ -822,27 +827,61 @@ public class GUIBase {
 		
 		JCheckBox chckbxTareaLista = new JCheckBox("Tarea Lista");
 		chckbxTareaLista.setBackground(new Color(30, 144, 255));
-		chckbxTareaLista.setBounds(30, 487, 97, 23);
+		chckbxTareaLista.setForeground(Color.white);
+		chckbxTareaLista.setBounds(10, 457, 97, 23);
 		chckbxTareaLista.setBorder(null);
 		TaskDetail.add(chckbxTareaLista);			/////tarea lista [4]
 		
 		JLabel lblProceso = new JLabel("Progreso");
-		lblProceso.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblProceso.setBounds(29, 510, 69, 23);
+		lblProceso.setFont(new Font("Tahoma", Font.BOLD, 16));
+		lblProceso.setBounds(10, 480, 69, 23);
+		lblProceso.setForeground(Color.white);
 		TaskDetail.add(lblProceso);					/////Progreso [5]
 		
 		JSlider slider_1 = new JSlider();
 		slider_1.setBackground(new Color(30, 144, 255));
 		slider_1.setForeground(new Color(64, 224, 208));
-		slider_1.setBounds(61, 544, 200, 20);
+		slider_1.setBounds(21, 514, 200, 20);
 		TaskDetail.add(slider_1);					/////SliderProgreso [6]
 		
+		JTextField DayEdit = new JTextField();
+		JTextField MonthEdit = new JTextField();
+		JTextField YearEdit = new JTextField();
+		
 		JButton btnD = new JButton("+ D");
-		btnD.setBounds(180, 385, 51, 23);
+		btnD.setBounds(130, 355, 51, 23);
+		btnD.setBackground(Color.white);
+		btnD.setForeground(new Color(0,141,177));
+		btnD.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				SelectedTask.getDeadline().add(Calendar.DATE, 1);
+				DayEdit.setText(SelectedTask.getDeadline().get(Calendar.DATE)+"");
+				MonthEdit.setText((SelectedTask.getDeadline().get(Calendar.MONTH)+1)+"");
+				YearEdit.setText(""+SelectedTask.getDeadline().get(Calendar.YEAR));
+				
+			}
+		});
 		TaskDetail.add(btnD);						/////Button +D [7]
 		
 		JButton btnW = new JButton("+ W");
-		btnW.setBounds(251, 385, 69, 23);
+		btnW.setBounds(190, 355, 51, 23);
+		btnW.setBackground(Color.white);
+		btnW.setForeground(new Color(0,141,177));
+		btnW.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				SelectedTask.getDeadline().add(Calendar.DATE, 7);
+				DayEdit.setText(SelectedTask.getDeadline().get(Calendar.DATE)+"");
+				MonthEdit.setText((SelectedTask.getDeadline().get(Calendar.MONTH)+1)+"");
+				YearEdit.setText(""+SelectedTask.getDeadline().get(Calendar.YEAR));
+				
+			}
+		});
 		TaskDetail.add(btnW);						/////Button +W [8]
 		
 		JTextField txtHh_1 = new JTextField();		
@@ -862,9 +901,12 @@ public class GUIBase {
 		txtHh_1.setFont(new Font("Tahoma", Font.PLAIN, 19));
 		txtHh_1.setBackground(new Color(30, 144, 255));
 		txtHh_1.setText("HH");
-		txtHh_1.setBounds(151, 431, 32, 34);
+		txtHh_1.setBounds(191, 401, 50, 34);
 		TaskDetail.add(txtHh_1);					////HH [9]
 		txtHh_1.setColumns(10);
+		
+		
+		
 		
 		JTextField txtMm_1 = new JTextField();
 		txtMm_1.addFocusListener(new FocusAdapter() {
@@ -883,14 +925,15 @@ public class GUIBase {
 		txtMm_1.setForeground(new Color(255, 255, 255));
 		txtMm_1.setFont(new Font("Tahoma", Font.PLAIN, 19));
 		txtMm_1.setText("MM");
-		txtMm_1.setBounds(193, 431, 38, 34);
+		txtMm_1.setBounds(130, 401, 50, 34);
 		TaskDetail.add(txtMm_1);
 		txtMm_1.setColumns(10);						/////MM [10]
 		
 		JButton btnGuardar = new JButton("GUARDAR");
 		btnGuardar.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		btnGuardar.setBackground(new Color(0, 255, 0));
-		btnGuardar.setBounds(203, 476, 117, 38);
+		btnGuardar.setForeground(new Color(125,184,93));
+		btnGuardar.setBackground(Color.WHITE);
+		btnGuardar.setBounds(103, 476, 117, 28);
 		TaskDetail.add(btnGuardar);
 		btnGuardar.addActionListener(new ActionListener(){
 			public void actionPerformed (ActionEvent e)
@@ -899,6 +942,15 @@ public class GUIBase {
 				SelectedTask.setRelevance(impo_1.getSelectedIndex());
 				SelectedTask.setDescription(textArea_1.getText());
 				SelectedTask.setProgress(slider_1.getValue());
+				SelectedTask.getDeadline().clear();
+				SelectedTask.getDeadline().set(Integer.parseInt(YearEdit.getText()), Integer.parseInt(MonthEdit.getText())-1, Integer.parseInt(DayEdit.getText()));
+				SelectedTask.CheckDate();
+				WhiteBase2.revalidate();
+				WhiteBase2.repaint();
+				WhiteBase.revalidate();
+				WhiteBase.repaint();
+				
+				
 				//faltan las fechas tambien
 				//hay que hacer un try and catcha para las fechas y para las horas
 				//de que se pueda parsear lo que hay en los textfields
@@ -906,6 +958,48 @@ public class GUIBase {
 		});
 		TaskDetail.add(btnGuardar);					/////Guardar [11]
 		
+		
+		
+		DayEdit.setHorizontalAlignment(JLabel.CENTER);
+		DayEdit.setBounds(130, 325, 20, 30);
+		DayEdit.setBorder(BorderFactory.createEmptyBorder());
+		DayEdit.setFont(new Font("Tahoma", Font.PLAIN, 19));
+		DayEdit.setBackground(new Color(0,141,177));
+		DayEdit.setForeground(Color.white);
+		TaskDetail.add(DayEdit);					//////DateEdit [12]
+		
+		MonthEdit.setHorizontalAlignment(JLabel.CENTER);
+		MonthEdit.setBounds(160, 325, 20, 30);
+		MonthEdit.setBorder(BorderFactory.createEmptyBorder());
+		MonthEdit.setFont(new Font("Tahoma", Font.PLAIN, 19));
+		MonthEdit.setBackground(new Color(0,141,177));
+		MonthEdit.setForeground(Color.white);
+		TaskDetail.add(MonthEdit);
+		
+		YearEdit.setHorizontalAlignment(JLabel.CENTER);
+		YearEdit.setBounds(190, 325, 50, 30);
+		YearEdit.setBorder(BorderFactory.createEmptyBorder());
+		YearEdit.setFont(new Font("Tahoma", Font.PLAIN, 19));
+		YearEdit.setBackground(new Color(0,141,177));
+		YearEdit.setForeground(Color.white);
+		TaskDetail.add(YearEdit);
+		
+		JLabel slash1 = new JLabel("/");
+		slash1.setBounds(150, 325, 10, 30);
+		slash1.setBorder(BorderFactory.createEmptyBorder());
+		slash1.setFont(new Font("Tahoma", Font.PLAIN, 19));
+		slash1.setBackground(new Color(0,141,177));
+		slash1.setForeground(Color.white);
+		slash1.setHorizontalAlignment(JLabel.CENTER);
+		TaskDetail.add(slash1);
+		JLabel slash2 = new JLabel("/");
+		slash2.setHorizontalAlignment(JLabel.CENTER);
+		slash2.setBounds(180, 325, 10, 30);
+		slash2.setBorder(BorderFactory.createEmptyBorder());
+		slash2.setFont(new Font("Tahoma", Font.PLAIN, 19));
+		slash2.setBackground(new Color(0,141,177));
+		slash2.setForeground(Color.white);
+		TaskDetail.add(slash2);
 		//hasta aca llegan los componentes del taskdetails
 ////////////////////////		////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -943,6 +1037,10 @@ public class GUIBase {
 			JLabel lblNombreTarea = (JLabel)TaskDetail.getComponent(1);
 			JTextArea Description = (JTextArea)TaskDetail.getComponent(0);
 			JSlider slider = (JSlider)TaskDetail.getComponent(6);
+			JTextField DayEdit = (JTextField)TaskDetail.getComponent(12);
+			JTextField MonthEdit = (JTextField)TaskDetail.getComponent(13);
+			JTextField YearEdit = (JTextField)TaskDetail.getComponent(14);
+			
 			impo.setSelectedIndex(t.getRelevance());
 			ctx.addItem(admin.ColorCont.get(t.getContext()));
 	    	ctx.setSelectedItem(admin.ColorCont.get(t.getContext()));
@@ -951,6 +1049,8 @@ public class GUIBase {
 	    	lblNombreTarea.setText(t.getName());
 	    	//poner las fechas y horas en orden tambien
 	    	slider.setValue(t.getProgress());
-	    	
+	    	DayEdit.setText(t.getDeadline().get(Calendar.DATE)+"");
+	    	MonthEdit.setText((t.getDeadline().get(Calendar.MONTH)+1)+"");
+	    	YearEdit.setText(""+t.getDeadline().get(Calendar.YEAR));
 	    }
 }

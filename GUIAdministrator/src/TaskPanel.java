@@ -13,19 +13,10 @@ public class TaskPanel extends JPanel{
 	
 	Task t;
 	int position;
-	MigLayout layout;
 	public TaskPanel(Task t,int Position) {
 		// TODO Auto-generated constructor stub
 		super();
-		layout = new MigLayout("", "[20]", "[50]");
-		position=Position;
-		String aux= (String)layout.getColumnConstraints();
-		for(int i=1; i<position;i++)
-		{
-			aux=aux+"10[20]";
-		}
-		layout.setColumnConstraints(aux);
-		setLayout(layout);
+		
 		
 		setOpaque(false);
 		NodeButton node = new NodeButton(t.getName(),t);
@@ -61,13 +52,13 @@ public class TaskPanel extends JPanel{
 	    */
 	    
 	    /////////////////////////////////// node
-	    /*
+	    
 	    graphics.setColor(t.getColor());
 	    graphics.fillRoundRect(10*position, 0, 15*t.getRelevance(), 15*t.getRelevance(), 5, 5);
 	    graphics.setColor(t.getContext());
 	    graphics.setStroke(new BasicStroke((float)1));
 	    graphics.drawRoundRect(10*position, 0, 15*t.getRelevance(), 15*t.getRelevance(), 5, 5);
-	    */
+	    
 	    
 	    
 	}
