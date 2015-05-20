@@ -23,6 +23,9 @@ import com.sun.glass.ui.InvokeLaterDispatcher;
 
 
 public class NodeButton extends JButton implements ActionListener {
+	
+	
+
 	protected int strokeSize = 2;
     /** Color of shadow */
     protected Color shadowColor = Color.black;
@@ -36,6 +39,8 @@ public class NodeButton extends JButton implements ActionListener {
     protected int shadowGap = 3;
     /** The offset of shadow.  */
     protected int shadowOffset =4;
+    
+    protected Graphics2D graphics;
     
     protected int nodeOffset =getPreferredSize().width/4;
     /** The transparency value of shadow. ( 0 - 255) */
@@ -69,7 +74,7 @@ public class NodeButton extends JButton implements ActionListener {
 				
 	    	 int width = 10+12*(task.getRelevance()+1);
 	         int height = width;
-	         Graphics2D graphics = (Graphics2D) g;
+	         graphics = (Graphics2D) g;
 	         
 	         //Sets antialiasing if HQ.
 	         if (highQuality) {
@@ -83,7 +88,7 @@ public class NodeButton extends JButton implements ActionListener {
 	         graphics.setColor(getBackground());
 	         graphics.fillRoundRect((this.getWidth()-width)/2, (this.getHeight()-height)/2, width, 
 	         height, arcs.width, arcs.height);
-	         graphics.setColor(getForeground());
+	         graphics.setColor(task.getContext());
 	         BasicStroke bs3 = new BasicStroke((float) 3.5);
 	         graphics.setStroke(bs3);
 	         graphics.drawRoundRect((this.getWidth()-width)/2, (this.getHeight()-height)/2, width , 

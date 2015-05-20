@@ -5,6 +5,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.Timer;
 import javax.swing.border.StrokeBorder;
 
 import java.awt.*;
@@ -25,11 +26,13 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Shape;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.ArrayList;
 
-public class ProjectLine extends JPanel {
+public class ProjectLine extends JPanel implements ActionListener{
 
 	protected Proyect pro;
 	protected int countTask=0;
@@ -42,14 +45,18 @@ public class ProjectLine extends JPanel {
 		
 		
 		pro = p;
+		Timer clock = new Timer(5000,this); //cada 5 segundos verifica si algun task cambio de estado
+		clock.setRepeats(true);
+		clock.setInitialDelay(1000);
+		clock.start();
 		this.setOpaque(false);
-		panel.setBounds(500, 0, 440, 545);
+		panel.setBounds(450, 0, 440, 545);
 		panel.setBackground(new Color(255, 255, 255));
 		panel.setOpaque(false);
 		this.add(panel);
 		GridBagLayout gbl_panel = new GridBagLayout();
-		gbl_panel.columnWidths = new int[]{140,140,140};
-		gbl_panel.rowHeights = new int[]{60,60,60,60,60,60,60,60,60,60,60,60,90};
+		gbl_panel.columnWidths = new int[]{190,140,140};
+		gbl_panel.rowHeights = new int[]{60,60,60,60,60,60,60,60,60};
 		gbl_panel.columnWeights = new double[]{Double.MIN_VALUE};
 		gbl_panel.rowWeights = new double[]{Double.MIN_VALUE};
 		panel.setLayout(gbl_panel);
@@ -84,7 +91,7 @@ public class ProjectLine extends JPanel {
 			panel.remove(mark*3);
 			panel.add(Panelnode, NodeConst);
 			
-			Component TaskLabel= panel.getComponent(mark*3);
+			JLabel TaskLabel= (JLabel)panel.getComponent(mark*3);
 			GridBagConstraints TaskConst= g.getConstraints(TaskLabel);
 			TaskConst.gridy=i+1;
 			panel.remove(mark*3);
@@ -130,21 +137,18 @@ public class ProjectLine extends JPanel {
 		nodeButton_5.setBackground(pro.getColor());
 		
 		
-		nodeButton_5.setAlignmentX(0.5f);
 		
-		JTextArea TaskLabel = new JTextArea(t.getName());
+		JLabel TaskLabel = new JLabel(t.getName());
+		TaskLabel.setHorizontalAlignment(JLabel.CENTER);
 		TaskLabel.setBounds(0, 0, 130, 50);
-		TaskLabel.setEditable(false);
 		TaskLabel.setBorder(BorderFactory.createEmptyBorder());
 		TaskLabel.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 16));
-		TaskLabel.setLineWrap(true);
-		TaskLabel.setWrapStyleWord(true);
 		GridBagConstraints gbc_TaskLabel = new GridBagConstraints();
 		TaskLabel.setForeground(new Color(112, 150, 252));
-		gbc_TaskLabel.insets = new Insets(0, 0, 0, 5);
+		gbc_TaskLabel.insets = new Insets(0, 0, 0, 0);
 		gbc_TaskLabel.gridy = pro.getTasks().indexOf(t);
 		gbc_TaskLabel.gridx = 0;
-		gbc_TaskLabel.ipady = 4;
+		gbc_TaskLabel.fill = GridBagConstraints.HORIZONTAL;
 		gbc_TaskLabel.anchor=GridBagConstraints.CENTER;
 		
 		
@@ -184,21 +188,22 @@ public class ProjectLine extends JPanel {
 
 	    graphics.setColor(new Color(212, 227, 252));
 	    
-	    graphics.fillRoundRect(140, 0, 140, 
+	    graphics.fillRoundRect(193, 0, 140, 
 		height, arcs.width, arcs.height);
 	    graphics.setColor(new Color(0,141,177));
+	    
 	    if(pro.getState()==State.Delayed){
 	    	 graphics.setColor(Color.RED);strokeSize=2;}
 	    else if(pro.getState()==State.Pause){
 	   	 graphics.setColor(Color.YELLOW);strokeSize=2;}
 	    graphics.setStroke(new BasicStroke(strokeSize));
 	    
-	    graphics.drawRoundRect(140,0, 140, 
-	    		height, arcs.width, arcs.height);
+	    graphics.drawRoundRect(193,0, 140+strokeSize
+	    		,height, arcs.width, arcs.height);
 	    
 	    graphics.setColor(new Color(188,211,250));
 	    
-	    graphics.fillRoundRect(140+strokeSize, strokeSize+Current*60, 140-strokeSize, 
+	    graphics.fillRoundRect(193+strokeSize, strokeSize+Current*60, 140, 
 		60, 5-2*strokeSize,5);
 	    
 	    graphics.setColor(new Color(112, 127, 252));
@@ -212,6 +217,73 @@ public class ProjectLine extends JPanel {
 	    //Sets strokes to default, is better.
 	    graphics.setStroke(new BasicStroke()); 
 		}
+
+	@Override
+	public void repaint() {
+		// TODO Auto-generated method stub
+		super.repaint();
+		
+		if(countTask>0)
+			for(int i = 0 ;i<pro.getTasks().size();i++)
+			{
+				JLabel Fecha= (JLabel )panel.getComponent(i*3);
+				JPanel pan= (JPanel)panel.getComponent(i*3+1);
+				NodeButton node = (NodeButton)pan.getComponent(0);
+				JLabel  Nombre= (JLabel )panel.getComponent(i*3+2);
+				
+				Calendar c= node.task.getDeadline();
+				
+				int month = c.get(Calendar.MONTH)+1;
+				int year = c.get(Calendar.YEAR);
+					
+				if(year!=9999)
+				{
+					 Fecha.setText(c.get(Calendar.DAY_OF_MONTH)+"/"+month+"/"+year); //se le resta 1 a year para que funcione..
+				}
+				else
+				{
+					Fecha.setText("No Especificada");
+					
+				}
+				
+				if(!node.task.getName().equals(""))
+					Nombre.setText(node.task.getName());
+				else
+					Nombre.setText("(?)");
+					
+				
+			}
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		for(Task t:pro.getTasks())
+		{
+			if(t.getState()==State.Delayed)
+			{
+				pro.setState(State.Delayed);
+				this.repaint();
+				return;
+			}
+			else if(t.getState()==State.Pause)
+			{
+				pro.setState(State.Pause);
+			}
+		}
+		if(pro.getState()==State.Pause)
+		{
+			this.repaint();
+		}
+		else
+		{
+			pro.setState(State.Active);
+			this.repaint();
+		}
+	}
 }
 
+
+
+	
 

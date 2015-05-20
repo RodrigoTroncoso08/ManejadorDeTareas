@@ -12,10 +12,13 @@ public class Administrator {
 	ArrayList<Proyect> Proyects;
 	ArrayList<String> PosibleContext; //restringe que los usuarios pongan cualquier cosa en contexto
 	ArrayList<Color> PosibleContextColor=new ArrayList<Color>();
-	public HashMap<Color,String> ColorCont = new HashMap<Color,String>();
-	public HashMap<String,Color> ContColor = new HashMap<String,Color>();
-	
-	public Administrator ()
+			public ArrayList<Color> getPosibleContextColor() {
+		return PosibleContextColor;
+	}
+	public void setPosibleContextColor(ArrayList<Color> posibleContextColor) {
+		PosibleContextColor = posibleContextColor;
+	}
+			public Administrator ()
 	{
 		Proyects = new ArrayList<Proyect>();
 		PosibleContext = new ArrayList<String>();

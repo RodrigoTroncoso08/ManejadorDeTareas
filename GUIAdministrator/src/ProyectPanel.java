@@ -62,7 +62,7 @@ public class ProyectPanel extends JPanel implements ActionListener{
 	    
 	public ProyectPanel(String Name,Proyect p) {
 		// TODO Auto-generated constructor stub
-		super();
+			super();
 		proyect =p;
 		Timer clock = new Timer(5000,this); //cada 5 segundos verifica si algun task cambio de estado
 		clock.setRepeats(true);
@@ -123,14 +123,13 @@ public class ProyectPanel extends JPanel implements ActionListener{
 		panel_1.add(scrollPane_3);
 		scrollPane_3.setBorder(BorderFactory.createEmptyBorder());
 		scrollPane_3.setViewportView(NodeGrid);
-		scrollPane_3.getViewport().setScrollMode(scrollPane_3.getViewport().BLIT_SCROLL_MODE);
 		scrollPane_3.getViewport().setOpaque(false);
 		scrollPane_3.setViewportBorder(BorderFactory.createEmptyBorder());
 		NodeGrid.setOpaque(false);
 		NodeGrid.setBorder(BorderFactory.createEmptyBorder());
 		GridBagLayout gbl_NodeGrid = new GridBagLayout();
 		
-		gbl_NodeGrid.columnWidths = new int[] {79,79,79,79,79,77,79,79,79,79,79,79};
+		gbl_NodeGrid.columnWidths = new int[] {79,79,79,79,79,79,79,79,79};
 		gbl_NodeGrid.rowHeights = new int[] {10, 55, 20};
 		gbl_NodeGrid.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		gbl_NodeGrid.rowWeights = new double[]{0.0, 0.0, 0.0};
@@ -190,7 +189,7 @@ public NodeButton AddTask(Task t)
 		}
 		else
 		{
-			lblNewLabel_2 = new JLabel("Fecha No Especificada");
+			lblNewLabel_2 = new JLabel("No Especificada");
 			
 		}
 		lblNewLabel_2.setFont(new Font("Bodoni MT Bold", Font.BOLD, 12));
@@ -204,7 +203,7 @@ public NodeButton AddTask(Task t)
 		gbc_lblNewLabel_2.anchor= gbc_lblNewLabel_2.SOUTH;
 		
 		NodeButton nodeButton_5;
-		if(t.getName()=="")
+		if(!t.getName().equals(""))
 			nodeButton_5 = new NodeButton(t.getName().substring(0, 1),t);
 		else
 			nodeButton_5 = new NodeButton("((?)",t);
@@ -224,7 +223,7 @@ public NodeButton AddTask(Task t)
 		nodeButton_5.setAlignmentX(0.5f);
 		
 		JLabel TaskLabel;
-		if(t.getName()=="")
+		if(!t.getName().equals(""))
 			TaskLabel = new JLabel(t.getName());
 		else
 			TaskLabel = new JLabel("(?)");
@@ -234,7 +233,6 @@ public NodeButton AddTask(Task t)
 		gbc_TaskLabel.insets = new Insets(0, 0, 0, 5);
 		gbc_TaskLabel.gridx = proyect.getTasks().indexOf(t);
 		gbc_TaskLabel.gridy = 2;
-		gbc_TaskLabel.ipady = 4;
 		gbc_TaskLabel.anchor = gbc_TaskLabel.NORTH;
 		NodeGrid.add(TaskLabel, gbc_TaskLabel,proyect.getTasks().indexOf(t)*3); ///primero el TaskLabel pq luego lo empuja hacia abajo
 		NodeGrid.add(nodeButton_5, gbc_nodeButton_5,proyect.getTasks().indexOf(t)*3);
@@ -362,7 +360,34 @@ public void actionPerformed(ActionEvent e) {
 public void repaint() {
 	// TODO Auto-generated method stub
 	super.repaint();
-	
+	if(countTask>0)
+	for(int i = 0 ;i<proyect.getTasks().size();i++)
+	{
+		JLabel Fecha= (JLabel )NodeGrid.getComponent(i*3);
+		NodeButton node= (NodeButton)NodeGrid.getComponent(i*3+1);
+		JLabel  Nombre= (JLabel )NodeGrid.getComponent(i*3+2);
+		
+		Calendar c= node.task.getDeadline();
+		
+		int month = c.get(Calendar.MONTH)+1;
+		int year = c.get(Calendar.YEAR);
+			
+		if(year!=9999)
+		{
+			 Fecha.setText(c.get(Calendar.DAY_OF_MONTH)+"/"+month+"/"+year); //se le resta 1 a year para que funcione..
+		}
+		else
+		{
+			Fecha.setText("No Especificada");
+			
+		}
+		
+		if(!node.task.getName().equals(""))
+			Nombre.setText(node.task.getName());
+		else
+			Nombre.setText("(?)");
+		
+	}
 	
 }
 }

@@ -109,10 +109,10 @@ public class GUIBase {
 	RoundedPanel WhiteBase2 = new RoundedPanel();
 	JPanel GlosaryPanel = new JPanel();
 	private JLabel Titulo;
-	private Task SelectedTask;	//importante para poder editar las tareas
+	private Task SelectedTask=null;	//importante para poder editar las tareas
 	private TimeLinePanel TimeLinePanel;
 	private JScrollPane scrollMainView;
-	JScrollPane scrollTaskPane = new JScrollPane();
+	private JScrollPane scrollTaskPane;
 	
 	MailSender mailSender;
 	/**
@@ -177,12 +177,14 @@ public class GUIBase {
 		size.setSize(frame.getSize());
 		frame.setVisible(false);
 		
-		scrollTaskPane.setBounds(240,10, 440, 545);
+		scrollTaskPane= new JScrollPane();
+		scrollTaskPane.setBounds(230,10, 510, 545);
 		scrollTaskPane.setBorder(BorderFactory.createEmptyBorder());
 		scrollTaskPane.setViewportBorder(BorderFactory.createEmptyBorder());
 		scrollTaskPane.setOpaque(false);
 		scrollTaskPane.getViewport().setOpaque(false);
 		scrollTaskPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollTaskPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		//esta parte se usara para hacer que todo se mueva junto al agrandar la ventana. No es requerimiento. Po ahora dejo el frame sin movilidad
 		/*
 		frame.addComponentListener(new ComponentAdapter() {
@@ -806,20 +808,23 @@ public class GUIBase {
 		textArea_1.setBounds(5, 100, 235, 210);
 		TaskDetail.add(textArea_1);						/////Descrpcion [0]
 		
-		JLabel lblNombreTarea_1 = new JLabel("Nombre Tarea");
+		JTextField lblNombreTarea_1 = new JTextField("Nombre Tarea");
 		lblNombreTarea_1.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lblNombreTarea_1.setForeground(new Color(255, 255, 255));
-		lblNombreTarea_1.setBounds(0, 44, 250, 50);
+		lblNombreTarea_1.setBounds(0, 44, 240, 50);
 		lblNombreTarea_1.setHorizontalAlignment(JLabel.CENTER);
+		lblNombreTarea_1.setBackground(new Color(0,141,177));
+		lblNombreTarea_1.setBorder(BorderFactory.createEmptyBorder());
 		
 		TaskDetail.add(lblNombreTarea_1);				/////Nombre [1]
 		
 		JComboBox ctx_1 = new JComboBox();
 		ctx_1.setBounds(10, 355, 100, 20);
+		
 		TaskDetail.add(ctx_1);					/////Contextos [2]
 		
 		JComboBox impo_1 = new JComboBox();
-		impo_1.setBounds(130, 28, 90, 20);
+		impo_1.setBounds(130, 15, 110, 20);
 		impo_1.addItem("Normal");
 		impo_1.addItem("Importante");
 		impo_1.addItem("Muy Importante");
@@ -834,7 +839,7 @@ public class GUIBase {
 		
 		JLabel lblProceso = new JLabel("Progreso");
 		lblProceso.setFont(new Font("Tahoma", Font.BOLD, 16));
-		lblProceso.setBounds(10, 480, 69, 23);
+		lblProceso.setBounds(10, 480, 100, 23);
 		lblProceso.setForeground(Color.white);
 		TaskDetail.add(lblProceso);					/////Progreso [5]
 		
@@ -933,18 +938,22 @@ public class GUIBase {
 		btnGuardar.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		btnGuardar.setForeground(new Color(125,184,93));
 		btnGuardar.setBackground(Color.WHITE);
-		btnGuardar.setBounds(103, 476, 117, 28);
+		btnGuardar.setBounds(113, 476, 117, 28);
 		TaskDetail.add(btnGuardar);
 		btnGuardar.addActionListener(new ActionListener(){
 			public void actionPerformed (ActionEvent e)
 			{
-				//SelectedTask.setContext(admin.ContColor.get(ctx_1.getSelectedItem().toString()));				
+				//SelectedTask.setContext(admin.ContColor.get(ctx_1.getSelectedItem().toString()));		
+				if(SelectedTask==null)
+					return;
 				SelectedTask.setRelevance(impo_1.getSelectedIndex());
 				SelectedTask.setDescription(textArea_1.getText());
 				SelectedTask.setProgress(slider_1.getValue());
 				SelectedTask.getDeadline().clear();
 				SelectedTask.getDeadline().set(Integer.parseInt(YearEdit.getText()), Integer.parseInt(MonthEdit.getText())-1, Integer.parseInt(DayEdit.getText()));
 				SelectedTask.CheckDate();
+				SelectedTask.setName(lblNombreTarea_1.getText());
+				SelectedTask.setContext(admin.getPosibleContextColor().get(admin.getPosibleContext().indexOf(ctx_1.getSelectedItem())));
 				WhiteBase2.revalidate();
 				WhiteBase2.repaint();
 				WhiteBase.revalidate();
@@ -956,9 +965,9 @@ public class GUIBase {
 				//de que se pueda parsear lo que hay en los textfields
 			}
 		});
+
 		TaskDetail.add(btnGuardar);					/////Guardar [11]
-		
-		
+		frame.getRootPane().setDefaultButton(btnGuardar);
 		
 		DayEdit.setHorizontalAlignment(JLabel.CENTER);
 		DayEdit.setBounds(130, 325, 20, 30);
@@ -1024,6 +1033,7 @@ public class GUIBase {
 		Titulo.setForeground(Color.WHITE);
 		Titulo.setBounds(276, 17, 422, 40);
 		frame.getContentPane().add(Titulo);
+		
 
 		
 		
@@ -1034,7 +1044,7 @@ public class GUIBase {
 	    	//al seleccionar una tarea muestra sus detalles en el panel de TaskDetail
 			JComboBox impo =(JComboBox)TaskDetail.getComponent(3);
 			JComboBox ctx =(JComboBox)TaskDetail.getComponent(2);
-			JLabel lblNombreTarea = (JLabel)TaskDetail.getComponent(1);
+			JTextField lblNombreTarea = (JTextField)TaskDetail.getComponent(1);
 			JTextArea Description = (JTextArea)TaskDetail.getComponent(0);
 			JSlider slider = (JSlider)TaskDetail.getComponent(6);
 			JTextField DayEdit = (JTextField)TaskDetail.getComponent(12);
@@ -1042,8 +1052,15 @@ public class GUIBase {
 			JTextField YearEdit = (JTextField)TaskDetail.getComponent(14);
 			
 			impo.setSelectedIndex(t.getRelevance());
-			ctx.addItem(admin.ColorCont.get(t.getContext()));
-	    	ctx.setSelectedItem(admin.ColorCont.get(t.getContext()));
+			ArrayList<String> Listac=admin.getPosibleContext();
+			String[] opcionesc = new String[Listac.size()+1];
+			for(int i=0; i<Listac.size();i++)
+			{
+				opcionesc[i]=Listac.get(i);
+			}
+			ctx.setModel(new DefaultComboBoxModel(opcionesc));
+			int i = admin.getPosibleContextColor().indexOf(t.getContext());
+	    	ctx.setSelectedItem(Listac.get(admin.getPosibleContextColor().indexOf(t.getContext())));
 	    	//diccionario para pasar del color del contexto a un string reconocible por el combobox
 	    	Description.setText(t.getDescription());
 	    	lblNombreTarea.setText(t.getName());
@@ -1052,5 +1069,6 @@ public class GUIBase {
 	    	DayEdit.setText(t.getDeadline().get(Calendar.DATE)+"");
 	    	MonthEdit.setText((t.getDeadline().get(Calendar.MONTH)+1)+"");
 	    	YearEdit.setText(""+t.getDeadline().get(Calendar.YEAR));
+	    	
 	    }
 }

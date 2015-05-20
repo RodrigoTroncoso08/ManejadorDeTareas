@@ -185,6 +185,13 @@ public class Task implements Comparable<Task> {
 			check[0]=false;
 			check[1]=false;
 		}
+		else if(state!=State.Active)
+		{
+			state= State.Active;
+			Change=true;
+			check[0]=false;
+			check[1]=false;
+		}
 	}
 
 	@Override
