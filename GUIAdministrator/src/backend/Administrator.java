@@ -5,10 +5,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Random;
+import java.io.*;
 
+public class Administrator implements  java.io.Serializable{
 
-public class Administrator {
-
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3233903846344009237L;
 	ArrayList<Proyect> Proyects;
 	ArrayList<String> PosibleContext; //restringe que los usuarios pongan cualquier cosa en contexto
 	ArrayList<Color> PosibleContextColor=new ArrayList<Color>();
@@ -133,4 +137,10 @@ public class Administrator {
 	{
 		return Proyects;
 	}
+	
+	
+	
+	
+	
+	
 }

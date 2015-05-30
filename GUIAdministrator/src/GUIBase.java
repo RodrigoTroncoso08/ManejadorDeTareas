@@ -24,6 +24,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
@@ -47,12 +49,26 @@ import backend.*;
 import javax.swing.BoxLayout;
 
 
+
+
+
+
+
+
+
 //import org.eclipse.wb.swing.FocusTraversalOnArray;
 import sun.java2d.loops.DrawLine;
 
 import java.awt.BasicStroke;
 import java.awt.Component;
 import java.awt.Dimension;
+
+
+
+
+
+
+
 
 
 
@@ -87,6 +103,12 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.io.Console;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -113,7 +135,8 @@ public class GUIBase {
 	private TimeLinePanel TimeLinePanel;
 	private JScrollPane scrollMainView;
 	private JScrollPane scrollTaskPane;
-	
+	private boolean recovered = false;
+	JLabel 	ProyectName;
 	MailSender mailSender;
 	/**
 	 * Launch the application.
@@ -129,12 +152,15 @@ public class GUIBase {
 				}
 			}
 		});
+	
 	}
 
 	/**
 	 * Create the application.
+	 * @throws IOException 
+	 * @throws ClassNotFoundException 
 	 */
-	public GUIBase() {
+	public GUIBase() throws ClassNotFoundException, IOException {
 		initialize();
 	}
 	private void CreateAdmin()
@@ -151,8 +177,10 @@ public class GUIBase {
 	}
 	/**
 	 * Initialize the contents of the frame.
+	 * @throws IOException 
+	 * @throws ClassNotFoundException 
 	 */
-	private void initialize() {
+	private void initialize() throws ClassNotFoundException, IOException {
 		
 		try {
 		    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
@@ -165,9 +193,153 @@ public class GUIBase {
 		    System.out.println(":(");
 		}
 		
-		CreateAdmin();
+
+		File directory = new File("Data");
+		File objectData = new File("Data/"+"Admin"+".data");
+		if (directory.exists()&&objectData.exists()) 			// reccupera el administrados serializado
+		{
+			admin = (Administrator) deSerialize("Admin");
+			TimeLinePanel = new TimeLinePanel(admin);
+			for(int p=0; p<admin.getProyects().size();p++ )
+			{
+				Proyect proyect = admin.getProyects().get(p);
+				ProyectPanel PP = new ProyectPanel(proyect.getName(),proyect);
+				//PP.setColorName(p.getColor());
+				ProjectLine PL = new ProjectLine(proyect);
+				
+				Parreglo.add(PL); //los projectLine se agragan en el mismo orden que los proyectPanel
+				PL.setBounds(0,0,440,545);
+				PL.setVisible(true);
+				
+				ProyectUI.add(PP);
+				WhiteBase.add(PP);
+				for(int t=0; t<proyect.getTasks().size();t++)
+				{
+					NodeButton n=PP.AddTask(proyect.getTasks().get(t));
+					NodeButton n2 = new NodeButton(n.getTask().getName(), n.getTask());
+					n.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							// TODO Auto-generated method stub
+							WhiteBase.setVisible(false);
+	                		WhiteBase2.setVisible(true);
+	                		TaskDetail.setVisible(true);
+	                		frame.getContentPane().setComponentZOrder(scrollMainView,2);
+	                		frame.getContentPane().setComponentZOrder(WhiteBase2,1);
+	                		Parreglo.get(n.getTask().getProyectId()).SelectTask(n);
+	                		scrollTaskPane.setViewportView(Parreglo.get(n.getTask().getProyectId()));
+	                		SelectedTask = n.getTask();
+	                		DetallarTarea(SelectedTask);
+	                		ProyectName.setText(proyect.getName());
+	                		ProyectName.setForeground(proyect.getColor());
+						}
+					});
+					PL.AddTask(n2);
+					n2.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							// TODO Auto-generated method stub
+							WhiteBase.setVisible(false);
+	                		WhiteBase2.setVisible(true);
+	                		TaskDetail.setVisible(true);
+	                		frame.getContentPane().setComponentZOrder(scrollMainView,2);
+	                		frame.getContentPane().setComponentZOrder(WhiteBase2,1);
+	                		Parreglo.get(n2.getTask().getProyectId()).SelectTask(n2);
+	                		scrollTaskPane.setViewportView(Parreglo.get(n2.getTask().getProyectId()));
+	                		SelectedTask = n2.getTask();
+	                		DetallarTarea(SelectedTask);
+	                		ProyectName.setText(proyect.getName());
+	                		ProyectName.setForeground(proyect.getColor());
+						}
+					});
+					
+					TimeLinePanel.AddTasks(n.getTask());
+				}
+				
+				RoundedButton b_1= new RoundedButton(proyect.getName());
+				b_1.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+						WhiteBase.setVisible(false);
+		        		WhiteBase2.setVisible(true);
+		        		TaskDetail.setVisible(true);
+		        		frame.getContentPane().setComponentZOrder(scrollMainView,2);
+		        		frame.getContentPane().setComponentZOrder(WhiteBase2,1);
+		        		scrollTaskPane.setViewportView(Parreglo.get(admin.getProyects().indexOf(proyect)));
+		        		ProyectName.setText(proyect.getName());
+                		ProyectName.setForeground(proyect.getColor());
+					}
+				});
+				b_1.shady=false;
+				b_1.setBackground(proyect.getColor());
+				b_1.setForeground(Color.WHITE);
+				b_1.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
+				b_1.setBounds(10, 5+GlosaryPanel.getComponentCount()*45, 150, 35);
+				GlosaryPanel.add(b_1);
+			}
+			recovered= true;
+		}
+		else
+		{
+			CreateAdmin();
+		}
+		
 		mailSender = new MailSender("rorotm@hotmail.com");
 		frame = new JFrame();
+		
+		frame.addWindowListener(new WindowListener() {
+			
+			@Override
+			public void windowOpened(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowIconified(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowDeiconified(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowDeactivated(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowClosing(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				try {
+					Serialize(admin, "Admin");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					System.out.println("Serializacion inconlusa");
+				}
+			}
+			
+			@Override
+			public void windowClosed(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowActivated(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 		frame.getContentPane().setBackground(new Color(0, 110, 142));
 		frame.setBounds(100, 50, 1043, 697);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -178,13 +350,20 @@ public class GUIBase {
 		frame.setVisible(false);
 		
 		scrollTaskPane= new JScrollPane();
-		scrollTaskPane.setBounds(230,10, 510, 545);
+		scrollTaskPane.setBounds(230,50, 510, 518);
 		scrollTaskPane.setBorder(BorderFactory.createEmptyBorder());
 		scrollTaskPane.setViewportBorder(BorderFactory.createEmptyBorder());
 		scrollTaskPane.setOpaque(false);
 		scrollTaskPane.getViewport().setOpaque(false);
 		scrollTaskPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollTaskPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		ProyectName = new JLabel("Micelaneo");
+		ProyectName.setHorizontalAlignment(JLabel.CENTER);
+		ProyectName.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 25));
+		ProyectName.setForeground(new Color(0,110,142));
+		ProyectName.setBounds(264, 0, 471, 50);
+		WhiteBase2.add(ProyectName);
+		
 		//esta parte se usara para hacer que todo se mueva junto al agrandar la ventana. No es requerimiento. Po ahora dejo el frame sin movilidad
 		/*
 		frame.addComponentListener(new ComponentAdapter() {
@@ -212,39 +391,44 @@ public class GUIBase {
 		});
 			
 			*/	
+		if(!recovered)
+		{
+			JButton MiselaneoItem = new RoundedButton("Miselaneo");
+			MiselaneoItem.setVerticalAlignment(SwingConstants.BOTTOM);
+			MiselaneoItem.setText("+ Proyect  ");
+			MiselaneoItem.setForeground(new Color(153, 204, 255));
+			MiselaneoItem.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 16));
+			MiselaneoItem.setBackground(Color.WHITE);
+			MiselaneoItem.setBounds(33, 83, 147, 48);
+			RoundedButton b_1= new RoundedButton("Miscelaneo");
+			b_1.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// TODO Auto-generated method stub
+					WhiteBase.setVisible(false);
+	        		WhiteBase2.setVisible(true);
+	        		TaskDetail.setVisible(true);
+	        		frame.getContentPane().setComponentZOrder(scrollMainView,2);
+	        		frame.getContentPane().setComponentZOrder(WhiteBase2,1);
+	        		scrollTaskPane.setViewportView(Parreglo.get(0));
+	        		ProyectName.setText(Parreglo.get(0).getName());
+            		ProyectName.setForeground(admin.getProyects().get(0).getColor());
+				}
+			});
+			b_1.shady=false;
+			b_1.setBackground(admin.getProyects().get(0).getColor());
+			b_1.setForeground(Color.WHITE);
+			b_1.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
+			b_1.setBounds(10, 5+GlosaryPanel.getComponentCount()*45, 150, 35);
+			GlosaryPanel.add(b_1);
+		}
 		
-		JButton MiselaneoItem = new RoundedButton("Miselaneo");
-		MiselaneoItem.setVerticalAlignment(SwingConstants.BOTTOM);
-		MiselaneoItem.setText("+ Proyect  ");
-		MiselaneoItem.setForeground(new Color(153, 204, 255));
-		MiselaneoItem.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 16));
-		MiselaneoItem.setBackground(Color.WHITE);
-		MiselaneoItem.setBounds(33, 83, 147, 48);
 		
 		
-		
-		RoundedButton b_1= new RoundedButton("Miscelaneo");
-		b_1.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				WhiteBase.setVisible(false);
-        		WhiteBase2.setVisible(true);
-        		TaskDetail.setVisible(true);
-        		frame.getContentPane().setComponentZOrder(scrollMainView,2);
-        		frame.getContentPane().setComponentZOrder(WhiteBase2,1);
-        		scrollTaskPane.setViewportView(Parreglo.get(0));
-			}
-		});
-		b_1.shady=false;
-		b_1.setBackground(admin.getProyects().get(0).getColor());
-		b_1.setForeground(Color.WHITE);
-		b_1.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
-		b_1.setBounds(10, 5+GlosaryPanel.getComponentCount()*45, 150, 35);
-		GlosaryPanel.add(b_1);
+	
 		RoundedPanel MenuPanel = new RoundedPanel();
-		MenuPanel.arcs= new Dimension(7,7);
+		MenuPanel.arcs= new Dimension(10,10);
 		MenuPanel.shady=false;
 		MenuPanel.setBounds(15, 80, 214, 545);
 		frame.getContentPane().add(MenuPanel);
@@ -252,8 +436,6 @@ public class GUIBase {
 		MenuPanel.setBackground(new Color(212, 227, 252));
 		MenuPanel.setForeground(new Color(255, 255, 255));
 		MenuPanel.setLayout(null);
-		
-		
 		
 		
 		JButton AddTask = new RoundedButton("+ Task"); 
@@ -490,6 +672,8 @@ public class GUIBase {
 				                		scrollTaskPane.setViewportView(Parreglo.get(n.getTask().getProyectId()));
 				                		SelectedTask = n.getTask();
 				                		DetallarTarea(SelectedTask);
+				                		ProyectName.setText(Parreglo.get(n.getTask().getProyectId()).pro.getName());
+				                		ProyectName.setForeground(Parreglo.get(n.getTask().getProyectId()).pro.getColor());
 									}
 								});
 				                n2.addActionListener(new ActionListener() {
@@ -506,6 +690,8 @@ public class GUIBase {
 				                		scrollTaskPane.setViewportView(Parreglo.get(n2.getTask().getProyectId()));
 				                		SelectedTask = n2.getTask();
 				                		DetallarTarea(SelectedTask);
+				                		ProyectName.setText(Parreglo.get(n2.getTask().getProyectId()).pro.getName());
+				                		ProyectName.setForeground(Parreglo.get(n.getTask().getProyectId()).pro.getColor());
 									}
 								});
 				                TimeLinePanel.AddTasks(t);
@@ -644,10 +830,13 @@ public class GUIBase {
 		                		frame.getContentPane().setComponentZOrder(scrollMainView,2);
 		                		frame.getContentPane().setComponentZOrder(WhiteBase2,1);
 		                		scrollTaskPane.setViewportView(PL);
+		                		ProyectName.setText(PL.pro.getName());
+		                		ProyectName.setForeground(PL.pro.getColor());
 							}
 						});
 						GlosaryPanel.add(b);
-						GlosaryPanel.setPreferredSize(new Dimension(GlosaryPanel.getPreferredSize().width,GlosaryPanel.getPreferredSize().height+45));
+						GlosaryPanel.setPreferredSize(new Dimension(GlosaryPanel.getPreferredSize().width,
+								GlosaryPanel.getPreferredSize().height+45));
 						frame.revalidate();
 						frame.repaint();
 						}
@@ -768,34 +957,42 @@ public class GUIBase {
 		
 		
 		frame.getContentPane().add(scrollMainView);
-		ProyectPanel PP_1 = new ProyectPanel("Miselaneo", admin.getProyects().get(0));
-		PP_1.setLocation(230, 25);
-		//PP.setColorName(admin.getProyects().get(0).getColor());
-		ProyectUI.add(PP_1);
-		WhiteBase.setSize(new Dimension(100, 1000));
-		WhiteBase.setPreferredSize(new Dimension(500, 140));
+		if(!recovered)
+		{
+			ProyectPanel PP_1 = new ProyectPanel("Miselaneo", admin.getProyects().get(0));
+			PP_1.setLocation(230, 25);
+			//PP.setColorName(admin.getProyects().get(0).getColor());
+			ProyectUI.add(PP_1);
+			WhiteBase.setSize(new Dimension(100, 1000));
+			WhiteBase.setPreferredSize(new Dimension(500, 140));
+			WhiteBase.add(PP_1);
+			ProjectLine PL_1 = new ProjectLine(admin.getProyects().get(0)); //el paralelo del proyecto, donde se ven los detalles
+			Parreglo.add(PL_1);
+			scrollTaskPane.setViewportView(PL_1);
+			PL_1.setBounds(0, 0, 440, 545);
+		}
 		scrollMainView.setViewportView(WhiteBase);
-		WhiteBase.add(PP_1);
+		
 		WhiteBase.setForeground(Color.DARK_GRAY);
 		WhiteBase.setBackground(new Color(255, 255, 255));
 		WhiteBase.setLayout(null);
 		WhiteBase.setVisible(true);												///////////////whitebase visible
 		scrollMainView.setVisible(true);
-		ProjectLine PL_1 = new ProjectLine(admin.getProyects().get(0)); //el paralelo del proyecto, donde se ven los detalles
-		Parreglo.add(PL_1);
+		WhiteBase.arcs = new Dimension(10,10);
+		WhiteBase2.arcs= new Dimension(10,10);
 		WhiteBase2.setBackground(new Color(255, 255, 255));
-		scrollTaskPane.setViewportView(PL_1);
+		
 		frame.getContentPane().add(WhiteBase2);
 		WhiteBase2.setBounds(6, 69, 1005, 576);
 		WhiteBase2.setLayout(null);
 		WhiteBase2.add(TaskDetail);
 		WhiteBase2.add(scrollTaskPane);
 		WhiteBase2.setVisible(false);
-		PL_1.setBounds(0, 0, 440, 545);
 		TaskDetail.setVisible(false);
 		TaskDetail.setBackground(new Color(0,141,177));
 		TaskDetail.setLayout(null);
 		TaskDetail.setBounds(745, 11, 250, 545);
+		TaskDetail.arcs = new Dimension(10,10);
 		
 		
 		
@@ -1021,8 +1218,8 @@ public class GUIBase {
 		scrollTime.setBorder(BorderFactory.createEmptyBorder());
 		scrollTime.setViewportBorder(BorderFactory.createEmptyBorder());
 		scrollTime.setVisible(true);											//////scolltime set visible
-		
-		TimeLinePanel = new TimeLinePanel(admin);
+		if(!recovered)
+			TimeLinePanel = new TimeLinePanel(admin);
 		TimeLinePanel.setBackground(new Color(255, 255, 255));
 		scrollTime.setViewportView(TimeLinePanel);
 		TimeLinePanel.setLayout(null);
@@ -1034,6 +1231,8 @@ public class GUIBase {
 		Titulo.setBounds(276, 17, 422, 40);
 		frame.getContentPane().add(Titulo);
 		
+		
+		System.out.println(System.getProperty("user.dir"));
 
 		
 		
@@ -1071,4 +1270,69 @@ public class GUIBase {
 	    	YearEdit.setText(""+t.getDeadline().get(Calendar.YEAR));
 	    	
 	    }
+		
+		public void Serialize(Object o,String name) throws IOException
+		{
+			File directory = new File("Data");
+			File objectData = new File("Data/"+name+".data");
+			
+			
+			if (!directory.exists()) 
+			{
+				    try
+				    {
+				        directory.mkdir();
+				    } 
+				    catch(SecurityException se)
+				    {}        
+			}
+			
+			if (!objectData.exists()) 
+			{
+
+				    try
+				    {
+				       objectData.createNewFile(); 
+				    } 
+				    catch(SecurityException se)
+				    { 
+				    	
+				    }        
+			}
+			FileOutputStream oStream = new FileOutputStream(objectData);
+			ObjectOutputStream adminOut = new ObjectOutputStream(oStream);
+			adminOut.writeObject(o);
+			oStream.close();
+		}
+
+		public Object deSerialize(String name) throws IOException, ClassNotFoundException
+		{
+			File directory = new File("Data");
+			File objectData = new File("Data/"+name+".data");
+			
+			
+			if (!directory.exists()) 
+			{
+				    try
+				    {
+				        directory.mkdir();
+				    } 
+				    catch(SecurityException se)
+				    {}   
+				    return null;
+			}
+			
+			if (!objectData.exists()) 
+			{
+
+				    return null;       
+			}
+			FileInputStream oStream = new FileInputStream(objectData);
+			ObjectInputStream adminIn = new ObjectInputStream(oStream);
+			return adminIn.readObject();
+			
+		}
+
 }
+
+

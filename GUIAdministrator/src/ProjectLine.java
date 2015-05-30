@@ -75,7 +75,7 @@ public class ProjectLine extends JPanel implements ActionListener{
 		}
 		int mark = pro.getTasks().indexOf(t);
 		if(countTask>0)
-		for(int i = mark ;i<pro.getTasks().size()-1;i++)
+		for(int i = mark ;3*i+2<panel.getComponentCount();i++)
 		{
 			Component label= panel.getComponent(mark*3);
 			GridBagLayout g = (GridBagLayout)panel.getLayout();
@@ -224,7 +224,7 @@ public class ProjectLine extends JPanel implements ActionListener{
 		super.repaint();
 		
 		if(countTask>0)
-			for(int i = 0 ;i<pro.getTasks().size();i++)
+			for(int i = 0 ;i*3+2<panel.getComponentCount();i++)
 			{
 				JLabel Fecha= (JLabel )panel.getComponent(i*3);
 				JPanel pan= (JPanel)panel.getComponent(i*3+1);

@@ -148,7 +148,7 @@ public NodeButton AddTask(Task t)
 		}
 		int mark = proyect.getTasks().indexOf(t);
 		if(countTask>0)
-		for(int i = proyect.getTasks().indexOf(t) ;i<proyect.getTasks().size()-1;i++)
+		for(int i = proyect.getTasks().indexOf(t) ;i*3+2<NodeGrid.getComponentCount();i++)
 		{
 			Component label= NodeGrid.getComponent(mark*3);
 			GridBagLayout g = (GridBagLayout)NodeGrid.getLayout();
@@ -234,7 +234,7 @@ public NodeButton AddTask(Task t)
 		gbc_TaskLabel.gridx = proyect.getTasks().indexOf(t);
 		gbc_TaskLabel.gridy = 2;
 		gbc_TaskLabel.anchor = gbc_TaskLabel.NORTH;
-		NodeGrid.add(TaskLabel, gbc_TaskLabel,proyect.getTasks().indexOf(t)*3); ///primero el TaskLabel pq luego lo empuja hacia abajo
+		NodeGrid.add(TaskLabel, gbc_TaskLabel,proyect.getTasks().indexOf(t)*3); 
 		NodeGrid.add(nodeButton_5, gbc_nodeButton_5,proyect.getTasks().indexOf(t)*3);
 		NodeGrid.add(lblNewLabel_2, gbc_lblNewLabel_2,proyect.getTasks().indexOf(t)*3);
 		this.revalidate();
@@ -361,7 +361,7 @@ public void repaint() {
 	// TODO Auto-generated method stub
 	super.repaint();
 	if(countTask>0)
-	for(int i = 0 ;i<proyect.getTasks().size();i++)
+	for(int i = 0 ;3*i+2<NodeGrid.getComponentCount();i++)
 	{
 		JLabel Fecha= (JLabel )NodeGrid.getComponent(i*3);
 		NodeButton node= (NodeButton)NodeGrid.getComponent(i*3+1);

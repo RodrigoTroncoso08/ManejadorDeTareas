@@ -8,9 +8,12 @@ import java.util.Random;
 
 import org.joda.time.DateTimeComparator;
 
-
-public class Proyect {
+public class Proyect implements java.io.Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3854624837071197097L;
 	String Name;
 	int Id;
 	String Description;

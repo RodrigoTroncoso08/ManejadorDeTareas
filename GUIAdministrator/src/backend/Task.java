@@ -10,8 +10,12 @@ import java.util.concurrent.TimeUnit;
 import javax.management.monitor.Monitor;
 
 
-public class Task implements Comparable<Task> {
+public class Task implements Comparable<Task>, java.io.Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5448777867464402073L;
 	String Name;
 	String Description;
 	Color Context; 	//Lo puse como string dado que me parecio practico por el momento

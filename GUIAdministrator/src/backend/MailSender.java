@@ -8,8 +8,12 @@ import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.mail.Message.RecipientType;
-public class MailSender {
+public class MailSender  implements java.io.Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1723225568787072298L;
 	String mailTarget;
 	String mailSender;
 	String host;

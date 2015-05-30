@@ -143,8 +143,9 @@ public void AddTasks(Task t){
 	}
 	if(year==9999)
 		total=0;
-	int index =tasks.indexOf(t)+1;
-	for(int i = tasks.indexOf(t)+1; i<tasks.size();i++)
+	int index =tasks.indexOf(t)+1;  //+1 pq los tasks parten desde la segunda row
+	
+	for(int i = tasks.indexOf(t)+1; i<(TaskPanel.getComponentCount()-1);i++)
 	{
 		
 		TaskPanel task = (TaskPanel)TaskPanel.getComponent(index);
