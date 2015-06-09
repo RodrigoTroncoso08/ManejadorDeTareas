@@ -976,8 +976,7 @@ public class GUIBase {
 		WhiteBase.setForeground(Color.DARK_GRAY);
 		WhiteBase.setBackground(new Color(255, 255, 255));
 		WhiteBase.setLayout(null);
-		WhiteBase.setVisible(true);												///////////////whitebase visible
-		scrollMainView.setVisible(true);
+		
 		WhiteBase.arcs = new Dimension(10,10);
 		WhiteBase2.arcs= new Dimension(10,10);
 		WhiteBase2.setBackground(new Color(255, 255, 255));
@@ -987,8 +986,6 @@ public class GUIBase {
 		WhiteBase2.setLayout(null);
 		WhiteBase2.add(TaskDetail);
 		WhiteBase2.add(scrollTaskPane);
-		WhiteBase2.setVisible(false);
-		TaskDetail.setVisible(false);
 		TaskDetail.setBackground(new Color(0,141,177));
 		TaskDetail.setLayout(null);
 		TaskDetail.setBounds(745, 11, 250, 545);
@@ -1216,14 +1213,13 @@ public class GUIBase {
 		scrollTime.setOpaque(false);
 		scrollTime.getViewport().setOpaque(false);
 		scrollTime.setBorder(BorderFactory.createEmptyBorder());
-		scrollTime.setViewportBorder(BorderFactory.createEmptyBorder());
-		scrollTime.setVisible(true);											//////scolltime set visible
+		scrollTime.setViewportBorder(BorderFactory.createEmptyBorder());										
 		if(!recovered)
 			TimeLinePanel = new TimeLinePanel(admin);
 		TimeLinePanel.setBackground(new Color(255, 255, 255));
 		scrollTime.setViewportView(TimeLinePanel);
 		TimeLinePanel.setLayout(null);
-		TimeLinePanel.setVisible(false);
+		TimeLinePanel.setVisible(true);
 		
 		Titulo = new JLabel("Proyect Administrator");
 		Titulo.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 33));
@@ -1233,8 +1229,18 @@ public class GUIBase {
 		
 		
 		System.out.println(System.getProperty("user.dir"));
-
 		
+		
+		
+		//Inittial visible
+		WhiteBase.setVisible(false);		
+		WhiteBase2.setVisible(true);
+		TaskDetail.setVisible(false);
+		scrollTime.setVisible(true);
+		frame.getRootPane().setComponentZOrder(WhiteBase, 2);
+		frame.getRootPane().setComponentZOrder(WhiteBase2, 2);
+		frame.getRootPane().setComponentZOrder(TaskDetail, 2);
+		frame.getRootPane().setComponentZOrder(scrollTime, 0);
 		
 	}
 		
@@ -1275,8 +1281,6 @@ public class GUIBase {
 		{
 			File directory = new File("Data");
 			File objectData = new File("Data/"+name+".data");
-			
-			
 			if (!directory.exists()) 
 			{
 				    try
@@ -1289,7 +1293,6 @@ public class GUIBase {
 			
 			if (!objectData.exists()) 
 			{
-
 				    try
 				    {
 				       objectData.createNewFile(); 

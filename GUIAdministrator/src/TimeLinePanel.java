@@ -29,7 +29,7 @@ public class TimeLinePanel extends JPanel {
 	
 	Calendar initial;
 	Calendar end;
-	JPanel TaskPanel = new JPanel();
+	JPanel TPanel = new JPanel();
 	JScrollPane scrollTask;
 	Administrator Admin;
 	public TimeLinePanel(Administrator admin)
@@ -74,17 +74,17 @@ public class TimeLinePanel extends JPanel {
 		});
 		
 		
-		TaskPanel.setBorder(BorderFactory.createEmptyBorder());
-		scrollTask.setViewportView(TaskPanel);
+		TPanel.setBorder(BorderFactory.createEmptyBorder());
+		scrollTask.setViewportView(TPanel);
 		scrollTask.setViewportBorder(BorderFactory.createEmptyBorder());
-		TaskPanel.setBounds(0, 0, 620, 532);
-		TaskPanel.setPreferredSize(new Dimension(1000, 500)); 
-		TaskPanel.setBackground(new Color(255, 255, 255));
-		MigLayout mig = new MigLayout("fillx", "[1][grow]", "[50]40[50]10[50]10[50]");
+		TPanel.setBounds(0, 0, 620, 532);
 		
-		TaskPanel.setLayout(mig);
+		TPanel.setBackground(new Color(255, 255, 255));
+		MigLayout mig = new MigLayout("fillx", "[0][grow]", "[50]40[50]");
 		
-		TaskPanel.setVisible(true);
+		TPanel.setLayout(mig);
+		
+		TPanel.setVisible(true);
 		
 		
 		JLabel lblTareas = new JLabel("Tareas");
@@ -93,15 +93,15 @@ public class TimeLinePanel extends JPanel {
 		lblTareas.setFont(new Font("Berlin Sans FB Demi", Font.PLAIN, 25));
 		lblTareas.setBounds(10, 11, 75, 27);
 		this.add(lblTareas);
-		TaskPanel.setVisible(true);
+		TPanel.setVisible(true);
 		
 		
 		
 		JPanel Fechas = new JPanel();
 		Fechas.setBackground(new Color(255, 255, 255));
 		Fechas.setBounds(0, 0, 800, 50);
-		TaskPanel.add(Fechas, "cell 1 0,grow");
-		MigLayout dateMig = new MigLayout("fillx", "[30]15", "[50]");
+		TPanel.add(Fechas, "cell 1 0,grow");
+		MigLayout dateMig = new MigLayout("fillx", "[30]10", "[50]");
 		Fechas.setLayout(dateMig);
 		
 		
@@ -134,7 +134,8 @@ public void AddTasks(Task t){
 	int k = tasks.size()-1;
 	end = tasks.get(k).getDeadline();
 	int year = end.get(Calendar.YEAR);
-	while(year==9999&&k>=0)
+	//reviso si hay tareas con fecha. creo que podria corregirse verificando solo initial
+	while(year==9999&&k>=0) //9999 -> sin fecha
 	{
 		
 		end = tasks.get(k).getDeadline();
@@ -143,34 +144,38 @@ public void AddTasks(Task t){
 	}
 	if(year==9999)
 		total=0;
+	////////////////////////////////
+	//empieza la inclusion de t
 	int index =tasks.indexOf(t)+1;  //+1 pq los tasks parten desde la segunda row
-	
-	for(int i = tasks.indexOf(t)+1; i<(TaskPanel.getComponentCount()-1);i++)
+	//hace el espacio
+	for(int i = tasks.indexOf(t)+1; i<=(TPanel.getComponentCount()-1);i++)
 	{
 		
-		TaskPanel task = (TaskPanel)TaskPanel.getComponent(index);
-		TaskPanel.remove(TaskPanel.getComponent(index));
-		String constr = "cell 1 "+(i+1)+",grow, h 50!";   /// lo mueve a la siguiente posicion
-		TaskPanel.add(task, constr);
+		TaskPanel task = (TaskPanel)TPanel.getComponent(index);
+		TPanel.remove(TPanel.getComponent(index));
+		String constr = "cell 1 "+(i+1)+",grow, h 55!";   /// lo mueve a la siguiente posicion
+		TPanel.add(task, constr);
 		
 	}
+	total = ((end.get(Calendar.YEAR)-initial.get(Calendar.YEAR))*365)+
+			(end.get(Calendar.DAY_OF_YEAR)-initial.get(Calendar.DAY_OF_YEAR));
 	TaskPanel task = new TaskPanel(t,((t.getDeadline().get(Calendar.YEAR)-initial.get(Calendar.YEAR))*365)+
-			(t.getDeadline().get(Calendar.DAY_OF_YEAR)-initial.get(Calendar.DAY_OF_YEAR)) );  ////////calcula la posicion del nodo de acuerdo a la distancia en fecha
+			(t.getDeadline().get(Calendar.DAY_OF_YEAR)-initial.get(Calendar.DAY_OF_YEAR)),total);  ////////calcula la posicion del nodo de acuerdo a la distancia en fecha
 	
-	String constr = "cell 1 "+index+",grow, h 50!";
-	TaskPanel.add(task, constr,index);
-	MigLayout m =(MigLayout)TaskPanel.getLayout();
+	String constr = "cell 1 "+index+",grow, h 55!";
+	TPanel.add(task, constr,index);
+	MigLayout m =(MigLayout)TPanel.getLayout();
 	task.setBackground(new Color(212, 227, 252));
-	String constrain = m.getRowConstraints()+"10[50]";
+	String constrain = m.getRowConstraints()+"10[55]";
 	m.setRowConstraints(constrain);
 	
 	
-	total = ((end.get(Calendar.YEAR)-initial.get(Calendar.YEAR))*365)+
-			(end.get(Calendar.DAY_OF_YEAR)-initial.get(Calendar.DAY_OF_YEAR));
-	TaskPanel.setPreferredSize(new Dimension(30*total, 100+tasks.size()*60));
-	JPanel fechas = (JPanel)TaskPanel.getComponent(0);
+	
+	TPanel.setPreferredSize(new Dimension(Math.max(65*(total+5), 628), 100+tasks.size()*60));
+	JPanel fechas = (JPanel)TPanel.getComponent(0);
 	MigLayout MigFechas = (MigLayout)fechas.getLayout();
 	fechas.removeAll();
+	/*
 	for(int i = 0; i <total&&i<2000; i++ )
 	{
 		
@@ -187,6 +192,7 @@ public void AddTasks(Task t){
 		MigFechas.setColumnConstraints(MigFechas.getColumnConstraints()+"10[30]");
 		
 	}
+	*/
 	this.revalidate();
 	this.repaint();
 }
