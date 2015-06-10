@@ -187,13 +187,13 @@ public class GUIBase {
 		        if ("Nimbus".equals(info.getName())) {
 		            UIManager.setLookAndFeel(info.getClassName());
 		            break;
+		            
 		        }
 		    }
 		} catch (Exception e) {
 		    System.out.println(":(");
 		}
 		
-
 		File directory = new File("Data");
 		File objectData = new File("Data/"+"Admin"+".data");
 		if (directory.exists()&&objectData.exists()) 			// reccupera el administrados serializado
@@ -730,7 +730,7 @@ public class GUIBase {
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setForeground(new Color(255, 255, 255));
 		lblNewLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 30));
-		lblNewLabel.setBackground(new Color(110,160,250));
+		lblNewLabel.setBackground(new Color(212, 227, 252));
 		lblNewLabel.setBounds(0, 21, 210, 28);
 		MenuPanel.add(lblNewLabel);
 		
@@ -893,7 +893,7 @@ public class GUIBase {
 		GlosayLabel.setOpaque(true);
 		GlosayLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		GlosayLabel.setForeground(new Color(255, 255, 255));
-		GlosayLabel.setBackground(new Color(110,160,250));
+		GlosayLabel.setBackground(new Color(212, 227, 252));
 		GlosayLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 30));
 		GlosayLabel.setBounds(0, 239, 209, 28);
 		MenuPanel.add(GlosayLabel);

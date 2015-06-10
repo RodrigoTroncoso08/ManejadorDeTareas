@@ -11,6 +11,7 @@ import java.awt.ScrollPane;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.plaf.ScrollBarUI;
 
 import backend.Administrator;
 import backend.State;
@@ -41,13 +42,13 @@ public class TimeLinePanel extends JPanel {
 		setSize(this.getPreferredSize().width, this.getPreferredSize().height);
 		setOpaque(false);
 		JSeparator separator_1 = new JSeparator();
-		separator_1.setBorder(BorderFactory.createLineBorder(new Color(40, 180, 255)));
+		separator_1.setBorder(BorderFactory.createLineBorder(new Color(40, 140, 180)));
 		separator_1.setBackground(new Color(0, 0, 0));
 		separator_1.setBounds(370, 45, 620, 2);
 		this.add(separator_1);
 		
 		JSeparator separator_2 = new JSeparator();
-		separator_2.setBorder(BorderFactory.createLineBorder(new Color(40, 180, 255)));
+		separator_2.setBorder(BorderFactory.createLineBorder(new Color(40, 140, 180)));
 		separator_2.setForeground(new Color(40, 180, 255));
 		separator_2.setBackground(Color.BLACK);
 		separator_2.setBounds(370, 20, 620, 2);
@@ -61,6 +62,8 @@ public class TimeLinePanel extends JPanel {
 		this.add(separator_3);
 		
 		scrollTask = new JScrollPane();
+		scrollTask.getHorizontalScrollBar().setUI(new myScrollBarUI());
+		scrollTask.getVerticalScrollBar().setUI(new myScrollBarUI());
 		scrollTask.setBorder(BorderFactory.createEmptyBorder());
 		scrollTask.setBounds(360, 50, 628, 470);
 		this.add(scrollTask);
@@ -75,10 +78,9 @@ public class TimeLinePanel extends JPanel {
 				
 			}
 		});
-		
-		
 		TPanel.setBorder(BorderFactory.createEmptyBorder());
 		scrollTask.setViewportView(TPanel);
+		
 		scrollTask.setViewportBorder(BorderFactory.createEmptyBorder());
 		TPanel.setBounds(250, 0, 620, 532);
 		TPanel.setBackground(new Color(255, 255, 255));
@@ -213,6 +215,8 @@ public void AddTasks(Task t){
 	{
 		TaskPanel task = (TaskPanel)TPanel.getComponent(i);
 		task.setTotal(total);
+		task.setPosition(((task.getTask().getDeadline().get(Calendar.YEAR)-initial.get(Calendar.YEAR))*365)+
+			(task.getTask().getDeadline().get(Calendar.DAY_OF_YEAR)-initial.get(Calendar.DAY_OF_YEAR)));
 		task.repaint();
 	}
 	
@@ -248,14 +252,13 @@ public void AddTasks(Task t){
 		c.setTime(initial.getTime()); 
 		c.add(Calendar.DAY_OF_MONTH, i);
 		JLabel d = new JLabel(c.get(Calendar.DAY_OF_MONTH)+"/"+(c.get(Calendar.MONTH)+1));
+		d.setForeground(new Color(40, 180, 255));
 		d.setHorizontalAlignment(SwingConstants.CENTER);
 		d.setSize(30, 50);
 		fechas.add(d,"cell "+i+" 0 , grow , w 50!");
 		MigFechas.setColumnConstraints(MigFechas.getColumnConstraints()+"10[50]");	
-		
-		
-		
 	}
+	
 	fechas.setPreferredSize(new Dimension(Math.max(65*(total+5), 628),50));
 	this.revalidate();
 	this.repaint();

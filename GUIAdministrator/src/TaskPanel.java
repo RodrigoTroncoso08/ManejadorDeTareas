@@ -20,12 +20,13 @@ public class TaskPanel extends JPanel{
 	int position;
 	int total;
 	Graphics2D graphics;
+	NodeButton node;
 	public TaskPanel(Task t,int Position, int total) {
 		// TODO Auto-generated constructor stub
 		super();
 		setLayout(new MigLayout());
 		setOpaque(false);
-		NodeButton node = new NodeButton(t.getName(),t);
+		node = new NodeButton(t.getName(),t);
 		node.setBackground(t.getColor());
 		node.setForeground(t.getContext());
 		node.shady=false;
@@ -56,23 +57,35 @@ public class TaskPanel extends JPanel{
 	    if(t!=null)
 	    {
 		    graphics.setColor(t.getColor().brighter());
-		    graphics.fillRoundRect(60*(position-t.getWorkingDays()+1),25-(10+12*(t.getRelevance()+1))/2, 55*t.getWorkingDays()-5, 10+12*(t.getRelevance()+1), 10*(t.getRelevance()+1), 10*(t.getRelevance()+1));
+		    graphics.fillRoundRect(60*(position-t.getWorkingDays()+1),25-(10+12*(t.getRelevance()+1))/2,
+		    		55*t.getWorkingDays()-5, 10+12*(t.getRelevance()+1), 10*(t.getRelevance()+1), 10*(t.getRelevance()+1));
 		    graphics.setColor(t.getContext());
 		    graphics.setStroke(new BasicStroke((float)3));
-		    graphics.drawRoundRect(60*(position-t.getWorkingDays()+1), 25-(10+12*(t.getRelevance()+1))/2, 55*t.getWorkingDays()-5, 10+12*(t.getRelevance()+1), 10*(t.getRelevance()+1), 10*(t.getRelevance()+1));
+		    graphics.drawRoundRect(60*(position-t.getWorkingDays()+1), 25-(10+12*(t.getRelevance()+1))/2,
+		    		55*t.getWorkingDays()-5, 10+12*(t.getRelevance()+1), 10*(t.getRelevance()+1), 10*(t.getRelevance()+1));
 	    }
 	    
 	    graphics.setStroke(new BasicStroke((float)1, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
-	    graphics.setColor(new Color(40, 180, 255));
+	    graphics.setColor(new Color(40, 140, 180));
 	    for(int i=0; i<total+1; i++ ){
 	    	graphics.drawLine(55+60*i, 0, 55+60*i, 50);
 	    }
 	    
 	}
 	
-	void setTotal(int t)
+	public void setTotal(int t)
 	{
 		total=t;
+	}
+	
+	public void setPosition(int p)
+	{
+		position=p;
+	}
+	
+	public Task getTask()
+	{
+		return t;
 	}
 	
 	@Override
@@ -82,11 +95,29 @@ public class TaskPanel extends JPanel{
 		if(graphics!=null)
 		{
 			graphics.setStroke(new BasicStroke((float)1, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
-		    graphics.setColor(new Color(40, 180, 255));
+		    graphics.setColor(new Color(40, 140, 180));
 		    for(int i=0; i<total+1; i++ )
 		    {
 		    	graphics.drawLine(60+60*i, 0, 60+60*i, 50);
 		    }
+		
+		
+			if(t!=null)
+		    {
+			    graphics.setColor(t.getColor().brighter());
+			    graphics.fillRoundRect(60*(position-t.getWorkingDays()+1),25-(10+12*(t.getRelevance()+1))/2,
+			    		55*t.getWorkingDays()-5, 10+12*(t.getRelevance()+1), 10*(t.getRelevance()+1), 10*(t.getRelevance()+1));
+			    graphics.setColor(t.getContext());
+			    graphics.setStroke(new BasicStroke((float)3));
+			    graphics.drawRoundRect(60*(position-t.getWorkingDays()+1), 25-(10+12*(t.getRelevance()+1))/2,
+			    		55*t.getWorkingDays()-5, 10+12*(t.getRelevance()+1), 10*(t.getRelevance()+1), 10*(t.getRelevance()+1));
+		    }
+			
+			if(node!=null)
+			{
+				remove(node);
+				add(node, "pos "+position*60+" 0"+", w 50!,h 50!");
+			}
 		}
 	
 	}
