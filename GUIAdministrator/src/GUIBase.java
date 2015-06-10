@@ -1208,7 +1208,7 @@ public class GUIBase {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		JScrollPane scrollTime = new JScrollPane();
-		scrollTime.setBounds(240, 91, 750, 534);
+		scrollTime.setBounds(10, 65, 1005, 575);
 		frame.getContentPane().add(scrollTime);
 		scrollTime.setOpaque(false);
 		scrollTime.getViewport().setOpaque(false);
@@ -1240,7 +1240,8 @@ public class GUIBase {
 		frame.getRootPane().setComponentZOrder(WhiteBase, 2);
 		frame.getRootPane().setComponentZOrder(WhiteBase2, 2);
 		frame.getRootPane().setComponentZOrder(TaskDetail, 2);
-		frame.getRootPane().setComponentZOrder(scrollTime, 0);
+		frame.getRootPane().setComponentZOrder(scrollTime, 1);
+		frame.getRootPane().setComponentZOrder(MenuPanel, 0);
 		
 	}
 		

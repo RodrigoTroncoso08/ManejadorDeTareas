@@ -1,8 +1,11 @@
 import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
+import java.awt.Shape;
+import java.awt.Stroke;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -15,6 +18,8 @@ public class TaskPanel extends JPanel{
 	
 	Task t;
 	int position;
+	int total;
+	Graphics2D graphics;
 	public TaskPanel(Task t,int Position, int total) {
 		// TODO Auto-generated constructor stub
 		super();
@@ -25,7 +30,10 @@ public class TaskPanel extends JPanel{
 		node.setForeground(t.getContext());
 		node.shady=false;
 		add(node, "pos "+Position*60+" 0"+", w 50!,h 50!");
-		
+		this.t=t;
+		this.total = total;
+		t.setWorkingDays(5);
+		position =Position;
 		
 		
 	}
@@ -33,39 +41,55 @@ public class TaskPanel extends JPanel{
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		Graphics2D graphics = (Graphics2D) g;
+		graphics = (Graphics2D) g.create();
 		
 		/////////////////////////////////// BlueBase
 		graphics.setColor(getBackground());
-	    graphics.fillRoundRect(0, 0, getWidth()-3, getHeight()-3, 5, 5);
+	    graphics.fillRoundRect(0, 0, getWidth()-3, getHeight()-3, 10, 10);
 	    graphics.setColor(getForeground());
+	    /*
 	    graphics.setStroke(new BasicStroke((float)1));
 	    graphics.drawRoundRect(0, 0, getWidth()-3, getHeight()-3, 5, 5);
+	    */
 	    
 	    /////////////////////////////////// estela
 	    if(t!=null)
 	    {
 		    graphics.setColor(t.getColor().brighter());
-		    graphics.fillRoundRect(10*(position-t.getWorkingDays()),5, 15*t.getRelevance(), 15*t.getRelevance(), 5, 5);
+		    graphics.fillRoundRect(60*(position-t.getWorkingDays()+1),25-(10+12*(t.getRelevance()+1))/2, 55*t.getWorkingDays()-5, 10+12*(t.getRelevance()+1), 10*(t.getRelevance()+1), 10*(t.getRelevance()+1));
 		    graphics.setColor(t.getContext());
-		    graphics.setStroke(new BasicStroke((float)1));
-		    graphics.drawRoundRect(10*(position-t.getWorkingDays()), 5, 10*t.getWorkingDays(), 15*t.getRelevance()+5, 25, 5);
+		    graphics.setStroke(new BasicStroke((float)3));
+		    graphics.drawRoundRect(60*(position-t.getWorkingDays()+1), 25-(10+12*(t.getRelevance()+1))/2, 55*t.getWorkingDays()-5, 10+12*(t.getRelevance()+1), 10*(t.getRelevance()+1), 10*(t.getRelevance()+1));
 	    }
 	    
-	    /////////////////////////////////// node
-	    /*
-	    graphics.setColor(t.getColor());
-	    graphics.fillRoundRect(10*position, 0, 15*t.getRelevance(), 15*t.getRelevance(), 5, 5);
-	    graphics.setColor(t.getContext());
-	    graphics.setStroke(new BasicStroke((float)1));
-	    graphics.drawRoundRect(10*position, 0, 15*t.getRelevance(), 15*t.getRelevance(), 5, 5);
-	    */
-	    
+	    graphics.setStroke(new BasicStroke((float)1, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+	    graphics.setColor(new Color(40, 180, 255));
+	    for(int i=0; i<total+1; i++ ){
+	    	graphics.drawLine(55+60*i, 0, 55+60*i, 50);
+	    }
 	    
 	}
 	
+	void setTotal(int t)
+	{
+		total=t;
+	}
 	
+	@Override
+	public void repaint() {
+		super.repaint();
+		
+		if(graphics!=null)
+		{
+			graphics.setStroke(new BasicStroke((float)1, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+		    graphics.setColor(new Color(40, 180, 255));
+		    for(int i=0; i<total+1; i++ )
+		    {
+		    	graphics.drawLine(60+60*i, 0, 60+60*i, 50);
+		    }
+		}
 	
+	}
 	
 	
 	
