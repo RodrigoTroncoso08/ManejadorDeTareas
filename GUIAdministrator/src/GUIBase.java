@@ -56,12 +56,14 @@ import javax.swing.BoxLayout;
 
 
 
+
 //import org.eclipse.wb.swing.FocusTraversalOnArray;
 import sun.java2d.loops.DrawLine;
 
 import java.awt.BasicStroke;
 import java.awt.Component;
 import java.awt.Dimension;
+
 
 
 
@@ -135,6 +137,7 @@ public class GUIBase {
 	private TimeLinePanel TimeLinePanel;
 	private JScrollPane scrollMainView;
 	private JScrollPane scrollTaskPane;
+	private JScrollPane scrollTime = new JScrollPane();
 	private boolean recovered = false;
 	JLabel 	ProyectName;
 	MailSender mailSender;
@@ -196,7 +199,7 @@ public class GUIBase {
 		
 		File directory = new File("Data");
 		File objectData = new File("Data/"+"Admin"+".data");
-		if (directory.exists()&&objectData.exists()) 			// reccupera el administrados serializado
+		if (directory.exists()&&objectData.exists()) 			// reccupera el administrador serializado
 		{
 			admin = (Administrator) deSerialize("Admin");
 			TimeLinePanel = new TimeLinePanel(admin);
@@ -213,6 +216,10 @@ public class GUIBase {
 				
 				ProyectUI.add(PP);
 				WhiteBase.add(PP);
+				WhiteBase.setPreferredSize(new Dimension(WhiteBase.getPreferredSize().width, WhiteBase.getPreferredSize().height+155));
+				WhiteBase.revalidate();
+				GlosaryPanel.setPreferredSize(new Dimension(GlosaryPanel.getPreferredSize().width,
+						GlosaryPanel.getPreferredSize().height+45));
 				for(int t=0; t<proyect.getTasks().size();t++)
 				{
 					NodeButton n=PP.AddTask(proyect.getTasks().get(t));
@@ -225,6 +232,7 @@ public class GUIBase {
 							WhiteBase.setVisible(false);
 	                		WhiteBase2.setVisible(true);
 	                		TaskDetail.setVisible(true);
+	                		frame.getContentPane().setComponentZOrder(scrollTime,2);
 	                		frame.getContentPane().setComponentZOrder(scrollMainView,2);
 	                		frame.getContentPane().setComponentZOrder(WhiteBase2,1);
 	                		Parreglo.get(n.getTask().getProyectId()).SelectTask(n);
@@ -244,6 +252,7 @@ public class GUIBase {
 							WhiteBase.setVisible(false);
 	                		WhiteBase2.setVisible(true);
 	                		TaskDetail.setVisible(true);
+	                		frame.getContentPane().setComponentZOrder(scrollTime,2);
 	                		frame.getContentPane().setComponentZOrder(scrollMainView,2);
 	                		frame.getContentPane().setComponentZOrder(WhiteBase2,1);
 	                		Parreglo.get(n2.getTask().getProyectId()).SelectTask(n2);
@@ -287,6 +296,9 @@ public class GUIBase {
 		{
 			CreateAdmin();
 		}
+		
+		
+		//////////////////////////empieza
 		
 		mailSender = new MailSender("rorotm@hotmail.com");
 		frame = new JFrame();
@@ -357,12 +369,15 @@ public class GUIBase {
 		scrollTaskPane.getViewport().setOpaque(false);
 		scrollTaskPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollTaskPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scrollTaskPane.getVerticalScrollBar().setUI(new myScrollBarUI());
 		ProyectName = new JLabel("Micelaneo");
 		ProyectName.setHorizontalAlignment(JLabel.CENTER);
 		ProyectName.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 25));
 		ProyectName.setForeground(new Color(0,110,142));
 		ProyectName.setBounds(264, 0, 471, 50);
 		WhiteBase2.add(ProyectName);
+		
+		
 		
 		//esta parte se usara para hacer que todo se mueva junto al agrandar la ventana. No es requerimiento. Po ahora dejo el frame sin movilidad
 		/*
@@ -425,8 +440,6 @@ public class GUIBase {
 		}
 		
 		
-		
-	
 		RoundedPanel MenuPanel = new RoundedPanel();
 		MenuPanel.arcs= new Dimension(10,10);
 		MenuPanel.shady=false;
@@ -843,6 +856,18 @@ public class GUIBase {
 						else
 						{
 							JDialog aviso = new JDialog(frame,"Warning");
+							JButton close = new JButton();
+							close.addActionListener(new ActionListener() {
+								
+								@Override
+								public void actionPerformed(ActionEvent e) {
+									// TODO Auto-generated method stub
+									aviso.setVisible(false);
+									aviso.dispose();
+									AddProject.requestFocus();
+								}
+							});
+							aviso.add(close);
 							aviso.setSize(300,100);
 							aviso.setLocation(310,310);
 							JPanel panelaviso = new JPanel();
@@ -856,7 +881,8 @@ public class GUIBase {
 							panelaviso.add(Nosepuede);
 							aviso.getContentPane().add(panelaviso);
 							aviso.setVisible(true);
-							frame.requestFocus();
+							aviso.getRootPane().setDefaultButton(close);
+							
 						}
 						
 					}
@@ -921,6 +947,8 @@ public class GUIBase {
 		scrollPane.setBounds(10, 297, 176, 162);
 		MenuPanel.add(scrollPane);
 		scrollPane.setBorder(BorderFactory.createEmptyBorder());
+		scrollPane.getVerticalScrollBar().setUI(new myScrollBarUI());
+		
 		
 		
 		GlosaryPanel.setForeground(Color.WHITE);
@@ -930,7 +958,7 @@ public class GUIBase {
 		
 		RoundedButton HomeView = new RoundedButton("Home");
 		HomeView.setBackground(Color.WHITE);
-		HomeView.setBounds(25, 494, 147, 28);
+		HomeView.setBounds(25, 470, 147, 28);
 		HomeView.setForeground(new Color(153, 204, 255));
 		HomeView.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 16));
 		MenuPanel.add(HomeView);
@@ -940,10 +968,37 @@ public class GUIBase {
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
 				WhiteBase.setVisible(true);
-        		WhiteBase2.setVisible(true);
+				scrollMainView.setVisible(true);
+        		WhiteBase2.setVisible(false);
         		TaskDetail.setVisible(false);
+        		TimeLinePanel.setVisible(false);
         		frame.getContentPane().setComponentZOrder(scrollMainView,1);
         		frame.getContentPane().setComponentZOrder(WhiteBase2,2);
+        		frame.getContentPane().setComponentZOrder(scrollTime,2);
+        		MenuPanel.repaint();
+			}
+		});
+		
+		RoundedButton TimeView = new RoundedButton("TimeLine");
+		TimeView.setBackground(Color.WHITE);
+		TimeView.setBounds(25, 505, 147, 28);
+		TimeView.setForeground(new Color(153, 204, 255));
+		TimeView.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 16));
+		MenuPanel.add( TimeView);
+		TimeView.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				WhiteBase.setVisible(false);
+        		WhiteBase2.setVisible(false);
+        		TaskDetail.setVisible(false);
+        		TimeLinePanel.setVisible(true);
+        		frame.getContentPane().setComponentZOrder(scrollMainView,2);
+        		frame.getContentPane().setComponentZOrder(WhiteBase2,2);
+        		frame.getContentPane().setComponentZOrder(scrollTime,1);
+        		MenuPanel.repaint();
+        		
 			}
 		});
 		
@@ -953,7 +1008,8 @@ public class GUIBase {
 		scrollMainView.setBounds(6, 69, 1005, 576);
 		scrollMainView.getViewport().setBackground(new Color(0, 110, 142));
 		scrollMainView.setBorder(BorderFactory.createEmptyBorder());
-		
+		scrollMainView.getVerticalScrollBar().setUI(new myScrollBarUI());
+		scrollMainView.getHorizontalScrollBar().setUI(new myScrollBarUI());
 		
 		
 		frame.getContentPane().add(scrollMainView);
@@ -1207,8 +1263,8 @@ public class GUIBase {
 ////////////////////////		////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		JScrollPane scrollTime = new JScrollPane();
-		scrollTime.setBounds(10, 65, 1005, 575);
+		
+		scrollTime.setBounds(6, 69, 1005, 576);
 		frame.getContentPane().add(scrollTime);
 		scrollTime.setOpaque(false);
 		scrollTime.getViewport().setOpaque(false);
@@ -1232,16 +1288,7 @@ public class GUIBase {
 		
 		
 		
-		//Inittial visible
-		WhiteBase.setVisible(false);		
-		WhiteBase2.setVisible(true);
-		TaskDetail.setVisible(false);
-		scrollTime.setVisible(true);
-		frame.getRootPane().setComponentZOrder(WhiteBase, 2);
-		frame.getRootPane().setComponentZOrder(WhiteBase2, 2);
-		frame.getRootPane().setComponentZOrder(TaskDetail, 2);
-		frame.getRootPane().setComponentZOrder(scrollTime, 1);
-		frame.getRootPane().setComponentZOrder(MenuPanel, 0);
+		
 		
 	}
 		

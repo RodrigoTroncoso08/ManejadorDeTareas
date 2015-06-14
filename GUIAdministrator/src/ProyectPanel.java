@@ -103,6 +103,7 @@ public class ProyectPanel extends JPanel implements ActionListener{
 		scrollPane_1.getViewport().setOpaque(false);
 		scrollPane_1.setBounds(40, 28, 697, 105);
 		scrollPane_1.setForeground(shadowColor);
+		scrollPane_1.getHorizontalScrollBar().setUI(new myScrollBarUI());
 		
 		
 		this.add(scrollPane_1);
