@@ -133,6 +133,16 @@ public class Proyect implements java.io.Serializable{
 			Members.remove(s);
 		return Members.contains(s); 
 	}
+	public ArrayList<Task> ActiveTasks()
+	{
+		ArrayList<Task> Aux = new ArrayList<Task>();
+		for(Task t : Tasks)
+		{
+			if(t.getState()==State.Active)
+				Aux.add(t);
+		}		
+		return Aux;
+	}
 
 	////Getters y Setters
 	public ArrayList<Task> getTasks()

@@ -88,7 +88,7 @@ public class NodeButton extends JButton implements ActionListener {
 	         graphics.setColor(getBackground());
 	         graphics.fillRoundRect((this.getWidth()-width)/2, (this.getHeight()-height)/2, width, 
 	         height, arcs.width, arcs.height);
-	         graphics.setColor(task.getContext());
+	         graphics.setColor(task.getContext().getColor());
 	         BasicStroke bs3 = new BasicStroke((float) 3.5);
 	         graphics.setStroke(bs3);
 	         graphics.drawRoundRect((this.getWidth()-width)/2, (this.getHeight()-height)/2, width , 

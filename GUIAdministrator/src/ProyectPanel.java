@@ -103,7 +103,7 @@ public class ProyectPanel extends JPanel implements ActionListener{
 		scrollPane_1.getViewport().setOpaque(false);
 		scrollPane_1.setBounds(40, 28, 697, 105);
 		scrollPane_1.setForeground(shadowColor);
-		scrollPane_1.getHorizontalScrollBar().setUI(new myScrollBarUI());
+		scrollPane_1.getHorizontalScrollBar().setUI(new myScrollBarUI('H'));
 		
 		
 		this.add(scrollPane_1);
@@ -210,7 +210,7 @@ public NodeButton AddTask(Task t)
 			nodeButton_5 = new NodeButton("((?)",t);
 		
 		nodeButton_5.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 30));
-		nodeButton_5.setForeground(t.getContext());
+		nodeButton_5.setForeground(t.getContext().getColor());
 		GridBagConstraints gbc_nodeButton_5 = new GridBagConstraints();
 		gbc_nodeButton_5.insets = new Insets(0, 0, 0, 0);
 		gbc_nodeButton_5.gridx = proyect.getTasks().indexOf(t);

@@ -62,8 +62,8 @@ public class TimeLinePanel extends JPanel {
 		this.add(separator_3);
 		
 		scrollTask = new JScrollPane();
-		scrollTask.getHorizontalScrollBar().setUI(new myScrollBarUI());
-		scrollTask.getVerticalScrollBar().setUI(new myScrollBarUI());
+		scrollTask.getHorizontalScrollBar().setUI(new myScrollBarUI('H'));
+		scrollTask.getVerticalScrollBar().setUI(new myScrollBarUI('V'));
 		scrollTask.setBorder(BorderFactory.createEmptyBorder());
 		scrollTask.setBounds(360, 50, 628, 470);
 		this.add(scrollTask);
@@ -159,14 +159,18 @@ public class TimeLinePanel extends JPanel {
 @Override
 protected void paintComponent(Graphics g) {
 
-    super.paintComponent(g);
+	 super.paintComponent(g);
+     int width = getWidth();
+     int height = getHeight();
+     Graphics2D graphics = (Graphics2D) g;
     ////////////////////////////////////////whiteBase
-    Graphics2D graphics = (Graphics2D) g;
     graphics.setColor(getBackground());
-    graphics.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
+    graphics.fillRoundRect(0, 0, width, 
+	height , 10, 10);
     graphics.setColor(getForeground());
-    graphics.setStroke(new BasicStroke((float)1));
-    graphics.drawRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
+    graphics.setStroke(new BasicStroke(1));
+    graphics.drawRoundRect(0, 0, width , 
+	height, 10, 10);
     
 	}
 public void AddTasks(Task t){

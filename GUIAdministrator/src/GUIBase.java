@@ -1,6 +1,5 @@
+import java.awt.Component;
 import java.awt.EventQueue;
-
-import javafx.scene.control.ComboBox;
 
 import javax.swing.JFrame;
 
@@ -15,15 +14,12 @@ import javax.swing.JButton;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
 import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
@@ -38,7 +34,6 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JPanel;
 import javax.swing.JDialog;
 import javax.swing.JSeparator;
-import javax.swing.Popup;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.Timer;
 import javax.swing.UIManager;
@@ -46,65 +41,10 @@ import javax.swing.UIManager.LookAndFeelInfo;
 
 import backend.*;
 
-import javax.swing.BoxLayout;
-
-
-
-
-
-
-
-
-
-
-//import org.eclipse.wb.swing.FocusTraversalOnArray;
-import sun.java2d.loops.DrawLine;
-
-import java.awt.BasicStroke;
-import java.awt.Component;
 import java.awt.Dimension;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 import javax.swing.JSlider;
 
-import java.awt.Label;
-import java.awt.Rectangle;
-import java.awt.GridLayout;
-//import net.miginfocom.swing.MigLayout;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import java.io.Console;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -116,11 +56,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import javax.swing.JList;
-import javax.swing.JScrollBar;
-import javax.swing.SpringLayout;
-
-import net.miginfocom.swing.MigLayout;
 
 public class GUIBase {
 	private JFrame frame;
@@ -208,7 +143,7 @@ public class GUIBase {
 				Proyect proyect = admin.getProyects().get(p);
 				ProyectPanel PP = new ProyectPanel(proyect.getName(),proyect);
 				//PP.setColorName(p.getColor());
-				ProjectLine PL = new ProjectLine(proyect);
+				ProjectLine PL = new ProjectLine(proyect,null);
 				
 				Parreglo.add(PL); //los projectLine se agragan en el mismo orden que los proyectPanel
 				PL.setBounds(0,0,440,545);
@@ -230,8 +165,10 @@ public class GUIBase {
 						public void actionPerformed(ActionEvent e) {
 							// TODO Auto-generated method stub
 							WhiteBase.setVisible(false);
+							scrollMainView.setVisible(false);
 	                		WhiteBase2.setVisible(true);
 	                		TaskDetail.setVisible(true);
+	                		scrollTime.setVisible(false);
 	                		frame.getContentPane().setComponentZOrder(scrollTime,2);
 	                		frame.getContentPane().setComponentZOrder(scrollMainView,2);
 	                		frame.getContentPane().setComponentZOrder(WhiteBase2,1);
@@ -250,8 +187,10 @@ public class GUIBase {
 						public void actionPerformed(ActionEvent e) {
 							// TODO Auto-generated method stub
 							WhiteBase.setVisible(false);
+							scrollMainView.setVisible(false);
 	                		WhiteBase2.setVisible(true);
 	                		TaskDetail.setVisible(true);
+	                		scrollTime.setVisible(false);
 	                		frame.getContentPane().setComponentZOrder(scrollTime,2);
 	                		frame.getContentPane().setComponentZOrder(scrollMainView,2);
 	                		frame.getContentPane().setComponentZOrder(WhiteBase2,1);
@@ -274,8 +213,10 @@ public class GUIBase {
 					public void actionPerformed(ActionEvent e) {
 						// TODO Auto-generated method stub
 						WhiteBase.setVisible(false);
+						scrollMainView.setVisible(false);
 		        		WhiteBase2.setVisible(true);
 		        		TaskDetail.setVisible(true);
+		        		scrollTime.setVisible(false);
 		        		frame.getContentPane().setComponentZOrder(scrollMainView,2);
 		        		frame.getContentPane().setComponentZOrder(WhiteBase2,1);
 		        		scrollTaskPane.setViewportView(Parreglo.get(admin.getProyects().indexOf(proyect)));
@@ -289,6 +230,80 @@ public class GUIBase {
 				b_1.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
 				b_1.setBounds(10, 5+GlosaryPanel.getComponentCount()*45, 150, 35);
 				GlosaryPanel.add(b_1);
+			}
+			for(int c=0;c<admin.getPosibleContext().size();c++)
+			{
+				///comunicacion backend
+				Context context = admin.getPosibleContextColor().get(c);
+				ProjectLine PL = new ProjectLine(null,context);
+				Parreglo.add(PL); //los projectLine se agragan en el mismo orden que los proyectPanel
+				PL.setBounds(0,0,440,545);
+				PL.setVisible(true);
+				
+				//// agregar a glosario
+				ContextButton cButton = new ContextButton(context);
+				cButton.setBounds(10, 5+GlosaryPanel.getComponentCount()*45, 200, 35);
+				cButton.addMouseListener(new MouseListener() {
+					
+					@Override
+					public void mouseReleased(MouseEvent arg0) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void mousePressed(MouseEvent arg0) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void mouseExited(MouseEvent arg0) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void mouseEntered(MouseEvent arg0) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void mouseClicked(MouseEvent arg0) {
+						// TODO Auto-generated method stub
+						WhiteBase.setVisible(false);
+                		WhiteBase2.setVisible(true);
+                		TaskDetail.setVisible(true);
+                		scrollMainView.setVisible(false);
+                		scrollTime.setVisible(false);
+                		frame.getContentPane().setComponentZOrder(scrollMainView,2);
+                		frame.getContentPane().setComponentZOrder(WhiteBase2,1);
+                		scrollTaskPane.setViewportView(PL);
+                		ProyectName.setText(PL.context.getName());
+                		ProyectName.setForeground(PL.context.getColor());
+					}
+				});
+				GlosaryPanel.add(cButton);
+				GlosaryPanel.setPreferredSize(new Dimension(GlosaryPanel.getPreferredSize().width,
+				GlosaryPanel.getPreferredSize().height+45));
+				
+				////agregar tareas 
+				for(int i = 0; i<context.getTasks().size();i++)
+				{
+					NodeButton n3 = new NodeButton("", context.getTasks().get(i));
+					PL.AddTask(n3);
+					n3.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							// TODO Auto-generated method stub
+							SelectedTask = n3.getTask();
+	                		DetallarTarea(SelectedTask);
+	                		PL.SelectTask(n3);
+						}
+					});
+				}
 			}
 			recovered= true;
 		}
@@ -369,7 +384,7 @@ public class GUIBase {
 		scrollTaskPane.getViewport().setOpaque(false);
 		scrollTaskPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollTaskPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-		scrollTaskPane.getVerticalScrollBar().setUI(new myScrollBarUI());
+		scrollTaskPane.getVerticalScrollBar().setUI(new myScrollBarUI('V'));
 		ProyectName = new JLabel("Micelaneo");
 		ProyectName.setHorizontalAlignment(JLabel.CENTER);
 		ProyectName.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 25));
@@ -422,8 +437,10 @@ public class GUIBase {
 				public void actionPerformed(ActionEvent e) {
 					// TODO Auto-generated method stub
 					WhiteBase.setVisible(false);
+					scrollMainView.setVisible(false);
 	        		WhiteBase2.setVisible(true);
 	        		TaskDetail.setVisible(true);
+	        		scrollTime.setVisible(false);
 	        		frame.getContentPane().setComponentZOrder(scrollMainView,2);
 	        		frame.getContentPane().setComponentZOrder(WhiteBase2,1);
 	        		scrollTaskPane.setViewportView(Parreglo.get(0));
@@ -489,7 +506,7 @@ public class GUIBase {
 				
 				JComboBox Proyectos = new JComboBox();
 				Proyectos.setBorder(null);
-				Proyectos.setEditable(true);
+				Proyectos.setEditable(false);
 				Proyectos.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 13));
 				Proyectos.setForeground(new Color(0,0,0));
 				ArrayList<String> Listap=admin.ProjectNames();
@@ -498,7 +515,6 @@ public class GUIBase {
 				{
 					opcionesp[i]=Listap.get(i);
 				}
-				opcionesp[Listap.size()]="Nuevo Proyecto";
 				Proyectos.setModel(new DefaultComboBoxModel(opcionesp));
 				Proyectos.setSelectedIndex(0);
 				Proyectos.setBackground(new Color(255, 255, 255));
@@ -514,16 +530,15 @@ public class GUIBase {
 				
 				JComboBox Contextos = new JComboBox();
 				Contextos.setBorder(null);
-				Contextos.setEditable(true);
+				Contextos.setEditable(false);
 				Contextos.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 13));
 				Contextos.setForeground(new Color(0,0,0));
 				ArrayList<String> Listac=admin.getPosibleContext();
-				String[] opcionesc = new String[Listac.size()+1];
+				String[] opcionesc = new String[Listac.size()];
 				for(int i=0; i<Listac.size();i++)
 				{
 					opcionesc[i]=Listac.get(i);
 				}
-				opcionesc[Listac.size()]="Nuevo Contexto";
 				Contextos.setModel(new DefaultComboBoxModel(opcionesc));
 				Contextos.setSelectedIndex(0);
 				Contextos.setBackground(new Color(255, 255, 255));
@@ -583,7 +598,7 @@ public class GUIBase {
 				
 				JComboBox Importancia = new  JComboBox();
 				Importancia.setBorder(null);
-				Importancia.setEditable(true);
+				Importancia.setEditable(false);
 				Importancia.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 13));
 				Importancia.setForeground(new Color(0,0,0));
 				String[] bla = new String[3];
@@ -652,7 +667,9 @@ public class GUIBase {
 								catch(Exception ex)
 								{
 									JOptionPane.showMessageDialog(null, "Recuerde ingresar una fecha cuando pueda",	"Recordatorio de Fecha", JOptionPane.INFORMATION_MESSAGE);
-									t.setContext(admin.AddContext((String)Contextos.getSelectedItem()));
+									Context context = admin.AddContext((String)Contextos.getSelectedItem());
+									t.setContext(context);
+									context.AddTask(t);
 									t.setRelevance(Importancia.getSelectedIndex());
 									Calendar c = Calendar.getInstance();
 									c.clear();
@@ -664,21 +681,28 @@ public class GUIBase {
 								}
 								t.setProyectId(i);
 								t.setRelevance(Importancia.getSelectedIndex());
-								t.setContext(admin.AddContext((String)Contextos.getSelectedItem()));
+								Context context = admin.AddContext((String)Contextos.getSelectedItem());
+								t.setContext(context);
+								context.AddTask(t);
 								t.setColor(admin.getProyects().get(i).getColor());
 								admin.getProyects().get(i).AddTask(t);
 								NodeButton n =ProyectUI.get(i).AddTask(t); //es importante que los proyectos se agreguen logica y visualmente en el mismo orden
 								NodeButton n2 = new NodeButton(n.getText(),n.getTask());
+								NodeButton n3 = new NodeButton(n.getText(),n.getTask());
 								n2.setSize(n.getSize());
+								n3.setSize(n.getSize());
 								Parreglo.get(i).AddTask(n2);
+								Parreglo.get(admin.getPosibleContextColor().indexOf(context)+admin.getProyects().size()).AddTask(n3);
 				                n.addActionListener(new ActionListener() {
 									
 									@Override
 									public void actionPerformed(ActionEvent e) {
 										// TODO Auto-generated method stub
 										WhiteBase.setVisible(false);
+										scrollMainView.setVisible(false);
 				                		WhiteBase2.setVisible(true);
 				                		TaskDetail.setVisible(true);
+				                		scrollTime.setVisible(false);
 				                		frame.getContentPane().setComponentZOrder(scrollMainView,2);
 				                		frame.getContentPane().setComponentZOrder(WhiteBase2,1);
 				                		Parreglo.get(n.getTask().getProyectId()).SelectTask(n);
@@ -695,8 +719,10 @@ public class GUIBase {
 									public void actionPerformed(ActionEvent e) {
 										// TODO Auto-generated method stub
 										WhiteBase.setVisible(false);
+										scrollMainView.setVisible(false);
 				                		WhiteBase2.setVisible(true);
 				                		TaskDetail.setVisible(true);
+				                		scrollTime.setVisible(false);
 				                		frame.getContentPane().setComponentZOrder(scrollMainView,2);
 				                		frame.getContentPane().setComponentZOrder(WhiteBase2,1);
 				                		Parreglo.get(n2.getTask().getProyectId()).SelectTask(n2);
@@ -735,8 +761,140 @@ public class GUIBase {
 		AddTask.setBackground(new Color(255, 255, 255));
 		AddTask.setForeground(new Color(153, 204, 255));
 		
-		AddTask.setBounds(25, 60, 147, 28);
+		AddTask.setBounds(30, 60, 147, 28);
 		MenuPanel.add(AddTask);
+		
+		
+		JButton Suggest = new RoundedButton("Sugerencias");
+		Suggest.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				JDialog UrgenciaOPlan = new JDialog (frame,"criterio de sugerencia");
+				UrgenciaOPlan.setSize(325,100);
+				UrgenciaOPlan.setLocation(400, 350);
+				JPanel Paneldia = new JPanel();
+				Paneldia.setLayout(null);
+				Paneldia.setBounds(0, 0, 0, 0);
+				
+				JButton U = new JButton("Urgentes");
+				U.setBounds(25, 20, 125, 60);
+				U.addActionListener(new ActionListener()
+				{
+					public void actionPerformed(ActionEvent e)
+					{
+						String[] contenido = admin.SugerenciaUrgencia();
+						JDialog Mostrar = new JDialog(frame,"Tareas Urgentes");
+						Mostrar.setSize(500,500);
+						Mostrar.setLocation(300,300);
+						JPanel pa = new JPanel();
+						pa.setLayout(null);
+						pa.setBounds(0,0,0,0);
+						Mostrar.getContentPane().add(pa);
+						JScrollPane s1 = new JScrollPane(); 
+						s1.setBounds(10,20,480,230);
+						s1.setBorder(BorderFactory.createEmptyBorder());
+						s1.setViewportBorder(BorderFactory.createEmptyBorder());
+						s1.setOpaque(false);
+						s1.getViewport().setOpaque(false);
+						s1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+						s1.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+						JPanel pa1 = new JPanel();
+						pa1.setLayout(null);
+						JLabel sugeridas = new JLabel(contenido[0]);
+						pa1.add(sugeridas);
+						s1.setViewportView(pa1);
+						pa.add(s1);
+						
+						JScrollPane s2 = new JScrollPane(); 
+						s2.setBounds(10,250,480,230);
+						s2.setBorder(BorderFactory.createEmptyBorder());
+						s2.setViewportBorder(BorderFactory.createEmptyBorder());
+						s2.setOpaque(false);
+						s2.getViewport().setOpaque(false);
+						s2.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+						s2.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+						JPanel pa2 = new JPanel();
+						pa2.setLayout(null);
+						JLabel requisitos = new JLabel(contenido[1]);
+						pa2.add(requisitos);
+						s2.setViewportView(pa2);
+						pa.add(s2);
+						
+						UrgenciaOPlan.setVisible(false);
+						UrgenciaOPlan.dispose();
+					}
+				});
+				
+				JButton P = new JButton("planificación");
+				P.setBounds(175, 20, 125, 60);
+				P.addActionListener(new ActionListener()
+				{
+					public void actionPerformed(ActionEvent e)
+					{
+						String[] contenido = admin.SugerenciaPlanificada();
+						JDialog Mostrar = new JDialog(frame,"Planificacion por contexto");
+						Mostrar.setSize(500,500);
+						Mostrar.setLocation(300,300);
+						JPanel pa = new JPanel();
+						pa.setLayout(null);
+						pa.setBounds(0,0,0,0);
+						Mostrar.getContentPane().add(pa);
+						JScrollPane s1 = new JScrollPane(); 
+						s1.setBounds(10,20,480,230);
+						s1.setBorder(BorderFactory.createEmptyBorder());
+						s1.setViewportBorder(BorderFactory.createEmptyBorder());
+						s1.setOpaque(false);
+						s1.getViewport().setOpaque(false);
+						s1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+						s1.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+						JPanel pa1 = new JPanel();
+						pa1.setLayout(null);
+						JLabel sugeridas = new JLabel(contenido[0]);
+						pa1.add(sugeridas);
+						s1.setViewportView(pa1);
+						pa.add(s1);
+						
+						JScrollPane s2 = new JScrollPane(); 
+						s2.setBounds(10,250,480,230);
+						s2.setBorder(BorderFactory.createEmptyBorder());
+						s2.setViewportBorder(BorderFactory.createEmptyBorder());
+						s2.setOpaque(false);
+						s2.getViewport().setOpaque(false);
+						s2.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+						s2.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+						JPanel pa2 = new JPanel();
+						pa2.setLayout(null);
+						JLabel requisitos = new JLabel(contenido[1]);
+						pa2.add(requisitos);
+						s2.setViewportView(pa2);
+						pa.add(s2);
+					
+						UrgenciaOPlan.setVisible(false);
+						UrgenciaOPlan.dispose();
+					}
+				});
+				
+				U.setForeground(new Color(153, 204, 255));
+				P.setForeground(new Color(153, 204, 255));
+				U.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 13));
+				P.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 13));
+				U.setBackground(Color.WHITE);
+				P.setBackground(Color.WHITE);
+				Paneldia.add(P);
+				Paneldia.add(U);
+				UrgenciaOPlan.getContentPane().add(Paneldia);
+				UrgenciaOPlan.setVisible(true);
+			}
+		});
+		Suggest.setBounds(30, 180, 147, 28);
+		Suggest.setVerticalAlignment(SwingConstants.BOTTOM);
+		Suggest.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 16));
+		Suggest.setBackground(new Color(255, 255, 255));
+		Suggest.setForeground(new Color(153, 204, 255));
+		MenuPanel.add(Suggest);
+
+		
 		
 		JLabel lblNewLabel = new JLabel("Menu");
 		lblNewLabel.setOpaque(true);
@@ -744,7 +902,7 @@ public class GUIBase {
 		lblNewLabel.setForeground(new Color(255, 255, 255));
 		lblNewLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 30));
 		lblNewLabel.setBackground(new Color(212, 227, 252));
-		lblNewLabel.setBounds(0, 21, 210, 28);
+		lblNewLabel.setBounds(2, 21, 210, 28);
 		MenuPanel.add(lblNewLabel);
 		
 		RoundedButton rndbtnProyect = new RoundedButton("+ Project");
@@ -811,9 +969,9 @@ public class GUIBase {
 						////Agregar a interfaz
 						ProyectPanel PP = new ProyectPanel(Pnombre.getText(),p);
 						//PP.setColorName(p.getColor());
-						ProjectLine PL = new ProjectLine(p);
+						ProjectLine PL = new ProjectLine(p,null);
 						
-						Parreglo.add(PL); //los projectLine se agragan en el mismo orden que los proyectPanel
+						Parreglo.add(admin.getProyects().size()-1,PL); //los projectLine se agragan en el mismo orden que los proyectPanel
 						PL.setBounds(0,0,440,545);
 						PL.setVisible(true);
 						
@@ -831,7 +989,13 @@ public class GUIBase {
 						b.setBackground(p.getColor());
 						b.setForeground(Color.WHITE);
 						b.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
-						b.setBounds(10, 5+GlosaryPanel.getComponentCount()*45, 150, 35);
+						b.setBounds(10, 5+(admin.getProyects().size()-1)*45, 150, 35);
+						GlosaryPanel.add(b,admin.getProyects().size()-1);
+						for(int i = admin.getProyects().size();i<GlosaryPanel.getComponentCount();i++)
+						{
+							Component c= GlosaryPanel.getComponent(i);
+							c.setBounds(10, 5+i*45, 150, 35);
+						}
 						b.addActionListener(new ActionListener() {
 					
 							@Override
@@ -840,6 +1004,8 @@ public class GUIBase {
 								WhiteBase.setVisible(false);
 		                		WhiteBase2.setVisible(true);
 		                		TaskDetail.setVisible(true);
+		                		scrollMainView.setVisible(false);
+		                		scrollTime.setVisible(false);
 		                		frame.getContentPane().setComponentZOrder(scrollMainView,2);
 		                		frame.getContentPane().setComponentZOrder(WhiteBase2,1);
 		                		scrollTaskPane.setViewportView(PL);
@@ -847,7 +1013,7 @@ public class GUIBase {
 		                		ProyectName.setForeground(PL.pro.getColor());
 							}
 						});
-						GlosaryPanel.add(b);
+						
 						GlosaryPanel.setPreferredSize(new Dimension(GlosaryPanel.getPreferredSize().width,
 								GlosaryPanel.getPreferredSize().height+45));
 						frame.revalidate();
@@ -867,7 +1033,7 @@ public class GUIBase {
 									AddProject.requestFocus();
 								}
 							});
-							aviso.add(close);
+							aviso.getContentPane().add(close);
 							aviso.setSize(300,100);
 							aviso.setLocation(310,310);
 							JPanel panelaviso = new JPanel();
@@ -901,54 +1067,177 @@ public class GUIBase {
 		rndbtnProyect.setForeground(new Color(153, 204, 255));
 		rndbtnProyect.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 16));
 		rndbtnProyect.setBackground(Color.WHITE);
-		rndbtnProyect.setBounds(25, 94, 147, 28);
+		rndbtnProyect.setBounds(30, 94, 147, 28);
 		MenuPanel.add(rndbtnProyect);
 		
-		txtSearch = new JTextField();
-		txtSearch.setBorder(BorderFactory.createSoftBevelBorder(1));
-		txtSearch.setBackground(new Color(255, 255, 255));
-		txtSearch.setHorizontalAlignment(SwingConstants.LEFT);
-		txtSearch.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 14));
-		txtSearch.setForeground(new Color(102, 204, 204));
-		txtSearch.setText("   Search...");
-		txtSearch.setBounds(25, 133, 147, 34);
-		MenuPanel.add(txtSearch);
-		txtSearch.setColumns(10);
 		
-		JLabel GlosayLabel = new JLabel("Glosary");
+		RoundedButton addContext = new RoundedButton("+ Context");
+		addContext.setVerticalAlignment(SwingConstants.BOTTOM);
+		addContext.setForeground(new Color(153, 204, 255));
+		addContext.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 16));
+		addContext.setBackground(Color.WHITE);
+		addContext.setBounds(30, 128, 147, 28);
+		MenuPanel.add(addContext);
+		addContext.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) 
+			{
+				JDialog AddContext= new JDialog(frame,"Nuevo Proyecto");
+				
+				AddContext.setSize(320, 150);
+				AddContext.setLocation(300,300);
+				JPanel panelsin = new JPanel();
+				panelsin.setBounds(0, 0, 0, 0);
+				panelsin.setLayout(null);
+				
+				JTextField Cnombre = new JTextField();
+				Cnombre.setText("Nombre Contexto");
+				Cnombre.setBounds(20, 20, 200, 50);
+				Cnombre.addMouseListener(new MouseListener() {
+					
+					@Override
+					public void mouseReleased(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void mousePressed(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+						
+					}
+					
+					@Override
+					public void mouseExited(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void mouseEntered(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						// TODO Auto-generated method stub
+						Cnombre.setText("");
+					}
+				});
+				
+				RoundedButton okbotom = new RoundedButton("OK");
+				AddContext.getRootPane().setDefaultButton(okbotom);
+				okbotom.setVerticalAlignment(SwingConstants.BOTTOM);
+				okbotom.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) 			////////////////////+ Contexto
+					{
+						///comunicacion backend
+						Context c = admin.AddContext(Cnombre.getText());;
+						
+						ProjectLine PL = new ProjectLine(null,c);
+						
+						Parreglo.add(PL); 
+						PL.setBounds(0,0,440,545);
+						PL.setVisible(true);
+						
+						AddContext.setVisible(false);
+						AddContext.dispose(); //pa cerrar el dialogo una vez que se acepta
+						
+						//// agregar a glosario
+						ContextButton cButton = new ContextButton(c);
+						cButton.setBounds(10, 5+GlosaryPanel.getComponentCount()*45, 200, 35);
+						cButton.addMouseListener(new MouseListener() {
+							
+							@Override
+							public void mouseReleased(MouseEvent arg0) {
+								// TODO Auto-generated method stub
+								
+							}
+							
+							@Override
+							public void mousePressed(MouseEvent arg0) {
+								// TODO Auto-generated method stub
+								
+							}
+							
+							@Override
+							public void mouseExited(MouseEvent arg0) {
+								// TODO Auto-generated method stub
+								
+							}
+							
+							@Override
+							public void mouseEntered(MouseEvent arg0) {
+								// TODO Auto-generated method stub
+								
+							}
+							
+							@Override
+							public void mouseClicked(MouseEvent arg0) {
+								// TODO Auto-generated method stub
+								WhiteBase.setVisible(false);
+		                		WhiteBase2.setVisible(true);
+		                		TaskDetail.setVisible(true);
+		                		scrollMainView.setVisible(false);
+		                		scrollTime.setVisible(false);
+		                		frame.getContentPane().setComponentZOrder(scrollMainView,2);
+		                		frame.getContentPane().setComponentZOrder(WhiteBase2,1);
+		                		scrollTaskPane.setViewportView(PL);
+		                		ProyectName.setText(PL.context.getName());
+		                		ProyectName.setForeground(PL.context.getColor());
+							}
+						});
+						GlosaryPanel.add(cButton);
+						GlosaryPanel.setPreferredSize(new Dimension(GlosaryPanel.getPreferredSize().width,
+								GlosaryPanel.getPreferredSize().height+45));
+						frame.revalidate();
+						frame.repaint();
+					}
+				});
+				okbotom.setForeground(new Color(153, 204, 255));
+				okbotom.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 13));
+				okbotom.setBackground(Color.WHITE);
+				okbotom.setBounds(240, 20, 50, 50);
+				
+				panelsin.add(Cnombre);
+				panelsin.add(okbotom);
+				AddContext.getContentPane().add(panelsin);
+				AddContext.setVisible(true);
+			}
+		});
+		
+		JLabel GlosayLabel = new JLabel(""
+				+ "");
 		GlosayLabel.setOpaque(true);
 		GlosayLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		GlosayLabel.setForeground(new Color(255, 255, 255));
 		GlosayLabel.setBackground(new Color(212, 227, 252));
 		GlosayLabel.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 30));
-		GlosayLabel.setBounds(0, 239, 209, 28);
+		GlosayLabel.setBounds(2, 250, 209, 28);
 		MenuPanel.add(GlosayLabel);
 		
-		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setBorder(null);
-		comboBox.setEditable(true);
-		comboBox.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 12));
-		comboBox.setForeground(new Color(0, 204, 255));
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Todos","Miselaneo"}));
-		comboBox.setSelectedIndex(0);
-		comboBox.setBackground(new Color(255, 255, 255));
-		comboBox.setBounds(25, 178, 147, 28);
-		comboBox.addItem("Miselaneo");
-		MenuPanel.add(comboBox);
 		
 		JSeparator separator = new JSeparator();
 		separator.setForeground(new Color(153, 204, 255));
 		separator.setBackground(new Color(255, 255, 255));
-		separator.setBounds(10, 217, 187, 2);
+		separator.setBounds(10, 240, 187, 2);
 		MenuPanel.add(separator);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 297, 176, 162);
+		scrollPane.setBounds(20, 297, 176, 162);
 		MenuPanel.add(scrollPane);
 		scrollPane.setBorder(BorderFactory.createEmptyBorder());
-		scrollPane.getVerticalScrollBar().setUI(new myScrollBarUI());
-		
+		scrollPane.getVerticalScrollBar().setUI(new myScrollBarUI('V'));
+		scrollPane.getVerticalScrollBar().addAdjustmentListener(new AdjustmentListener() {
+			
+			@Override
+			public void adjustmentValueChanged(AdjustmentEvent arg0) {
+				// TODO Auto-generated method stub
+				scrollPane.repaint();
+			}
+		});
 		
 		
 		GlosaryPanel.setForeground(Color.WHITE);
@@ -958,7 +1247,7 @@ public class GUIBase {
 		
 		RoundedButton HomeView = new RoundedButton("Home");
 		HomeView.setBackground(Color.WHITE);
-		HomeView.setBounds(25, 470, 147, 28);
+		HomeView.setBounds(30, 470, 147, 28);
 		HomeView.setForeground(new Color(153, 204, 255));
 		HomeView.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 16));
 		MenuPanel.add(HomeView);
@@ -972,6 +1261,7 @@ public class GUIBase {
         		WhiteBase2.setVisible(false);
         		TaskDetail.setVisible(false);
         		TimeLinePanel.setVisible(false);
+        		scrollTime.setVisible(false);
         		frame.getContentPane().setComponentZOrder(scrollMainView,1);
         		frame.getContentPane().setComponentZOrder(WhiteBase2,2);
         		frame.getContentPane().setComponentZOrder(scrollTime,2);
@@ -981,7 +1271,7 @@ public class GUIBase {
 		
 		RoundedButton TimeView = new RoundedButton("TimeLine");
 		TimeView.setBackground(Color.WHITE);
-		TimeView.setBounds(25, 505, 147, 28);
+		TimeView.setBounds(30, 505, 147, 28);
 		TimeView.setForeground(new Color(153, 204, 255));
 		TimeView.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 16));
 		MenuPanel.add( TimeView);
@@ -991,9 +1281,11 @@ public class GUIBase {
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
 				WhiteBase.setVisible(false);
+				scrollMainView.setVisible(false);
         		WhiteBase2.setVisible(false);
         		TaskDetail.setVisible(false);
         		TimeLinePanel.setVisible(true);
+        		scrollTime.setVisible(true);
         		frame.getContentPane().setComponentZOrder(scrollMainView,2);
         		frame.getContentPane().setComponentZOrder(WhiteBase2,2);
         		frame.getContentPane().setComponentZOrder(scrollTime,1);
@@ -1008,8 +1300,8 @@ public class GUIBase {
 		scrollMainView.setBounds(6, 69, 1005, 576);
 		scrollMainView.getViewport().setBackground(new Color(0, 110, 142));
 		scrollMainView.setBorder(BorderFactory.createEmptyBorder());
-		scrollMainView.getVerticalScrollBar().setUI(new myScrollBarUI());
-		scrollMainView.getHorizontalScrollBar().setUI(new myScrollBarUI());
+		scrollMainView.getVerticalScrollBar().setUI(new myScrollBarUI('V'));
+		scrollMainView.getHorizontalScrollBar().setUI(new myScrollBarUI('H'));
 		
 		
 		frame.getContentPane().add(scrollMainView);
@@ -1022,10 +1314,59 @@ public class GUIBase {
 			WhiteBase.setSize(new Dimension(100, 1000));
 			WhiteBase.setPreferredSize(new Dimension(500, 140));
 			WhiteBase.add(PP_1);
-			ProjectLine PL_1 = new ProjectLine(admin.getProyects().get(0)); //el paralelo del proyecto, donde se ven los detalles
+			ProjectLine PL_1 = new ProjectLine(admin.getProyects().get(0),null); //el paralelo del proyecto, donde se ven los detalles
 			Parreglo.add(PL_1);
 			scrollTaskPane.setViewportView(PL_1);
 			PL_1.setBounds(0, 0, 440, 545);
+			
+			Context c = admin.AddContext("Micelaneo");
+			ProjectLine context = new ProjectLine(null, c);
+			Parreglo.add(context);
+			ContextButton cB = new ContextButton(c);
+			GlosaryPanel.add(cB);
+			cB.addMouseListener(new MouseListener() {
+				
+				@Override
+				public void mouseReleased(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mousePressed(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mouseExited(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mouseEntered(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					// TODO Auto-generated method stub
+					WhiteBase.setVisible(false);
+            		WhiteBase2.setVisible(true);
+            		TaskDetail.setVisible(true);
+            		scrollMainView.setVisible(false);
+            		scrollTime.setVisible(false);
+            		frame.getContentPane().setComponentZOrder(scrollMainView,2);
+            		frame.getContentPane().setComponentZOrder(WhiteBase2,1);
+            		scrollTaskPane.setViewportView(context);
+            		ProyectName.setText(context.context.getName());
+            		ProyectName.setForeground(context.context.getColor());
+				}
+			});
+			
+			
 		}
 		scrollMainView.setViewportView(WhiteBase);
 		
@@ -1097,6 +1438,8 @@ public class GUIBase {
 		slider_1.setBackground(new Color(30, 144, 255));
 		slider_1.setForeground(new Color(64, 224, 208));
 		slider_1.setBounds(21, 514, 200, 20);
+		slider_1.setMaximum(100);
+		slider_1.setMinimum(0);
 		TaskDetail.add(slider_1);					/////SliderProgreso [6]
 		
 		JTextField DayEdit = new JTextField();
@@ -1203,7 +1546,9 @@ public class GUIBase {
 				SelectedTask.getDeadline().set(Integer.parseInt(YearEdit.getText()), Integer.parseInt(MonthEdit.getText())-1, Integer.parseInt(DayEdit.getText()));
 				SelectedTask.CheckDate();
 				SelectedTask.setName(lblNombreTarea_1.getText());
-				SelectedTask.setContext(admin.getPosibleContextColor().get(admin.getPosibleContext().indexOf(ctx_1.getSelectedItem())));
+				Context context = admin.getPosibleContextColor().get(admin.getPosibleContext().indexOf(ctx_1.getSelectedItem()));
+				SelectedTask.setContext(context);
+				context.AddTask(SelectedTask);
 				WhiteBase2.revalidate();
 				WhiteBase2.repaint();
 				WhiteBase.revalidate();
@@ -1264,7 +1609,7 @@ public class GUIBase {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		
-		scrollTime.setBounds(6, 69, 1005, 576);
+		scrollTime.setBounds(6, 69, 998, 568);
 		frame.getContentPane().add(scrollTime);
 		scrollTime.setOpaque(false);
 		scrollTime.getViewport().setOpaque(false);
@@ -1312,8 +1657,8 @@ public class GUIBase {
 				opcionesc[i]=Listac.get(i);
 			}
 			ctx.setModel(new DefaultComboBoxModel(opcionesc));
-			int i = admin.getPosibleContextColor().indexOf(t.getContext());
-	    	ctx.setSelectedItem(Listac.get(admin.getPosibleContextColor().indexOf(t.getContext())));
+			int i = admin.getPosibleContext().indexOf(t.getContext().getName());
+	    	ctx.setSelectedItem(Listac.get(i));
 	    	//diccionario para pasar del color del contexto a un string reconocible por el combobox
 	    	Description.setText(t.getDescription());
 	    	lblNombreTarea.setText(t.getName());

@@ -28,7 +28,7 @@ public class TaskPanel extends JPanel{
 		setOpaque(false);
 		node = new NodeButton(t.getName(),t);
 		node.setBackground(t.getColor());
-		node.setForeground(t.getContext());
+		node.setForeground(t.getContext().getColor());
 		node.shady=false;
 		add(node, "pos "+Position*60+" 0"+", w 50!,h 50!");
 		this.t=t;
@@ -59,7 +59,7 @@ public class TaskPanel extends JPanel{
 		    graphics.setColor(t.getColor().brighter());
 		    graphics.fillRoundRect(60*(position-t.getWorkingDays()+1),25-(10+12*(t.getRelevance()+1))/2,
 		    		55*t.getWorkingDays()-5, 10+12*(t.getRelevance()+1), 10*(t.getRelevance()+1), 10*(t.getRelevance()+1));
-		    graphics.setColor(t.getContext());
+		    graphics.setColor(t.getContext().getColor());
 		    graphics.setStroke(new BasicStroke((float)3));
 		    graphics.drawRoundRect(60*(position-t.getWorkingDays()+1), 25-(10+12*(t.getRelevance()+1))/2,
 		    		55*t.getWorkingDays()-5, 10+12*(t.getRelevance()+1), 10*(t.getRelevance()+1), 10*(t.getRelevance()+1));
@@ -107,7 +107,7 @@ public class TaskPanel extends JPanel{
 			    graphics.setColor(t.getColor().brighter());
 			    graphics.fillRoundRect(60*(position-t.getWorkingDays()+1),25-(10+12*(t.getRelevance()+1))/2,
 			    		55*t.getWorkingDays()-5, 10+12*(t.getRelevance()+1), 10*(t.getRelevance()+1), 10*(t.getRelevance()+1));
-			    graphics.setColor(t.getContext());
+			    graphics.setColor(t.getContext().getColor());
 			    graphics.setStroke(new BasicStroke((float)3));
 			    graphics.drawRoundRect(60*(position-t.getWorkingDays()+1), 25-(10+12*(t.getRelevance()+1))/2,
 			    		55*t.getWorkingDays()-5, 10+12*(t.getRelevance()+1), 10*(t.getRelevance()+1), 10*(t.getRelevance()+1));
