@@ -790,6 +790,7 @@ public class GUIBase {
 					{
 						String[] contenido = admin.SugerenciaUrgencia();
 						JDialog Mostrar = new JDialog(frame,"Tareas Urgentes");
+						Mostrar.setVisible(true);
 						Mostrar.setSize(500,500);
 						Mostrar.setLocation(300,300);
 						JPanel pa = new JPanel();
@@ -1641,7 +1642,7 @@ public class GUIBase {
 					WhiteBase2.repaint();
 					WhiteBase.revalidate();
 					WhiteBase.repaint();
-				}
+				}		
 				else if(selectedProyect!=null)
 				{
 					selectedProyect.setDescription(textArea_1.getText());
