@@ -63,6 +63,7 @@ public class NodeButton extends JButton implements ActionListener {
 	   // the background.
 	// This allows us to paint a round background.
 	    setContentAreaFilled(false);
+	    
 	  }
 
 	// Paint the round background and label.
@@ -84,17 +85,44 @@ public class NodeButton extends JButton implements ActionListener {
 
 
 	         //Draws the rounded opaque panel with borders.
-	         int prueba= (this.getWidth()-width)/2;
-	         graphics.setColor(getBackground());
-	         graphics.fillRoundRect((this.getWidth()-width)/2, (this.getHeight()-height)/2, width, 
-	         height, arcs.width, arcs.height);
-	         graphics.setColor(task.getContext().getColor());
-	         BasicStroke bs3 = new BasicStroke((float) 3.5);
-	         graphics.setStroke(bs3);
-	         graphics.drawRoundRect((this.getWidth()-width)/2, (this.getHeight()-height)/2, width , 
-	 		        height, arcs.width, arcs.height);
-	         graphics.setStroke(new BasicStroke(strokeSize));
-	         if(task.getState()!=State.Active)
+	         if(task.getState()!=State.Finished)
+	         {
+		         graphics.setColor(getBackground());
+		         graphics.fillRoundRect((this.getWidth()-width)/2, (this.getHeight()-height)/2, width, 
+		         height, arcs.width, arcs.height);
+		         setForeground(task.getContext().getColor());
+		         graphics.setColor(task.getContext().getColor());
+		         BasicStroke bs3 = new BasicStroke((float) 3.5);
+		         graphics.setStroke(bs3);
+		         graphics.drawRoundRect((this.getWidth()-width)/2, (this.getHeight()-height)/2, width , 
+		 		        height, arcs.width, arcs.height);
+		         graphics.setStroke(new BasicStroke(strokeSize));
+	         }
+	         if(task.getState()==State.Finished)
+	         {
+	        	 
+	        	 int red=getBackground().getRed();
+	        	 int blue=getBackground().getBlue();
+	        	 int green=getBackground().getGreen();
+	        	 setBackground(new Color(red,green,blue,99));
+	        	 
+	        	 int rc = getForeground().getRed();
+	        	 int gc = getForeground().getGreen();
+	        	 int bc = getForeground().getBlue();
+	        	 setForeground(new Color(rc,gc,bc,20));
+	        	 
+	        	 graphics.setColor(getBackground());
+	        	 graphics.fillRoundRect((this.getWidth()-width)/2, (this.getHeight()-height)/2, width, 
+	      		         height, arcs.width, arcs.height);
+	        	 graphics.setColor(getForeground());
+	        	 graphics.setStroke(new BasicStroke(strokeSize));
+	        	 graphics.drawRoundRect((this.getWidth()-width)/2, (this.getHeight()-height)/2, width , 
+			 		        height, arcs.width, arcs.height);
+			     
+	        	 
+	        	 
+	         }
+	         else if(task.getState()!=State.Active)
 	         {
 		        if(task.getState()==State.Delayed)
 		        	 graphics.setColor(new Color(210,0,0));
@@ -106,7 +134,7 @@ public class NodeButton extends JButton implements ActionListener {
 		        		height+6, height/5
 		        		, height/5);
 	         }
-
+	         setToolTipText(task.getDescription());
 	         super.paintComponent(g);
 	    }
 	  }
@@ -119,6 +147,7 @@ public class NodeButton extends JButton implements ActionListener {
 			this.repaint();
 			this.task.setChange(false);
 			task.isCheck(0);
+			setToolTipText(task.getDescription());
 		}
 	}
 

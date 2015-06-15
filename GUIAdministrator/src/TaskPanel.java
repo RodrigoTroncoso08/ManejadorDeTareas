@@ -6,15 +6,24 @@ import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Shape;
 import java.awt.Stroke;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.Timer;
 
 import net.miginfocom.swing.MigLayout;
 import backend.Task;
 
 
-public class TaskPanel extends JPanel{
+public class TaskPanel extends JPanel implements ActionListener{
 	
 	Task t;
 	int position;
@@ -24,8 +33,13 @@ public class TaskPanel extends JPanel{
 	public TaskPanel(Task t,int Position, int total) {
 		// TODO Auto-generated constructor stub
 		super();
+		
 		setLayout(new MigLayout());
 		setOpaque(false);
+		Timer clock = new Timer(5000,this); //cada 5 segundos verifica si algun task cambio de estado
+		clock.setRepeats(true);
+		clock.setInitialDelay(1000);
+		clock.start();
 		node = new NodeButton(t.getName(),t);
 		node.setBackground(t.getColor());
 		node.setForeground(t.getContext().getColor());
@@ -33,8 +47,65 @@ public class TaskPanel extends JPanel{
 		add(node, "pos "+Position*60+" 0"+", w 50!,h 50!");
 		this.t=t;
 		this.total = total;
-		t.setWorkingDays(5);
+		if(t.getWorkingDays()==0)
+			t.setWorkingDays(5);
 		position =Position;
+		TaskPanel aux= this;
+		node.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				JDialog ask = new JDialog();
+				JPanel base = new JPanel();
+				base.setBackground(new Color(213,227,254));
+				base.setLayout(null);
+				ask.setContentPane(base);
+				ask.setBounds(500, 300, 200, 150);
+				
+				JLabel workingLabel = new JLabel("Working Days");
+				workingLabel.setForeground(new Color(0,110,141));
+				workingLabel.setBounds(20, 20, 130, 30);
+				base.add(workingLabel);
+				
+				JTextField workingD = new JTextField();
+				workingD.setText(""+t.getWorkingDays());
+				workingD.setForeground(new Color(0,110,141));
+				workingD.setBorder(BorderFactory.createLineBorder(new Color(0,110,141)));
+				workingD.setBounds(100, 20, 80, 30);
+				base.add(workingD);
+				
+				JButton guardar = new JButton("guardar");
+				guardar.setBackground(Color.white);
+				guardar.setForeground(new Color(0,110,141));
+				guardar.setBounds(100, 80, 80, 20);
+				base.add(guardar);
+				guardar.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						// TODO Auto-generated method stub
+						try
+						{
+							t.setWorkingDays(Integer.parseInt(workingD.getText()));
+							aux.revalidate();
+							aux.repaint();
+						}
+						catch(NumberFormatException nfe)
+						{
+							JOptionPane.showMessageDialog(ask, "No es entero");
+						}
+						ask.setVisible(false);
+						ask.dispose();
+					}
+				});
+				ask.getRootPane().setDefaultButton(guardar);
+				ask.setResizable(false);
+				ask.setVisible(true);
+				
+				
+			}
+		});
 		
 		
 	}
@@ -90,7 +161,7 @@ public class TaskPanel extends JPanel{
 	
 	@Override
 	public void repaint() {
-		super.repaint();
+		
 		
 		if(graphics!=null)
 		{
@@ -119,7 +190,14 @@ public class TaskPanel extends JPanel{
 				add(node, "pos "+position*60+" 0"+", w 50!,h 50!");
 			}
 		}
-	
+		super.repaint();
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
+		this.repaint();
 	}
 	
 	

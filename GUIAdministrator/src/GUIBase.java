@@ -69,6 +69,7 @@ public class GUIBase {
 	JPanel GlosaryPanel = new JPanel();
 	private JLabel Titulo;
 	private Task SelectedTask=null;	//importante para poder editar las tareas
+	private Proyect selectedProyect= null;
 	private TimeLinePanel TimeLinePanel;
 	private JScrollPane scrollMainView;
 	private JScrollPane scrollTaskPane;
@@ -110,7 +111,6 @@ public class GUIBase {
 		Proyect p =new Proyect("Miscelaneo");
 		p.setState(State.Delayed);
 		admin.AddProyect(p);
-		admin.AddContext("Miscelaneo");
 		GlosaryPanel.setPreferredSize(new Dimension(GlosaryPanel.getPreferredSize().width,GlosaryPanel.getPreferredSize().height+45));
 	}
 	/**
@@ -175,6 +175,7 @@ public class GUIBase {
 	                		Parreglo.get(n.getTask().getProyectId()).SelectTask(n);
 	                		scrollTaskPane.setViewportView(Parreglo.get(n.getTask().getProyectId()));
 	                		SelectedTask = n.getTask();
+	                		selectedProyect=null;
 	                		DetallarTarea(SelectedTask);
 	                		ProyectName.setText(proyect.getName());
 	                		ProyectName.setForeground(proyect.getColor());
@@ -197,6 +198,7 @@ public class GUIBase {
 	                		Parreglo.get(n2.getTask().getProyectId()).SelectTask(n2);
 	                		scrollTaskPane.setViewportView(Parreglo.get(n2.getTask().getProyectId()));
 	                		SelectedTask = n2.getTask();
+	                		selectedProyect=null;
 	                		DetallarTarea(SelectedTask);
 	                		ProyectName.setText(proyect.getName());
 	                		ProyectName.setForeground(proyect.getColor());
@@ -222,6 +224,9 @@ public class GUIBase {
 		        		scrollTaskPane.setViewportView(Parreglo.get(admin.getProyects().indexOf(proyect)));
 		        		ProyectName.setText(proyect.getName());
                 		ProyectName.setForeground(proyect.getColor());
+                		selectedProyect=proyect;
+                		SelectedTask=null;
+                		DetallarProyecto(PL.pro);
 					}
 				});
 				b_1.shady=false;
@@ -299,6 +304,7 @@ public class GUIBase {
 						public void actionPerformed(ActionEvent e) {
 							// TODO Auto-generated method stub
 							SelectedTask = n3.getTask();
+							selectedProyect=null;
 	                		DetallarTarea(SelectedTask);
 	                		PL.SelectTask(n3);
 						}
@@ -444,7 +450,7 @@ public class GUIBase {
 	        		frame.getContentPane().setComponentZOrder(scrollMainView,2);
 	        		frame.getContentPane().setComponentZOrder(WhiteBase2,1);
 	        		scrollTaskPane.setViewportView(Parreglo.get(0));
-	        		ProyectName.setText(Parreglo.get(0).getName());
+	        		ProyectName.setText(Parreglo.get(0).pro.getName());
             		ProyectName.setForeground(admin.getProyects().get(0).getColor());
 				}
 			});
@@ -472,7 +478,6 @@ public class GUIBase {
 		AddTask.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JDialog Ask = new JDialog (frame,"Nueva Tarea");
-				
 				Ask.setSize(400,380);
 				Ask.setLocation(400, 200);
 				JPanel Paneldialog = new JPanel ();
@@ -481,17 +486,17 @@ public class GUIBase {
 				
 				JLabel NombreTarea = new JLabel("Nombre de la tarea");
 				NombreTarea.setHorizontalAlignment(SwingConstants.CENTER);
-				NombreTarea.setForeground(new Color(0,0,0));
+				NombreTarea.setForeground(new Color(0,110,141));
 				NombreTarea.setFont(new Font("Arial Rounded MT Bold",Font.BOLD,13));
 				NombreTarea.setBounds(10, 10, 200, 50);
 				Paneldialog.add(NombreTarea);
 				
 				JTextField Tnombre = new JTextField();
-				Tnombre.setBorder(null);
+				Tnombre.setBorder(BorderFactory.createLineBorder(new Color(1,110,141),2));
 				Tnombre.setBackground(new Color(255, 255, 255));
 				Tnombre.setHorizontalAlignment(SwingConstants.LEFT);
 				Tnombre.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 13));
-				Tnombre.setForeground(new Color(0,0,0));
+				Tnombre.setForeground(new Color(0,110,141));
 				Tnombre.setBounds(220, 10, 160, 50);
 				
 				Paneldialog.add(Tnombre);
@@ -499,7 +504,7 @@ public class GUIBase {
 				
 				JLabel ProyectoTarea = new JLabel("Proyecto de la tarea");
 				ProyectoTarea.setHorizontalAlignment(SwingConstants.CENTER);
-				ProyectoTarea.setForeground(new Color(0,0,0));
+				ProyectoTarea.setForeground(new Color(0,110,141));
 				ProyectoTarea.setFont(new Font("Arial Rounded MT Bold",Font.BOLD,13));
 				ProyectoTarea.setBounds(10, 70, 200, 50);
 				Paneldialog.add(ProyectoTarea);
@@ -508,7 +513,7 @@ public class GUIBase {
 				Proyectos.setBorder(null);
 				Proyectos.setEditable(false);
 				Proyectos.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 13));
-				Proyectos.setForeground(new Color(0,0,0));
+				Proyectos.setForeground(new Color(213,227,254));
 				ArrayList<String> Listap=admin.ProjectNames();
 				String[] opcionesp = new String[Listap.size()+1];
 				for(int i=0; i<Listap.size();i++)
@@ -523,7 +528,7 @@ public class GUIBase {
 				
 				JLabel ContextoTarea = new JLabel("Contexto de la tarea");
 				ContextoTarea.setHorizontalAlignment(SwingConstants.CENTER);
-				ContextoTarea.setForeground(new Color(0,0,0));
+				ContextoTarea.setForeground(new Color(0,110,141));
 				ContextoTarea.setFont(new Font("Arial Rounded MT Bold",Font.BOLD,13));
 				ContextoTarea.setBounds(10, 130, 200, 50);
 				Paneldialog.add(ContextoTarea);
@@ -532,7 +537,7 @@ public class GUIBase {
 				Contextos.setBorder(null);
 				Contextos.setEditable(false);
 				Contextos.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 13));
-				Contextos.setForeground(new Color(0,0,0));
+				Contextos.setForeground(new Color(213,227,254));
 				ArrayList<String> Listac=admin.getPosibleContext();
 				String[] opcionesc = new String[Listac.size()];
 				for(int i=0; i<Listac.size();i++)
@@ -547,51 +552,51 @@ public class GUIBase {
 				
 				JLabel FechaTarea = new JLabel("Fecha de termino");
 				FechaTarea.setHorizontalAlignment(SwingConstants.CENTER);
-				FechaTarea.setForeground(new Color(0,0,0));
+				FechaTarea.setForeground(new Color(0,110,141));
 				FechaTarea.setFont(new Font("Arial Rounded MT Bold",Font.BOLD,13));
 				FechaTarea.setBounds(10, 190, 200, 50);
 				Paneldialog.add(FechaTarea);
 				
 				JLabel DiaTarea = new JLabel("dia");
 				DiaTarea.setHorizontalAlignment(SwingConstants.CENTER);
-				DiaTarea.setForeground(new Color(0,0,0));
+				DiaTarea.setForeground(new Color(0,110,141));
 				DiaTarea.setFont(new Font("Arial Rounded MT Bold",Font.BOLD,13));
 				DiaTarea.setBounds(220, 220, 30, 25);
 				Paneldialog.add(DiaTarea);
 				JLabel MesTarea = new JLabel("mes");
 				MesTarea.setHorizontalAlignment(SwingConstants.CENTER);
-				MesTarea.setForeground(new Color(0,0,0));
+				MesTarea.setForeground(new Color(0,110,141));
 				MesTarea.setFont(new Font("Arial Rounded MT Bold",Font.BOLD,13));
 				MesTarea.setBounds(260, 220, 30, 25);
 				Paneldialog.add(MesTarea);
 				JLabel AñoTarea = new JLabel("año");
 				AñoTarea.setHorizontalAlignment(SwingConstants.CENTER);
-				AñoTarea.setForeground(new Color(0,0,0));
+				AñoTarea.setForeground(new Color(0,110,141));
 				AñoTarea.setFont(new Font("Arial Rounded MT Bold",Font.BOLD,13));
 				AñoTarea.setBounds(300, 220, 40, 25);
 				Paneldialog.add(AñoTarea);
 				JTextField Tdia = new JTextField();
-				Tdia.setBorder(null);
+				Tdia.setBorder(BorderFactory.createLineBorder(new Color(1,110,141),2));
 				Tdia.setBackground(new Color(255, 255, 255));
 				Tdia.setHorizontalAlignment(SwingConstants.LEFT);
 				Tdia.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 13));
-				Tdia.setForeground(new Color(0,0,0));
+				Tdia.setForeground(new Color(0,110,141));
 				Tdia.setBounds(220, 195, 30, 25);
 				Paneldialog.add(Tdia);
 				JTextField Tmes = new JTextField();
-				Tmes.setBorder(null);
+				Tmes.setBorder(BorderFactory.createLineBorder(new Color(1,110,141),2));
 				Tmes.setBackground(new Color(255, 255, 255));
 				Tmes.setHorizontalAlignment(SwingConstants.LEFT);
 				Tmes.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 13));
-				Tmes.setForeground(new Color(0,0,0));
+				Tmes.setForeground(new Color(0,110,141));
 				Tmes.setBounds(260, 195, 30, 25);
 				Paneldialog.add(Tmes);
 				JTextField Taño = new JTextField();
-				Taño.setBorder(null);
+				Taño.setBorder(BorderFactory.createLineBorder(new Color(1,110,141),2));
 				Taño.setBackground(new Color(255, 255, 255));
 				Taño.setHorizontalAlignment(SwingConstants.LEFT);
 				Taño.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 13));
-				Taño.setForeground(new Color(0,0,0));
+				Taño.setForeground(new Color(0,110,141));
 				Taño.setBounds(300, 195, 40, 25);
 				Paneldialog.add(Taño);
 				
@@ -600,7 +605,7 @@ public class GUIBase {
 				Importancia.setBorder(null);
 				Importancia.setEditable(false);
 				Importancia.setFont(new Font("Arial Rounded MT Bold", Font.BOLD, 13));
-				Importancia.setForeground(new Color(0,0,0));
+				Importancia.setForeground(new Color(213,227,254));
 				String[] bla = new String[3];
 				bla[0]="Normal";
 				bla[1]="Importante";
@@ -612,9 +617,10 @@ public class GUIBase {
 				Paneldialog.add(Importancia);
 				JLabel imp = new JLabel("Importancia");
 				imp.setHorizontalAlignment(SwingConstants.CENTER);
-				imp.setForeground(new Color(0,0,0));
+				imp.setForeground(new Color(0,110,141));
 				imp.setFont(new Font("Arial Rounded MT Bold",Font.BOLD,13));
-				imp.setBounds(10, 250, 200, 50);
+				imp.setBounds(10, 250, 200, 
+						50);
 				Paneldialog.add(imp);
 				
 				RoundedButton okbotom = new RoundedButton("OK");
@@ -667,15 +673,11 @@ public class GUIBase {
 								catch(Exception ex)
 								{
 									JOptionPane.showMessageDialog(null, "Recuerde ingresar una fecha cuando pueda",	"Recordatorio de Fecha", JOptionPane.INFORMATION_MESSAGE);
-									Context context = admin.AddContext((String)Contextos.getSelectedItem());
-									t.setContext(context);
-									context.AddTask(t);
 									t.setRelevance(Importancia.getSelectedIndex());
 									Calendar c = Calendar.getInstance();
 									c.clear();
 									c.set(10000, 0, 0);
 									t.setDeadline(c);
-									
 									Ask.setVisible(false);
 									Ask.dispose();
 								}
@@ -708,6 +710,7 @@ public class GUIBase {
 				                		Parreglo.get(n.getTask().getProyectId()).SelectTask(n);
 				                		scrollTaskPane.setViewportView(Parreglo.get(n.getTask().getProyectId()));
 				                		SelectedTask = n.getTask();
+				                		selectedProyect=null;
 				                		DetallarTarea(SelectedTask);
 				                		ProyectName.setText(Parreglo.get(n.getTask().getProyectId()).pro.getName());
 				                		ProyectName.setForeground(Parreglo.get(n.getTask().getProyectId()).pro.getColor());
@@ -728,6 +731,7 @@ public class GUIBase {
 				                		Parreglo.get(n2.getTask().getProyectId()).SelectTask(n2);
 				                		scrollTaskPane.setViewportView(Parreglo.get(n2.getTask().getProyectId()));
 				                		SelectedTask = n2.getTask();
+				                		selectedProyect=null;
 				                		DetallarTarea(SelectedTask);
 				                		ProyectName.setText(Parreglo.get(n2.getTask().getProyectId()).pro.getName());
 				                		ProyectName.setForeground(Parreglo.get(n.getTask().getProyectId()).pro.getColor());
@@ -749,8 +753,9 @@ public class GUIBase {
 				okbotom.setBackground(Color.WHITE);
 				okbotom.setBounds(310,305 ,70 ,30 );
 				Paneldialog.add(okbotom);
-				
+				Paneldialog.setBackground(new Color(213,227,254));
 				Ask.getContentPane().add(Paneldialog);
+				Ask.setResizable(false);
 				Ask.setVisible(true);
 					
 
@@ -771,7 +776,7 @@ public class GUIBase {
 			public void actionPerformed(ActionEvent e)
 			{
 				JDialog UrgenciaOPlan = new JDialog (frame,"criterio de sugerencia");
-				UrgenciaOPlan.setSize(325,100);
+				UrgenciaOPlan.setSize(325,150);
 				UrgenciaOPlan.setLocation(400, 350);
 				JPanel Paneldia = new JPanel();
 				Paneldia.setLayout(null);
@@ -883,6 +888,7 @@ public class GUIBase {
 				P.setBackground(Color.WHITE);
 				Paneldia.add(P);
 				Paneldia.add(U);
+				Paneldia.setBackground(new Color(210,227,253));
 				UrgenciaOPlan.getContentPane().add(Paneldia);
 				UrgenciaOPlan.setVisible(true);
 			}
@@ -894,7 +900,6 @@ public class GUIBase {
 		Suggest.setForeground(new Color(153, 204, 255));
 		MenuPanel.add(Suggest);
 
-		
 		
 		JLabel lblNewLabel = new JLabel("Menu");
 		lblNewLabel.setOpaque(true);
@@ -912,8 +917,8 @@ public class GUIBase {
 			{
 				JDialog AddProject = new JDialog(frame,"Nuevo Proyecto");
 				
-				AddProject.setSize(320, 150);
-				AddProject.setLocation(300,300);
+				AddProject.setSize(320, 230);
+				AddProject.setLocation(500,300);
 				JPanel panelsin = new JPanel();
 				panelsin.setBounds(0, 0, 0, 0);
 				panelsin.setLayout(null);
@@ -921,6 +926,8 @@ public class GUIBase {
 				JTextField Pnombre = new JTextField();
 				Pnombre.setText("Nombre Proyecto");
 				Pnombre.setBounds(20, 20, 200, 50);
+				Pnombre.setForeground(new Color(0,111,141));
+				Pnombre.setBorder(BorderFactory.createLineBorder(new Color(0,110,141)));
 				Pnombre.addMouseListener(new MouseListener() {
 					
 					@Override
@@ -955,6 +962,29 @@ public class GUIBase {
 					}
 				});
 				
+				JTextField dia = new JTextField();
+				dia.setBounds(110, 90, 30, 20);
+				dia.setForeground(new Color(0,111,141));
+				dia.setBorder(BorderFactory.createLineBorder(new Color(0,110,141)));
+				JTextField mes = new JTextField();
+				mes.setBounds(150, 90, 30, 20);
+				mes.setForeground(new Color(0,111,141));
+				mes.setBorder(BorderFactory.createLineBorder(new Color(0,110,141)));
+				JTextField ano = new JTextField();
+				ano.setBounds(190, 90, 30, 20);
+				ano.setForeground(new Color(0,111,141));
+				ano.setBorder(BorderFactory.createLineBorder(new Color(0,110,141)));
+				AddProject.add(dia);
+				AddProject.add(mes);
+				AddProject.add(ano);
+				
+				JLabel fecha= new JLabel("Fecha :");
+				fecha.setBounds(20, 87, 70, 30);
+				fecha.setBackground(new Color(210,227,254));
+				fecha.setForeground(new Color(0,111,141));
+				fecha.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 16));
+				AddProject.add(fecha);
+				
 				RoundedButton okbotom = new RoundedButton("OK");
 				AddProject.getRootPane().setDefaultButton(okbotom);
 				okbotom.setVerticalAlignment(SwingConstants.BOTTOM);
@@ -964,6 +994,22 @@ public class GUIBase {
 						///comunicacion backend
 						Proyect p = new Proyect(Pnombre.getText());
 						p.setState(State.Active);
+						try{
+							Calendar c = Calendar.getInstance();
+							c.clear();
+							if(Integer.parseInt(mes.getText())>12|| Integer.parseInt(dia.getText())>31)
+								throw new Exception();
+							c.set(Integer.parseInt(ano.getText()), Integer.parseInt(mes.getText())-1, Integer.parseInt(dia.getText()));
+							p.setDeadline(c);
+							}
+							catch(Exception ex)
+							{
+								JOptionPane.showMessageDialog(null, "Recuerde ingresar una fecha cuando pueda",	"Recordatorio de Fecha", JOptionPane.INFORMATION_MESSAGE);
+								Calendar c = Calendar.getInstance();
+								c.clear();
+								c.set(10000, 0, 0);
+								p.setDeadline(c);
+							}
 						if(admin.AddProyect(p))
 						{
 						////Agregar a interfaz
@@ -1011,6 +1057,9 @@ public class GUIBase {
 		                		scrollTaskPane.setViewportView(PL);
 		                		ProyectName.setText(PL.pro.getName());
 		                		ProyectName.setForeground(PL.pro.getColor());
+		                		selectedProyect=PL.pro;
+		                		DetallarProyecto(PL.pro);
+		                		SelectedTask=null;
 							}
 						});
 						
@@ -1056,10 +1105,11 @@ public class GUIBase {
 				okbotom.setForeground(new Color(153, 204, 255));
 				okbotom.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 13));
 				okbotom.setBackground(Color.WHITE);
-				okbotom.setBounds(240, 20, 50, 50);
+				okbotom.setBounds(240, 35, 50, 30);
 				
 				panelsin.add(Pnombre);
 				panelsin.add(okbotom);
+				panelsin.setBackground(new Color(210,227,254));
 				AddProject.getContentPane().add(panelsin);
 				AddProject.setVisible(true);
 			}
@@ -1093,6 +1143,8 @@ public class GUIBase {
 				JTextField Cnombre = new JTextField();
 				Cnombre.setText("Nombre Contexto");
 				Cnombre.setBounds(20, 20, 200, 50);
+				Cnombre.setBorder(BorderFactory.createLineBorder(new Color(0,111,141)));
+				Cnombre.setForeground(new Color(0,110,141));
 				Cnombre.addMouseListener(new MouseListener() {
 					
 					@Override
@@ -1187,6 +1239,7 @@ public class GUIBase {
 		                		scrollTaskPane.setViewportView(PL);
 		                		ProyectName.setText(PL.context.getName());
 		                		ProyectName.setForeground(PL.context.getColor());
+		                		
 							}
 						});
 						GlosaryPanel.add(cButton);
@@ -1199,17 +1252,17 @@ public class GUIBase {
 				okbotom.setForeground(new Color(153, 204, 255));
 				okbotom.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 13));
 				okbotom.setBackground(Color.WHITE);
-				okbotom.setBounds(240, 20, 50, 50);
+				okbotom.setBounds(240, 35, 50, 30);
 				
 				panelsin.add(Cnombre);
 				panelsin.add(okbotom);
+				panelsin.setBackground(new Color(210,227,253));
 				AddContext.getContentPane().add(panelsin);
 				AddContext.setVisible(true);
 			}
 		});
 		
-		JLabel GlosayLabel = new JLabel(""
-				+ "");
+		JLabel GlosayLabel = new JLabel("Glosary");
 		GlosayLabel.setOpaque(true);
 		GlosayLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		GlosayLabel.setForeground(new Color(255, 255, 255));
@@ -1319,10 +1372,12 @@ public class GUIBase {
 			scrollTaskPane.setViewportView(PL_1);
 			PL_1.setBounds(0, 0, 440, 545);
 			
-			Context c = admin.AddContext("Micelaneo");
+			
+			Context c = admin.AddContext("Miscelaneo");
 			ProjectLine context = new ProjectLine(null, c);
 			Parreglo.add(context);
 			ContextButton cB = new ContextButton(c);
+			cB.setBounds(10, 5+GlosaryPanel.getComponentCount()*45, 200, 35);
 			GlosaryPanel.add(cB);
 			cB.addMouseListener(new MouseListener() {
 				
@@ -1455,10 +1510,20 @@ public class GUIBase {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				SelectedTask.getDeadline().add(Calendar.DATE, 1);
-				DayEdit.setText(SelectedTask.getDeadline().get(Calendar.DATE)+"");
-				MonthEdit.setText((SelectedTask.getDeadline().get(Calendar.MONTH)+1)+"");
-				YearEdit.setText(""+SelectedTask.getDeadline().get(Calendar.YEAR));
+				if(SelectedTask!=null)
+				{
+					SelectedTask.getDeadline().add(Calendar.DATE, 1);
+					DayEdit.setText(SelectedTask.getDeadline().get(Calendar.DATE)+"");
+					MonthEdit.setText((SelectedTask.getDeadline().get(Calendar.MONTH)+1)+"");
+					YearEdit.setText(""+SelectedTask.getDeadline().get(Calendar.YEAR));
+				}
+				else
+				{
+					selectedProyect.getDeadline().add(Calendar.DATE, 1);
+					DayEdit.setText(selectedProyect.getDeadline().get(Calendar.DATE)+"");
+					MonthEdit.setText((selectedProyect.getDeadline().get(Calendar.MONTH)+1)+"");
+					YearEdit.setText(""+selectedProyect.getDeadline().get(Calendar.YEAR));
+				}
 				
 			}
 		});
@@ -1473,10 +1538,21 @@ public class GUIBase {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				SelectedTask.getDeadline().add(Calendar.DATE, 7);
-				DayEdit.setText(SelectedTask.getDeadline().get(Calendar.DATE)+"");
-				MonthEdit.setText((SelectedTask.getDeadline().get(Calendar.MONTH)+1)+"");
-				YearEdit.setText(""+SelectedTask.getDeadline().get(Calendar.YEAR));
+				
+				if(SelectedTask!=null)
+				{
+					SelectedTask.getDeadline().add(Calendar.DATE, 7);
+					DayEdit.setText(SelectedTask.getDeadline().get(Calendar.DATE)+"");
+					MonthEdit.setText((SelectedTask.getDeadline().get(Calendar.MONTH)+1)+"");
+					YearEdit.setText(""+SelectedTask.getDeadline().get(Calendar.YEAR));
+				}
+				else
+				{
+					selectedProyect.getDeadline().add(Calendar.DATE, 7);
+					DayEdit.setText(selectedProyect.getDeadline().get(Calendar.DATE)+"");
+					MonthEdit.setText((selectedProyect.getDeadline().get(Calendar.MONTH)+1)+"");
+					YearEdit.setText(""+selectedProyect.getDeadline().get(Calendar.YEAR));
+				}
 				
 			}
 		});
@@ -1537,23 +1613,57 @@ public class GUIBase {
 			public void actionPerformed (ActionEvent e)
 			{
 				//SelectedTask.setContext(admin.ContColor.get(ctx_1.getSelectedItem().toString()));		
-				if(SelectedTask==null)
-					return;
-				SelectedTask.setRelevance(impo_1.getSelectedIndex());
-				SelectedTask.setDescription(textArea_1.getText());
-				SelectedTask.setProgress(slider_1.getValue());
-				SelectedTask.getDeadline().clear();
-				SelectedTask.getDeadline().set(Integer.parseInt(YearEdit.getText()), Integer.parseInt(MonthEdit.getText())-1, Integer.parseInt(DayEdit.getText()));
-				SelectedTask.CheckDate();
-				SelectedTask.setName(lblNombreTarea_1.getText());
-				Context context = admin.getPosibleContextColor().get(admin.getPosibleContext().indexOf(ctx_1.getSelectedItem()));
-				SelectedTask.setContext(context);
-				context.AddTask(SelectedTask);
-				WhiteBase2.revalidate();
-				WhiteBase2.repaint();
-				WhiteBase.revalidate();
-				WhiteBase.repaint();
-				
+				if(SelectedTask!=null)
+				{
+					SelectedTask.setRelevance(impo_1.getSelectedIndex());
+					SelectedTask.setDescription(textArea_1.getText());
+					SelectedTask.setProgress(slider_1.getValue());
+					if(chckbxTareaLista.isSelected())
+					{
+						SelectedTask.setState(State.Finished);
+						SelectedTask.setProgress(100);
+						slider_1.setValue(100);
+						
+					}
+					SelectedTask.getDeadline().clear();
+					SelectedTask.getDeadline().set(Integer.parseInt(YearEdit.getText()), Integer.parseInt(MonthEdit.getText())-1, Integer.parseInt(DayEdit.getText()));
+					SelectedTask.CheckDate();
+					SelectedTask.setName(lblNombreTarea_1.getText());
+					Context context = admin.getPosibleContextColor().get(admin.getPosibleContext().indexOf(ctx_1.getSelectedItem()));
+					
+					if(context!=SelectedTask.getContext()){
+						SelectedTask.getContext().getTasks().remove(SelectedTask);
+						SelectedTask.setContext(context);
+						context.AddTask(SelectedTask);
+					}
+					SelectedTask.setChange(true);
+					WhiteBase2.revalidate();
+					WhiteBase2.repaint();
+					WhiteBase.revalidate();
+					WhiteBase.repaint();
+				}
+				else if(selectedProyect!=null)
+				{
+					selectedProyect.setDescription(textArea_1.getText());
+					selectedProyect.setProgress(slider_1.getValue());
+					if(chckbxTareaLista.isSelected())
+					{
+						selectedProyect.setState(State.Finished);
+						selectedProyect.setProgress(100);
+						slider_1.setValue(100);
+						
+					}
+					if(selectedProyect.getDeadline()!=null)
+					{
+						selectedProyect.getDeadline().clear();
+						selectedProyect.getDeadline().set(Integer.parseInt(YearEdit.getText()), Integer.parseInt(MonthEdit.getText())-1, Integer.parseInt(DayEdit.getText()));
+					}
+					selectedProyect.setName(lblNombreTarea_1.getText());
+					WhiteBase2.revalidate();
+					WhiteBase2.repaint();
+					WhiteBase.revalidate();
+					WhiteBase.repaint();
+				}
 				
 				//faltan las fechas tambien
 				//hay que hacer un try and catcha para las fechas y para las horas
@@ -1631,7 +1741,7 @@ public class GUIBase {
 		
 		System.out.println(System.getProperty("user.dir"));
 		
-		
+		scrollTime.setVisible(false);
 		
 		
 		
@@ -1661,12 +1771,58 @@ public class GUIBase {
 	    	ctx.setSelectedItem(Listac.get(i));
 	    	//diccionario para pasar del color del contexto a un string reconocible por el combobox
 	    	Description.setText(t.getDescription());
-	    	lblNombreTarea.setText(t.getName());
+	    	if(t.getName().equals(""))
+	    	{
+	    		lblNombreTarea.setText("Agregar Nombre");
+	    		lblNombreTarea.getCaret().setVisible(true);
+	    	}
+	    	else
+	    		lblNombreTarea.setText(t.getName());
 	    	//poner las fechas y horas en orden tambien
 	    	slider.setValue(t.getProgress());
 	    	DayEdit.setText(t.getDeadline().get(Calendar.DATE)+"");
 	    	MonthEdit.setText((t.getDeadline().get(Calendar.MONTH)+1)+"");
 	    	YearEdit.setText(""+t.getDeadline().get(Calendar.YEAR));
+	    	
+	    }
+
+		private void DetallarProyecto(Proyect p)
+	    {
+	    	//al seleccionar una tarea muestra sus detalles en el panel de TaskDetail
+			JComboBox impo =(JComboBox)TaskDetail.getComponent(3);
+			JComboBox ctx =(JComboBox)TaskDetail.getComponent(2);
+			JTextField lblNombreTarea = (JTextField)TaskDetail.getComponent(1);
+			JTextArea Description = (JTextArea)TaskDetail.getComponent(0);
+			JSlider slider = (JSlider)TaskDetail.getComponent(6);
+			JTextField DayEdit = (JTextField)TaskDetail.getComponent(12);
+			JTextField MonthEdit = (JTextField)TaskDetail.getComponent(13);
+			JTextField YearEdit = (JTextField)TaskDetail.getComponent(14);
+			
+			
+			ArrayList<String> Listac=admin.getPosibleContext();
+			String[] opcionesc = new String[Listac.size()+1];
+			for(int i=0; i<Listac.size();i++)
+			{
+				opcionesc[i]=Listac.get(i);
+			}
+			
+	    	//diccionario para pasar del color del contexto a un string reconocible por el combobox
+	    	Description.setText(p.getDescription());
+	    	if(p.getName().equals(""))
+	    	{
+	    		lblNombreTarea.setText("Agregar Nombre");
+	    		lblNombreTarea.getCaret().setVisible(true);
+	    	}
+	    	else
+	    		lblNombreTarea.setText(p.getName());
+	    	//poner las fechas y horas en orden tambien
+	    	slider.setValue(p.getProgress());
+	    	if(p.getDeadline()!=null)
+	    	{
+		    	DayEdit.setText(p.getDeadline().get(Calendar.DATE)+"");
+		    	MonthEdit.setText((p.getDeadline().get(Calendar.MONTH)+1)+"");
+		    	YearEdit.setText(""+p.getDeadline().get(Calendar.YEAR));
+	    	}
 	    	
 	    }
 		

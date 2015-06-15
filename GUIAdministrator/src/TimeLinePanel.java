@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -19,13 +20,15 @@ import backend.Task;
 import net.miginfocom.swing.MigLayout;
 
 import java.awt.BasicStroke;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
 import java.util.ArrayList;
 import java.util.Calendar;
 
 
-public class TimeLinePanel extends JPanel {
+public class TimeLinePanel extends JPanel implements ActionListener {
 
 	
 	Calendar initial;
@@ -35,10 +38,20 @@ public class TimeLinePanel extends JPanel {
 	JPanel fechas = new JPanel();
 	JScrollPane scrollTask;
 	Administrator Admin;
+	ArrayList<Task> tasks;
 	public TimeLinePanel(Administrator admin)
 	{
 		super();
+		
+		Timer clock = new Timer(5000,this); //cada 5 segundos verifica si algun task cambio de estado
+		clock.setRepeats(true);
+		clock.setInitialDelay(1000);
+		clock.start();
+		
+		
 		Admin = admin;
+		tasks=Admin.AllTasks();
+		
 		setSize(this.getPreferredSize().width, this.getPreferredSize().height);
 		setOpaque(false);
 		JSeparator separator_1 = new JSeparator();
@@ -132,6 +145,40 @@ public class TimeLinePanel extends JPanel {
 		fScroll.setBorder(BorderFactory.createEmptyBorder());
 		fScroll.setViewportBorder(BorderFactory.createEmptyBorder());
 		
+		
+		
+		String[] periodos = {"Hoy","3 dias","Semana","Todo"};
+		JComboBox<String> periodoCombo = new JComboBox<String>(periodos);
+		periodoCombo.setSelectedItem("Todo");
+		periodoCombo.setBounds(500, 520, 80, 30);
+		this.add(periodoCombo);
+		this.setComponentZOrder(periodoCombo, 0);
+		
+		JButton mostrar = new JButton("Mostrar");
+		mostrar.addActionListener(new ActionListener() {	
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				TPanel.removeAll();
+				taskNames.removeAll();
+				fechas.removeAll();
+				if(periodoCombo.getSelectedItem().equals("Hoy"))
+					tasks=Admin.TodayTasks();
+				else if(periodoCombo.getSelectedItem().equals("3 dias"))
+					tasks=Admin.ThreeDayTasks();
+				else if(periodoCombo.getSelectedItem().equals("Semana"))
+					tasks=Admin.WeekTasks();
+				else
+					tasks=Admin.AllTasks();
+				for(Task t:tasks)
+				{
+					AddTasks(t);
+				}
+			}
+		});
+		mostrar.setBounds(600, 520, 80, 30);
+		this.add(mostrar);
+		this.setComponentZOrder(mostrar, 0);
 		//se conectan los scrollbars
 		scrollTask.getVerticalScrollBar().addAdjustmentListener(new AdjustmentListener() {
 			
@@ -176,7 +223,8 @@ protected void paintComponent(Graphics g) {
 public void AddTasks(Task t){
 	
 	
-	ArrayList<Task> tasks = Admin.AllTasks();
+	if(!tasks.contains(t))
+		return;
 	int total;
 	if(tasks.size()==0)
 		return;
@@ -266,6 +314,56 @@ public void AddTasks(Task t){
 	fechas.setPreferredSize(new Dimension(Math.max(65*(total+5), 628),50));
 	this.revalidate();
 	this.repaint();
+}
+
+public void removeTask(Task t)
+{
+	if(!tasks.contains(t))	
+		return;
+	int index = tasks.indexOf(t)+1;
+	TaskPanel taskP;
+	for(int i=1; i<TPanel.getComponentCount();i++)
+	{
+		taskP= (TaskPanel)TPanel.getComponent(i);
+		if(taskP.t.equals(t))
+		{
+			TPanel.remove(taskP);
+			break;
+		}
+	}
+	
+	for(int i=index; i<TPanel.getComponentCount()-1;i++)
+	{
+		TaskPanel task = (TaskPanel)TPanel.getComponent(index);
+		TPanel.remove(TPanel.getComponent(index));
+		String constr = "cell 1 "+(i-1)+",grow, h 55!";   /// lo mueve a la siguiente posicion
+		TPanel.add(task, constr);	
+		
+		JLabel tName = (JLabel)taskNames.getComponent(index+1);
+		taskNames.remove(taskNames.getComponent(index+1));
+		constr = "cell 0 "+(i)+",grow, h 55!, w 100!";
+		taskNames.add(tName,constr);
+	}
+	
+	this.revalidate();
+	this.repaint();
+}
+
+
+@Override
+public void actionPerformed(ActionEvent arg0) {
+	// TODO Auto-generated method stub
+	
+	for(Task t: tasks)
+	{
+		if(t.getChange())
+		{
+			t.isCheck(2);
+			removeTask(t);
+			AddTasks(t);
+			
+		}
+	}
 }
 
 

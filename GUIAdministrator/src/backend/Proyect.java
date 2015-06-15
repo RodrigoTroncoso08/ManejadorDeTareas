@@ -80,7 +80,7 @@ public class Proyect implements java.io.Serializable{
 		ArrayList<Task> TodayTasks = new ArrayList<Task>();
 		for(Task t: Tasks)
 		{
-			if(DateTimeComparator.getDateOnlyInstance().compare(new Date(), t)==0)
+			if(DateTimeComparator.getDateOnlyInstance().compare(new Date(), t.Deadline)==0)
 				TodayTasks.add(t);
 			
 		}
@@ -185,5 +185,8 @@ public class Proyect implements java.io.Serializable{
 	public void setProgress(int progress) {
 		Progress = progress;
 	}
+
+
 }
+
 

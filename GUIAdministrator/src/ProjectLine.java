@@ -41,6 +41,7 @@ public class ProjectLine extends JPanel implements ActionListener{
 	protected int Current;
 	protected int strokeSize=2;
 	protected Dimension arcs = new Dimension(10, 10);
+	private Graphics2D graph;
 	
 	public ProjectLine(Proyect p,Context c) {
 		
@@ -216,7 +217,7 @@ public class ProjectLine extends JPanel implements ActionListener{
 	    super.paintComponent(g);
 	    int height = getHeight();
 	    Graphics2D graphics = (Graphics2D) g;
-
+	    graph=(Graphics2D)g;
 	    graphics.setColor(new Color(212, 227, 252));
 	    
 	    graphics.fillRoundRect(193, 0, 140, 
@@ -224,7 +225,11 @@ public class ProjectLine extends JPanel implements ActionListener{
 	    graphics.setColor(new Color(0,141,177));
 	    if(pro!=null)
 	    {
-		    if(pro.getState()==State.Delayed){
+	    	if(pro.getState()==State.Finished)
+	    	{
+	    		graphics.setColor(new Color(0,141,177,50));
+	    	}
+	    	else if(pro.getState()==State.Delayed){
 		    	 graphics.setColor(Color.RED);strokeSize=2;}
 		    else if(pro.getState()==State.Pause){
 		   	 graphics.setColor(Color.YELLOW);strokeSize=2;}
@@ -235,7 +240,11 @@ public class ProjectLine extends JPanel implements ActionListener{
 	    		,height, arcs.width, arcs.height);
 	    
 	    graphics.setColor(new Color(188,211,250));
-	    
+	    if(pro!=null)
+	    if(pro.getState()==State.Finished)
+    	{
+    		graphics.setColor(new Color(188,211,250,50));
+    	}
 	    graphics.fillRoundRect(193+strokeSize, strokeSize+Current*60, 140, 
 		60, 5-2*strokeSize,5);
 	    
@@ -291,30 +300,39 @@ public class ProjectLine extends JPanel implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		if(context!=null)
-			return;
-		for(Task t:pro.getTasks())
+		
+		if(context==null)
 		{
-			if(t.getState()==State.Delayed)
+			if(pro.getState()==State.Finished)
 			{
-				pro.setState(State.Delayed);
 				this.repaint();
 				return;
 			}
-			else if(t.getState()==State.Pause)
+			for(Task t:pro.getTasks())
 			{
-				pro.setState(State.Pause);
+				if(t.getState()==State.Delayed)
+				{
+					pro.setState(State.Delayed);
+					this.repaint();
+					return;
+				}
+				else if(t.getState()==State.Pause)
+				{
+					pro.setState(State.Pause);
+				}
+			}
+			if(pro.getState()==State.Pause)
+			{
+				this.repaint();
+			}
+			else
+			{
+				pro.setState(State.Active);
+				this.repaint();
 			}
 		}
-		if(pro.getState()==State.Pause)
-		{
-			this.repaint();
-		}
 		else
-		{
-			pro.setState(State.Active);
-			this.repaint();
-		}
+			repaint();
 	}
 }
 

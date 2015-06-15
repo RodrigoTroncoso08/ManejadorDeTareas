@@ -39,9 +39,10 @@ public class Task implements Comparable<Task>, java.io.Serializable{
 	public Task(String name) //pide lo menos posible para crear una tarea
 	{                        //dasen: le saque lo de la fecha, que en realidad lo puede pedir despues
 		Name=name;
-		check = new Boolean[2];  //2 controles, en nodebutton y en guibase
+		check = new Boolean[3];  //3 controles, en nodebutton y en guibase y en timeline
 		check[0]=false;
 		check[1]=false;
+		check[2]=false;
 		state= State.Active;
 		Change = false;
 		Thread clock = new Thread(new Runnable() {
@@ -187,7 +188,7 @@ public class Task implements Comparable<Task>, java.io.Serializable{
 		//si una tarea le quedan muchos WorkingDays para terminarse, entonces el logaritmo es mas grande y la urgencia mas cercana a 0
 		
 		//el unico motivo por el cual es un metodo double es para poder cortarlo en los try and catch. #MalasPracticas
-		if(state!=State.Active)
+		if(state!=State.Active&&state!=State.Finished)
 		{
 			Urgency=1.0;
 			return Urgency;
@@ -234,6 +235,8 @@ public class Task implements Comparable<Task>, java.io.Serializable{
 	public void CheckDate()
 	{
 		Calendar c = Calendar.getInstance();
+		if(state==State.Finished)
+			return;
 		if(c.compareTo(Deadline)>0)
 		{
 			state= State.Delayed;

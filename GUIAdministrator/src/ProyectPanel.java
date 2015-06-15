@@ -282,11 +282,37 @@ protected void paintComponent(Graphics g) {
 
     //Draws the rounded opaque panel with borders.
     graphics.setColor(getBackground());
-    
+    if(proyect.getState()==State.Finished)
+    {
+    	int rc = getBackground().getRed();
+   	 int gc = getBackground().getGreen();
+   	 int bc = getBackground().getBlue();
+   	 setBackground(new Color(rc,gc,bc,30));
+   	 graphics.setColor(getBackground());
+   	 
+    }
     graphics.fillRoundRect(0, 45, width - shadowGap, 
 	height - shadowGap-67, arcs.width, arcs.height);
     graphics.setColor(getForeground());
-    if(proyect.getState()==State.Delayed){
+    
+    
+    if(proyect.getState()==State.Finished)
+    {
+    	int rc = getForeground().getRed();
+   	 int gc = getForeground().getGreen();
+   	 int bc = getForeground().getBlue();
+   	 setForeground(new Color(rc,gc,bc,30));
+   	 graphics.setColor(getForeground());
+   	 
+ 	int rl = ProyectLabel.getForeground().getRed();
+  	 int gl = ProyectLabel.getForeground().getGreen();
+  	 int bl = ProyectLabel.getForeground().getBlue();
+  	 ProyectLabel.setForeground(new Color(rl,gl,bl,50));
+  	 
+   	 
+    }
+    
+    else if(proyect.getState()==State.Delayed){
     	 graphics.setColor(Color.RED);strokeSize=2;}
     else if(proyect.getState()==State.Pause){
    	 graphics.setColor(Color.YELLOW);strokeSize=2;}
@@ -294,6 +320,8 @@ protected void paintComponent(Graphics g) {
     graphics.drawRoundRect(0, 45, width - shadowGap, 
 	height - shadowGap-67, arcs.width, arcs.height);
 
+  
+    
     if(proyect.getState() ==State.Active)
     {
     	graphics.setColor(Color.GREEN);
@@ -334,6 +362,13 @@ public String GetName()
 @Override
 public void actionPerformed(ActionEvent e) {
 	// TODO Auto-generated method stub
+	if(proyect.getState()==State.Finished)
+	{
+		this.repaint();
+		for(Task t : proyect.ActiveTasks())
+			t.setState(State.Finished);
+		return;
+	}
 	for(Task t:proyect.getTasks())
 	{
 		if(t.getState()==State.Delayed)
